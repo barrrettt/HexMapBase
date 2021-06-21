@@ -40,6 +40,7 @@ anchor_right = 0.999225
 anchor_bottom = 1.0
 margin_top = 0.434144
 margin_bottom = 0.434143
+mouse_filter = 2
 theme = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false

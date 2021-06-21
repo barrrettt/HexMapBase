@@ -22,7 +22,7 @@ public class Camara : Spatial{
         inputPC(delta);
     }
 
-    public override void _Input(InputEvent @event){
+    public override void _UnhandledInput(InputEvent @event){
         if (!playerControl || !isPC) return;
         
         //PC ZOOM with mouse wheel
@@ -106,8 +106,6 @@ public class Camara : Spatial{
         camara.Translation = offset;
     }
 
-    // OTHER CONTROL
-    public void move(Vector3 position){}
 
     //AUX
     public Vector3[] getMouseRay(){
