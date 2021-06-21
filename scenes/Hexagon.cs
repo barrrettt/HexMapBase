@@ -5,16 +5,16 @@ public class Hexagon : MeshInstance{
     public HexaData hexData;
     
     private Color[] colors = new Color[]{
-        new Color(0.1f,0,0.8f),
-        new Color(0.2f,0,0.5f),
-        new Color(0.3f,0,0.2f),
-        new Color(0.4f,0,0),
-        new Color(0.5f,0,0),
-        new Color(0.6f,0,0),
-        new Color(0.7f,0.2f,0),
-        new Color(0.8f,0.5f,0),
-        new Color(0.9f,0.8f,0),
-        new Color(1f,0.9f,0),
+        new Color("#022340"),//blue dark
+        new Color("#115999"),//b
+        new Color("#859911"),//yellow
+        new Color("#518513"),//y-green
+        new Color("#1f5404"),//g
+        new Color("#0c2b02"), //green d
+        new Color("#2e2a0a"), //broown
+        new Color("#2e210a"), //b dark
+        new Color("#5e4e38"), //b light
+        new Color("#ccc3b8"), //white
     };
 
     public override void _Ready() {

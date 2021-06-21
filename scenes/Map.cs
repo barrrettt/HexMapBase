@@ -30,7 +30,6 @@ public class Map : Spatial{
 
     private void generateDebugMap(){
         mapData = new MapData(10);
-        hexagons = new Hexagon[mapData.datas.Length];
         int index = 0; 
 
         for (int i = 0; i< mapData.datas.Length;i++){ 
@@ -44,12 +43,14 @@ public class Map : Spatial{
         }
     }
 
-    private void instanceAllMap() { 
-        
-        if (hexagons == null){
-            mapData = new MapData(1);
-            hexagons = new Hexagon[1];
+    public void instanceAllMap() { 
+        //borra lo anterior
+        if (hexagons != null){
+            foreach (Hexagon hx in hexagons) hx.QueueFree();
         }
+        
+        //nuevos hexagon
+        hexagons = new Hexagon[mapData.datas.Length];
 
         // Actualizar vista con los datos
         for (int i = 0; i< mapData.datas.Length;i++){ 

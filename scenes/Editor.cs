@@ -15,12 +15,13 @@ public class Editor : Spatial{
     private Control[] panels;
     private String actualToolSelected = "";
     private Label lblActualTool;
-    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers;
+    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers,buGenMap;
 
     //DEBUG 
     private RigidBody[] balls; 
+    //GENERATION
     private Random random = new Random(); 
-
+    private int mapSizeActual = 20;
     public override void _EnterTree(){ 
         //Things
         Spatial centro = GetNode<Spatial>("center"); 
@@ -40,6 +41,8 @@ public class Editor : Spatial{
         buStyles= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC2/BUStyles"); 
         buGeneration= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC3/BUGeneration"); 
         buOptions= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC4/BUOptions"); 
+
+        buGenMap = GetNode<Button>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0/CC/BuGenerate");
 
         pElevations = GetNode<Control>("GUI/RightPanel/VB/MC/VBElevations"); 
         pStyles = GetNode<Control>("GUI/RightPanel/VB/MC/VBStyles"); 
@@ -79,6 +82,8 @@ public class Editor : Spatial{
         buRoads.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"road"});
         buRibers = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3/CC/BuRibers");
         buRibers.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"riber"});
+
+        buGenMap.Connect("pressed", this, "generateSimplexNoise");
 
         // translate text GUI
         locateTexts();
@@ -232,4 +237,77 @@ public class Editor : Spatial{
         downbuttonclick(-1);
     }
 
+    //GENERACION CON RUIDO - BIOMAS
+    public void generateSimplexNoise(){
+        GD.Print("New map...");
+        int mapSize = mapSizeActual;
+        map.mapData = new MapData(mapSize);
+        Random rnd = new Random();
+        int seed = rnd.Next();
+        OpenSimplexNoise noise = new OpenSimplexNoise();
+        noise.Seed = seed;
+
+        //pass datas
+        float [][] algoritmData = {
+            new float[]{1,10},//1pass 
+            new float[]{3,20},//2pass 
+            new float[]{5,30} //3pass 
+        };
+
+        //1 pass low noise
+        float heigthMulti = algoritmData[0][1];//2f;
+        noise.Period = algoritmData[0][0];//22;
+        noise.Octaves = 8;
+        noise.Lacunarity = 1.5f;
+        noise.Persistence = 0.02f;
+
+        float[,] dataTerrain = new float[mapSize,mapSize];
+        for (int i = 0; i<mapSize; i++){
+            for (int j = 0; j<mapSize; j++){
+                dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
+            }
+        }
+
+        //2 pass
+        noise.Period = algoritmData[1][0]; heigthMulti =algoritmData[1][1];
+        for (int i = 0; i<mapSize; i++){
+            for (int j = 0; j<mapSize; j++){
+                dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
+            }
+        }
+
+        //3 pass y de paso cogemos cotas max y min
+        noise.Period = algoritmData[2][0]; heigthMulti = algoritmData[2][1];
+        float min = float.MaxValue; float max = float.MinValue;
+        for (int i = 0; i<mapSize; i++){
+            for (int j = 0; j<mapSize; j++){
+                dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
+                //minMax
+                float h =  dataTerrain[j,i];
+                if (h<min) min = h;
+                if (h>max) max = h;
+            }
+        }
+
+        //pasamos las alturas generedas a mis alturas, necesitamos las cotas:
+        for (int i = 0; i<mapSize; i++){
+            for (int j = 0; j<mapSize; j++){
+                float h =  dataTerrain[j,i];
+                float value = Mathf.InverseLerp(min,max,h);
+                float lerp = Mathf.Lerp(0,9,value);
+                int height =  Mathf.RoundToInt(lerp);
+
+                HexaData hexaData = map.mapData.GetHexaData(i,j);
+                hexaData.height = height;
+                hexaData.colorIndex = height;
+            }
+        }
+
+        //Instanciar vista
+        map.instanceAllMap();
+
+        //cierra panel
+        downbuttonclick(-1);
+
+    }
 }
