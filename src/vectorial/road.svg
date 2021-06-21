@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Outline"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="fi-rr-road.svg"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs15" />
+  <sodipodi:namedview
+     id="namedview13"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="true"
+     showgrid="false"
+     inkscape:zoom="34.666667"
+     inkscape:cx="14.783654"
+     inkscape:cy="10.745192"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Outline" />
+  <title
+     id="title2">32 exit full screen</title>
+  <path
+     d="M7,0A1,1,0,0,0,6,1V3A3,3,0,0,1,3,6H1A1,1,0,0,0,1,8H3A5.006,5.006,0,0,0,8,3V1A1,1,0,0,0,7,0Z"
+     id="path4"
+     style="fill:#ffffff" />
+  <path
+     d="M23,16H21a5.006,5.006,0,0,0-5,5v2a1,1,0,0,0,2,0V21a3,3,0,0,1,3-3h2a1,1,0,0,0,0-2Z"
+     id="path6"
+     style="fill:#ffffff" />
+  <path
+     d="M21,8h2a1,1,0,0,0,0-2H21a3,3,0,0,1-3-3V1a1,1,0,0,0-2,0V3A5.006,5.006,0,0,0,21,8Z"
+     id="path8"
+     style="fill:#ffffff" />
+  <path
+     d="M3,16H1a1,1,0,0,0,0,2H3a3,3,0,0,1,3,3v2a1,1,0,0,0,2,0V21A5.006,5.006,0,0,0,3,16Z"
+     id="path10"
+     style="fill:#ffffff" />
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>32 exit full screen</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <rect
+     style="fill:#ffffff;stroke-width:0.883641"
+     id="rect874"
+     width="3.2884614"
+     height="1.1538461"
+     x="0.375"
+     y="11.942307" />
+  <rect
+     style="fill:#ffffff;stroke-width:0.883641"
+     id="rect874-3"
+     width="3.2884614"
+     height="1.1538461"
+     x="4.4423079"
+     y="11.942307" />
+  <rect
+     style="fill:#ffffff;stroke-width:0.883641"
+     id="rect874-8"
+     width="3.2884614"
+     height="1.1538461"
+     x="20.509615"
+     y="11.740384" />
+  <rect
+     style="fill:#ffffff;stroke-width:0.883641"
+     id="rect874-83"
+     width="3.2884614"
+     height="1.1538461"
+     x="16.5"
+     y="11.76923" />
+  <rect
+     style="fill:#ffffff;stroke-width:0.883641"
+     id="rect874-89"
+     width="3.2884614"
+     height="1.1538461"
+     x="0.31730768"
+     y="-12.634616"
+     transform="rotate(90)" />
+  <rect
+     style="fill:#ffffff;stroke-width:0.883641"
+     id="rect874-9"
+     width="3.2884614"
+     height="1.1538461"
+     x="4.1826925"
+     y="-12.692307"
+     transform="rotate(90)" />
+  <rect
+     style="fill:#ffffff;stroke-width:0.883641"
+     id="rect874-9-4"
+     width="3.2884614"
+     height="1.1538461"
+     x="19.211538"
+     y="-12.721153"
+     transform="rotate(90)" />
+  <rect
+     style="fill:#ffffff;stroke-width:0.883641"
+     id="rect874-9-0"
+     width="3.2884614"
+     height="1.1538461"
+     x="15.086538"
+     y="-12.634616"
+     transform="rotate(90)" />
+</svg>

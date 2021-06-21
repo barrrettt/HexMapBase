@@ -1,0 +1,1476 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://scenes/Editor.cs" type="Script" id=1]
+[ext_resource path="res://scenes/Map.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/themes/default.tres" type="Theme" id=3]
+[ext_resource path="res://scenes/Camara.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/shaders/circles.shader" type="Shader" id=5]
+[ext_resource path="res://src/vectorial/doble-down.svg" type="Texture" id=6]
+[ext_resource path="res://src/vectorial/palette.svg" type="Texture" id=7]
+[ext_resource path="res://src/vectorial/home.svg" type="Texture" id=8]
+[ext_resource path="res://src/vectorial/world.svg" type="Texture" id=9]
+[ext_resource path="res://src/vectorial/menu-burger.svg" type="Texture" id=10]
+[ext_resource path="res://src/vectorial/picture.svg" type="Texture" id=11]
+[ext_resource path="res://src/vectorial/doble-up.svg" type="Texture" id=12]
+[ext_resource path="res://src/vectorial/up.svg" type="Texture" id=13]
+[ext_resource path="res://src/vectorial/down.svg" type="Texture" id=14]
+[ext_resource path="res://src/vectorial/road.svg" type="Texture" id=15]
+[ext_resource path="res://src/vectorial/riber.svg" type="Texture" id=16]
+[ext_resource path="res://src/vectorial/paint-brush.svg" type="Texture" id=17]
+[ext_resource path="res://src/vectorial/disk.svg" type="Texture" id=18]
+[ext_resource path="res://src/vectorial/file-delete.svg" type="Texture" id=19]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 5 )
+
+[node name="Editor" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="center" type="Spatial" parent="."]
+
+[node name="DirectionalLight" type="DirectionalLight" parent="center"]
+
+[node name="Camara" parent="center" instance=ExtResource( 4 )]
+
+[node name="Map" parent="center" instance=ExtResource( 2 )]
+
+[node name="GUI" type="Control" parent="."]
+anchor_left = -0.000775099
+anchor_right = 0.999225
+anchor_bottom = 1.0
+margin_top = 0.434144
+margin_bottom = 0.434143
+theme = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="UpPanel" type="Panel" parent="GUI"]
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+margin_bottom = 80.0
+rect_min_size = Vector2( 200, 80 )
+rect_pivot_offset = Vector2( -1597.92, -282.1 )
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MC" type="MarginContainer" parent="GUI/UpPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB" type="HBoxContainer" parent="GUI/UpPanel/MC"]
+margin_right = 1014.0
+margin_bottom = 70.0
+mouse_filter = 2
+custom_constants/separation = 5
+
+[node name="CC" type="CenterContainer" parent="GUI/UpPanel/MC/HB"]
+margin_right = 106.0
+margin_bottom = 70.0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="GUI/UpPanel/MC/HB/CC"]
+margin_top = 25.0
+margin_right = 106.0
+margin_bottom = 44.0
+text = "ACTUAL TOOL:"
+
+[node name="CC2" type="CenterContainer" parent="GUI/UpPanel/MC/HB"]
+margin_left = 111.0
+margin_right = 153.0
+margin_bottom = 70.0
+mouse_filter = 2
+
+[node name="lblTool" type="Label" parent="GUI/UpPanel/MC/HB/CC2"]
+margin_top = 25.0
+margin_right = 42.0
+margin_bottom = 44.0
+text = "NONE"
+
+[node name="RightPanel" type="Panel" parent="GUI"]
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_left = 0.805
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -0.32019
+margin_right = -0.00012207
+margin_bottom = -100.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 200, 80 )
+rect_pivot_offset = Vector2( -1597.92, -282.1 )
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBElevations" type="VBoxContainer" parent="GUI/RightPanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PTitle" type="Panel" parent="GUI/RightPanel/VBElevations"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_right = 190.0
+margin_bottom = 50.0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 50 )
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="HB" type="HBoxContainer" parent="GUI/RightPanel/VBElevations/PTitle"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC5" type="CenterContainer" parent="GUI/RightPanel/VBElevations/PTitle/HB"]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBElevations/PTitle/HB/CC5"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+mouse_filter = 2
+texture = ExtResource( 11 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBElevations/PTitle/HB"]
+margin_left = 44.0
+margin_top = 10.0
+margin_right = 135.0
+margin_bottom = 29.0
+text = "ELEVATIONS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PContent" type="Panel" parent="GUI/RightPanel/VBElevations"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_top = 54.0
+margin_right = 190.0
+margin_bottom = 490.0
+grow_vertical = 0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VB" type="VBoxContainer" parent="GUI/RightPanel/VBElevations/PContent"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/VBElevations/PContent/VB"]
+margin_right = 121.0
+margin_bottom = 50.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBElevations/PContent/VB/HB0"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuUp" type="Button" parent="GUI/RightPanel/VBElevations/PContent/VB/HB0/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBElevations/PContent/VB/HB0/CC/BuUp"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 13 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBElevations/PContent/VB/HB0"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 75.0
+margin_bottom = 34.0
+text = "UP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB1" type="HBoxContainer" parent="GUI/RightPanel/VBElevations/PContent/VB"]
+margin_top = 54.0
+margin_right = 121.0
+margin_bottom = 104.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBElevations/PContent/VB/HB1"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuUp2" type="Button" parent="GUI/RightPanel/VBElevations/PContent/VB/HB1/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBElevations/PContent/VB/HB1/CC/BuUp2"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 12 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBElevations/PContent/VB/HB1"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 100.0
+margin_bottom = 34.0
+text = "UP x 2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/VBElevations/PContent/VB"]
+margin_top = 108.0
+margin_right = 121.0
+margin_bottom = 158.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBElevations/PContent/VB/HB2"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuDown" type="Button" parent="GUI/RightPanel/VBElevations/PContent/VB/HB2/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBElevations/PContent/VB/HB2/CC/BuDown"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 14 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBElevations/PContent/VB/HB2"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 100.0
+margin_bottom = 34.0
+text = "DOWN"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB3" type="HBoxContainer" parent="GUI/RightPanel/VBElevations/PContent/VB"]
+margin_top = 162.0
+margin_right = 121.0
+margin_bottom = 212.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBElevations/PContent/VB/HB3"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuDown2" type="Button" parent="GUI/RightPanel/VBElevations/PContent/VB/HB3/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBElevations/PContent/VB/HB3/CC/BuDown2"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 6 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBElevations/PContent/VB/HB3"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 121.0
+margin_bottom = 34.0
+text = "DOWN x2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBStyles" type="VBoxContainer" parent="GUI/RightPanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PTitle" type="Panel" parent="GUI/RightPanel/VBStyles"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_right = 190.0
+margin_bottom = 50.0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 50 )
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="HB" type="HBoxContainer" parent="GUI/RightPanel/VBStyles/PTitle"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC5" type="CenterContainer" parent="GUI/RightPanel/VBStyles/PTitle/HB"]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBStyles/PTitle/HB/CC5"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+mouse_filter = 2
+texture = ExtResource( 7 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBStyles/PTitle/HB"]
+margin_left = 44.0
+margin_top = 10.0
+margin_right = 104.0
+margin_bottom = 29.0
+text = "DETAILS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PContent" type="Panel" parent="GUI/RightPanel/VBStyles"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_top = 54.0
+margin_right = 190.0
+margin_bottom = 490.0
+grow_vertical = 0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VB" type="VBoxContainer" parent="GUI/RightPanel/VBStyles/PContent"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/VBStyles/PContent/VB"]
+margin_right = 106.0
+margin_bottom = 50.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBStyles/PContent/VB/HB0"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuStyle" type="Button" parent="GUI/RightPanel/VBStyles/PContent/VB/HB0/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBStyles/PContent/VB/HB0/CC/BuStyle"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 17 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBStyles/PContent/VB/HB0"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 100.0
+margin_bottom = 34.0
+text = "STYLE"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB1" type="HBoxContainer" parent="GUI/RightPanel/VBStyles/PContent/VB"]
+margin_top = 54.0
+margin_right = 106.0
+margin_bottom = 104.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBStyles/PContent/VB/HB1"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuDetail" type="Button" parent="GUI/RightPanel/VBStyles/PContent/VB/HB1/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBStyles/PContent/VB/HB1/CC/BuDetail"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 8 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBStyles/PContent/VB/HB1"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 105.0
+margin_bottom = 34.0
+text = "DETAIL"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/VBStyles/PContent/VB"]
+margin_top = 108.0
+margin_right = 106.0
+margin_bottom = 158.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBStyles/PContent/VB/HB2"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuRoads" type="Button" parent="GUI/RightPanel/VBStyles/PContent/VB/HB2/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBStyles/PContent/VB/HB2/CC/BuRoads"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 15 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBStyles/PContent/VB/HB2"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 104.0
+margin_bottom = 34.0
+text = "ROADS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB3" type="HBoxContainer" parent="GUI/RightPanel/VBStyles/PContent/VB"]
+margin_top = 162.0
+margin_right = 106.0
+margin_bottom = 212.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBStyles/PContent/VB/HB3"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuRibers" type="Button" parent="GUI/RightPanel/VBStyles/PContent/VB/HB3/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBStyles/PContent/VB/HB3/CC/BuRibers"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 16 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBStyles/PContent/VB/HB3"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 106.0
+margin_bottom = 34.0
+text = "RIBERS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBGeneration" type="VBoxContainer" parent="GUI/RightPanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PTitle" type="Panel" parent="GUI/RightPanel/VBGeneration"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_right = 190.0
+margin_bottom = 50.0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 50 )
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="HB" type="HBoxContainer" parent="GUI/RightPanel/VBGeneration/PTitle"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC5" type="CenterContainer" parent="GUI/RightPanel/VBGeneration/PTitle/HB"]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBGeneration/PTitle/HB/CC5"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+mouse_filter = 2
+texture = ExtResource( 9 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBGeneration/PTitle/HB"]
+margin_left = 44.0
+margin_top = 10.0
+margin_right = 140.0
+margin_bottom = 29.0
+text = "GENERATION"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PContent" type="Panel" parent="GUI/RightPanel/VBGeneration"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_top = 54.0
+margin_right = 190.0
+margin_bottom = 490.0
+grow_vertical = 0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VB" type="VBoxContainer" parent="GUI/RightPanel/VBGeneration/PContent"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBSEPARATOR" type="HBoxContainer" parent="GUI/RightPanel/VBGeneration/PContent/VB"]
+margin_right = 192.0
+margin_bottom = 10.0
+rect_min_size = Vector2( 0, 10 )
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB1" type="HBoxContainer" parent="GUI/RightPanel/VBGeneration/PContent/VB"]
+margin_top = 20.0
+margin_right = 192.0
+margin_bottom = 50.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB1"]
+margin_top = 5.0
+margin_right = 82.0
+margin_bottom = 24.0
+text = "NAME MAP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="txtNameMap" type="TextEdit" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB1"]
+margin_left = 92.0
+margin_right = 192.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/VBGeneration/PContent/VB"]
+margin_top = 60.0
+margin_right = 192.0
+margin_bottom = 89.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB2"]
+margin_top = 5.0
+margin_right = 70.0
+margin_bottom = 24.0
+text = "SIZE MAP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sbSizeMap" type="SpinBox" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB2"]
+margin_left = 80.0
+margin_right = 192.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 50.0
+value = 1.0
+
+[node name="HB3" type="HBoxContainer" parent="GUI/RightPanel/VBGeneration/PContent/VB"]
+margin_top = 99.0
+margin_right = 192.0
+margin_bottom = 124.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="mbStyleMap" type="MenuButton" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB3"]
+margin_right = 192.0
+margin_bottom = 25.0
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 3
+text = "STYLE MAP"
+flat = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB4" type="HBoxContainer" parent="GUI/RightPanel/VBGeneration/PContent/VB"]
+margin_top = 134.0
+margin_right = 192.0
+margin_bottom = 163.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB4"]
+margin_top = 5.0
+margin_right = 37.0
+margin_bottom = 24.0
+text = "SEED"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sbSizeMap" type="SpinBox" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB4"]
+margin_left = 47.0
+margin_right = 192.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = -999999.0
+max_value = 1e+07
+
+[node name="HBSEPARATOR2" type="HBoxContainer" parent="GUI/RightPanel/VBGeneration/PContent/VB"]
+margin_top = 173.0
+margin_right = 192.0
+margin_bottom = 198.0
+rect_min_size = Vector2( 0, 25 )
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/VBGeneration/PContent/VB"]
+margin_top = 208.0
+margin_right = 192.0
+margin_bottom = 258.0
+grow_vertical = 0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB0"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuGenerate" type="Button" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB0/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB0/CC/BuGenerate"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 9 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBGeneration/PContent/VB/HB0"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 80.0
+margin_bottom = 34.0
+text = "GO!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBOptions" type="VBoxContainer" parent="GUI/RightPanel"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PTitle" type="Panel" parent="GUI/RightPanel/VBOptions"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_right = 190.0
+margin_bottom = 50.0
+grow_vertical = 0
+rect_min_size = Vector2( 0, 50 )
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="HB" type="HBoxContainer" parent="GUI/RightPanel/VBOptions/PTitle"]
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC5" type="CenterContainer" parent="GUI/RightPanel/VBOptions/PTitle/HB"]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBOptions/PTitle/HB/CC5"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+margin_right = 40.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
+mouse_filter = 2
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBOptions/PTitle/HB"]
+margin_left = 44.0
+margin_top = 10.0
+margin_right = 110.0
+margin_bottom = 29.0
+text = "OPTIONS"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PContent" type="Panel" parent="GUI/RightPanel/VBOptions"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_top = 54.0
+margin_right = 190.0
+margin_bottom = 490.0
+grow_vertical = 0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VB" type="VBoxContainer" parent="GUI/RightPanel/VBOptions/PContent"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/VBOptions/PContent/VB"]
+margin_right = 180.0
+margin_bottom = 50.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBOptions/PContent/VB/HB0"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BU" type="Button" parent="GUI/RightPanel/VBOptions/PContent/VB/HB0/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBOptions/PContent/VB/HB0/CC/BU"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBOptions/PContent/VB/HB0"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 92.0
+margin_bottom = 34.0
+text = "SAVE"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB1" type="HBoxContainer" parent="GUI/RightPanel/VBOptions/PContent/VB"]
+margin_top = 54.0
+margin_right = 180.0
+margin_bottom = 104.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBOptions/PContent/VB/HB1"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BU" type="Button" parent="GUI/RightPanel/VBOptions/PContent/VB/HB1/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBOptions/PContent/VB/HB1/CC/BU"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBOptions/PContent/VB/HB1"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 93.0
+margin_bottom = 34.0
+text = "LOAD"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/VBOptions/PContent/VB"]
+margin_top = 108.0
+margin_right = 180.0
+margin_bottom = 158.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VBOptions/PContent/VB/HB2"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BU" type="Button" parent="GUI/RightPanel/VBOptions/PContent/VB/HB2/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VBOptions/PContent/VB/HB2/CC/BU"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 19 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VBOptions/PContent/VB/HB2"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 109.0
+margin_bottom = 34.0
+text = "DELETE"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BottomPanel" type="Panel" parent="GUI"]
+self_modulate = Color( 1, 1, 1, 0 )
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -95.0
+margin_right = -9.99994
+margin_bottom = -15.0
+grow_horizontal = 0
+grow_vertical = 0
+rect_min_size = Vector2( 200, 80 )
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB" type="HBoxContainer" parent="GUI/BottomPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 4.76837e-07
+mouse_filter = 2
+size_flags_horizontal = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="LPanel" type="Panel" parent="GUI/BottomPanel/HB"]
+self_modulate = Color( 1, 1, 1, 0.25098 )
+margin_right = 248.0
+margin_bottom = 80.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HB" type="HBoxContainer" parent="GUI/BottomPanel/HB/LPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 2.0
+margin_right = -10.0
+margin_bottom = 2.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/BottomPanel/HB/LPanel/HB"]
+margin_right = 64.0
+margin_bottom = 80.0
+mouse_filter = 2
+
+[node name="ColorRect" type="ColorRect" parent="GUI/BottomPanel/HB/LPanel/HB/CC"]
+material = SubResource( 1 )
+margin_top = 8.0
+margin_right = 64.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 64, 64 )
+mouse_filter = 2
+
+[node name="VB" type="VBoxContainer" parent="GUI/BottomPanel/HB/LPanel/HB"]
+margin_left = 68.0
+margin_right = 228.0
+margin_bottom = 80.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HB1" type="HBoxContainer" parent="GUI/BottomPanel/HB/LPanel/HB/VB"]
+margin_right = 160.0
+margin_bottom = 24.0
+mouse_filter = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GUI/BottomPanel/HB/LPanel/HB/VB/HB1"]
+margin_top = 2.0
+margin_right = 66.0
+margin_bottom = 21.0
+custom_colors/font_color = Color( 0.521569, 0.521569, 0.521569, 1 )
+text = "Positions"
+
+[node name="Label2" type="Label" parent="GUI/BottomPanel/HB/LPanel/HB/VB/HB1"]
+margin_left = 70.0
+margin_top = 2.0
+margin_right = 137.0
+margin_bottom = 21.0
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "(999,999)"
+
+[node name="HB2" type="HBoxContainer" parent="GUI/BottomPanel/HB/LPanel/HB/VB"]
+margin_top = 28.0
+margin_right = 160.0
+margin_bottom = 52.0
+mouse_filter = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GUI/BottomPanel/HB/LPanel/HB/VB/HB2"]
+margin_top = 2.0
+margin_right = 66.0
+margin_bottom = 21.0
+custom_colors/font_color = Color( 0.521569, 0.521569, 0.521569, 1 )
+text = "Positions"
+
+[node name="Label2" type="Label" parent="GUI/BottomPanel/HB/LPanel/HB/VB/HB2"]
+margin_left = 70.0
+margin_top = 2.0
+margin_right = 137.0
+margin_bottom = 21.0
+text = "(999,999)"
+
+[node name="HB3" type="HBoxContainer" parent="GUI/BottomPanel/HB/LPanel/HB/VB"]
+margin_top = 56.0
+margin_right = 160.0
+margin_bottom = 80.0
+mouse_filter = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="GUI/BottomPanel/HB/LPanel/HB/VB/HB3"]
+margin_top = 2.0
+margin_right = 66.0
+margin_bottom = 21.0
+custom_colors/font_color = Color( 0.521569, 0.521569, 0.521569, 1 )
+text = "Positions"
+
+[node name="Label2" type="Label" parent="GUI/BottomPanel/HB/LPanel/HB/VB/HB3"]
+margin_left = 70.0
+margin_top = 2.0
+margin_right = 137.0
+margin_bottom = 21.0
+text = "(999,999)"
+
+[node name="RPanel" type="Panel" parent="GUI/BottomPanel/HB"]
+self_modulate = Color( 1, 1, 1, 0 )
+margin_left = 258.0
+margin_right = 1004.0
+margin_bottom = 80.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="HB" type="HBoxContainer" parent="GUI/BottomPanel/HB/RPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -1.0
+margin_bottom = -1.0
+rect_min_size = Vector2( 200, 80 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 10
+alignment = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/BottomPanel/HB/RPanel/HB"]
+margin_left = 516.0
+margin_right = 566.0
+margin_bottom = 80.0
+mouse_filter = 2
+
+[node name="BUElevations" type="Button" parent="GUI/BottomPanel/HB/RPanel/HB/CC"]
+margin_top = 15.0
+margin_right = 50.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 50, 50 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="GUI/BottomPanel/HB/RPanel/HB/CC/BUElevations"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 11 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC2" type="CenterContainer" parent="GUI/BottomPanel/HB/RPanel/HB"]
+margin_left = 576.0
+margin_right = 626.0
+margin_bottom = 80.0
+mouse_filter = 2
+
+[node name="BUStyles" type="Button" parent="GUI/BottomPanel/HB/RPanel/HB/CC2"]
+margin_top = 15.0
+margin_right = 50.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 50, 50 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="GUI/BottomPanel/HB/RPanel/HB/CC2/BUStyles"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 7 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC3" type="CenterContainer" parent="GUI/BottomPanel/HB/RPanel/HB"]
+margin_left = 636.0
+margin_right = 686.0
+margin_bottom = 80.0
+mouse_filter = 2
+
+[node name="BUGeneration" type="Button" parent="GUI/BottomPanel/HB/RPanel/HB/CC3"]
+margin_top = 15.0
+margin_right = 50.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 50, 50 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="GUI/BottomPanel/HB/RPanel/HB/CC3/BUGeneration"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 9 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC4" type="CenterContainer" parent="GUI/BottomPanel/HB/RPanel/HB"]
+margin_left = 696.0
+margin_right = 746.0
+margin_bottom = 80.0
+mouse_filter = 2
+
+[node name="BUOptions" type="Button" parent="GUI/BottomPanel/HB/RPanel/HB/CC4"]
+margin_top = 15.0
+margin_right = 50.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 50, 50 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+
+[node name="TextureRect" type="TextureRect" parent="GUI/BottomPanel/HB/RPanel/HB/CC4/BUOptions"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 10 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
