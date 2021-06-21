@@ -2,31 +2,31 @@ using Godot;
 using System;
 
 public class Editor : Spatial{
-    Camara camara;
-    Map map;
+    private Camara camara;
+    private Map map;
 
     //GUI REFERENCES
-    Label lblMousePos1, lblCameraPos1, lblSelectedPos1;
-    Label lblMousePos2, lblCameraPos2, lblSelectedPos2;
+    private Label lblMousePos1, lblCameraPos1, lblSelectedPos1;
+    private Label lblMousePos2, lblCameraPos2, lblSelectedPos2;
 
-    Button buElevations, buStyles, buGeneration, buOptions;
+    private Button buElevations, buStyles, buGeneration, buOptions;
 
-    Control pElevations, pStyles, pGeneration, pOptions;
+    private Control pElevations, pStyles, pGeneration, pOptions;
+    private Control[] panels;
     private String actualToolSelected = "";
-    Label lblActualTool;
-    Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers;
+    private Label lblActualTool;
+    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers;
 
-    //DEBUG
-    RigidBody[] balls;
-    Random random = new Random();
+    //DEBUG 
+    private RigidBody[] balls; 
+    private Random random = new Random(); 
 
-    public override void _EnterTree(){
+    public override void _EnterTree(){ 
         //Things
-        Spatial centro = GetNode<Spatial>("center");
-        map = centro.GetNode<Map>("Map");
-        camara = centro.GetNode<Camara>("Camara");
-
-        spaceState = GetWorld().DirectSpaceState; //physic ray neededs
+        Spatial centro = GetNode<Spatial>("center"); 
+        map = centro.GetNode<Map>("Map"); 
+        camara = centro.GetNode<Camara>("Camara"); 
+        spaceState = GetWorld().DirectSpaceState; //physic ray neededs 
 
         //GUI
         lblMousePos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB1/Label");
@@ -36,15 +36,22 @@ public class Editor : Spatial{
         lblCameraPos2 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB2/Label2");
         lblSelectedPos2 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB3/Label2");
 
-        buElevations = GetNode<Button>("GUI/BottomPanel/HB/RPanel/HB/CC/BUElevations"); 
-        buStyles= GetNode<Button>("GUI/BottomPanel/HB/RPanel/HB/CC2/BUStyles"); 
-        buGeneration= GetNode<Button>("GUI/BottomPanel/HB/RPanel/HB/CC3/BUGeneration"); 
-        buOptions= GetNode<Button>("GUI/BottomPanel/HB/RPanel/HB/CC4/BUOptions"); 
+        buElevations = GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC/BUElevations"); 
+        buStyles= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC2/BUStyles"); 
+        buGeneration= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC3/BUGeneration"); 
+        buOptions= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC4/BUOptions"); 
 
-        pElevations = GetNode<Control>("GUI/RightPanel/VBElevations"); 
-        pStyles = GetNode<Control>("GUI/RightPanel/VBStyles"); 
-        pGeneration = GetNode<Control>("GUI/RightPanel/VBGeneration"); 
-        pOptions = GetNode<Control>("GUI/RightPanel/VBOptions"); 
+        pElevations = GetNode<Control>("GUI/RightPanel/VB/MC/VBElevations"); 
+        pStyles = GetNode<Control>("GUI/RightPanel/VB/MC/VBStyles"); 
+        pGeneration = GetNode<Control>("GUI/RightPanel/VB/MC/VBGeneration"); 
+        pOptions = GetNode<Control>("GUI/RightPanel/VB/MC/VBOptions"); 
+        
+        panels = new Control[]{
+            pElevations,
+            pStyles,
+            pGeneration,
+            pOptions
+        };
 
         // SIGNALS
         buElevations.Connect("pressed", this, "downbuttonclick",new Godot.Collections.Array{0});
@@ -53,24 +60,24 @@ public class Editor : Spatial{
         buOptions.Connect("pressed", this, "downbuttonclick",new Godot.Collections.Array{3});
 
         // TOOLS
-        lblActualTool = GetNode<Label>("GUI/UpPanel/MC/HB/CC2/lblTool");
+        lblActualTool = GetNode<Label>("GUI/UpPanel/MC/HB/HB/lblTool");
 
-        buUp = GetNode<Button>("GUI/RightPanel/VBElevations/PContent/VB/HB0/CC/BuUp");
+        buUp = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB0/CC/BuUp");
         buUp.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"up"});
-        buUp2 = GetNode<Button>("GUI/RightPanel/VBElevations/PContent/VB/HB1/CC/BuUp2");
+        buUp2 = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB1/CC/BuUp2");
         buUp2.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"up2"});
-        buDown = GetNode<Button>("GUI/RightPanel/VBElevations/PContent/VB/HB2/CC/BuDown");
+        buDown = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB2/CC/BuDown");
         buDown.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"down"});
-        buDown2 = GetNode<Button>("GUI/RightPanel/VBElevations/PContent/VB/HB3/CC/BuDown2");
+        buDown2 = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB3/CC/BuDown2");
         buDown2.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"down2"});
 
-        buStyle = GetNode<Button>("GUI/RightPanel/VBStyles/PContent/VB/HB0/CC/BuStyle");
+        buStyle = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB0/CC/BuStyle");
         buStyle.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"style"});
-        buDetail = GetNode<Button>("GUI/RightPanel/VBStyles/PContent/VB/HB1/CC/BuDetail");
+        buDetail = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB1/CC/BuDetail");
         buDetail.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"detail"});
-        buRoads = GetNode<Button>("GUI/RightPanel/VBStyles/PContent/VB/HB2/CC/BuRoads");
+        buRoads = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB2/CC/BuRoads");
         buRoads.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"road"});
-        buRibers = GetNode<Button>("GUI/RightPanel/VBStyles/PContent/VB/HB3/CC/BuRibers");
+        buRibers = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3/CC/BuRibers");
         buRibers.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"riber"});
 
         // translate text GUI
@@ -206,38 +213,17 @@ public class Editor : Spatial{
     private bool deactivateInput = false;
     private void downbuttonclick(int buttonIndex){
 
-        switch (buttonIndex){
-            case 0: 
-                pElevations.Visible = !pElevations.Visible; 
-                pStyles.Visible = false; 
-                pGeneration.Visible = false; 
-                pOptions.Visible = false; 
-                break;
-            case 1:
-                pElevations.Visible = false;  
-                pStyles.Visible =  !pStyles.Visible; 
-                pGeneration.Visible = false; 
-                pOptions.Visible = false; 
-                break;
-            case 2: 
-                pElevations.Visible = false;  
-                pStyles.Visible = false; 
-                pGeneration.Visible = !pGeneration.Visible; 
-                pOptions.Visible = false; 
-                break;
-            case 3: 
-                pElevations.Visible = false; 
-                pStyles.Visible = false; 
-                pGeneration.Visible = false; 
-                pOptions.Visible = !pOptions.Visible; 
-                break;
-            default:
-                pElevations.Visible = false; 
-                pStyles.Visible = false; 
-                pGeneration.Visible = false; 
-                pOptions.Visible = false;
-                break;
+        Boolean allHides = true;
+        for (int i = 0; i< panels.Length;i++){
+            if (i==buttonIndex){
+                panels[i].Visible = !panels[i].Visible;
+            } else{
+                panels[i].Visible = false;
+            }
+            allHides &= !panels[i].Visible;
         }
+
+        camara.playerControl = allHides;
     }
 
     private void buttonToolSelect(String toolname){

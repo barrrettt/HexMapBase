@@ -45,7 +45,7 @@ public class Camara : Spatial{
     private float zoom = 1f; 
 
     private void inputPC(float delta){
-        
+        if (!playerControl) return;
         Vector2 vel = new Vector2();
         float speed = 1;
 
