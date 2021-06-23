@@ -15,13 +15,17 @@ public class Editor : Spatial{
     private Control[] panels;
     private String actualToolSelected = "";
     private Label lblActualTool;
-    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers,buGenMap;
+    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers;
+
+    private LineEdit lblNameMap;
+    private SpinBox sbSeedMap;
+    private HSlider sSizeMap,sP1,sH1,sP2,sH2,sP3,sH3;
+    private Button buGenMap;
 
     //DEBUG 
     private RigidBody[] balls; 
     //GENERATION
     private Random random = new Random(); 
-    private int mapSizeActual = 20;
     public override void _EnterTree(){ 
         //Things
         Spatial centro = GetNode<Spatial>("center"); 
@@ -42,7 +46,7 @@ public class Editor : Spatial{
         buGeneration= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC3/BUGeneration"); 
         buOptions= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC4/BUOptions"); 
 
-        buGenMap = GetNode<Button>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0/CC/BuGenerate");
+        
 
         pElevations = GetNode<Control>("GUI/RightPanel/VB/MC/VBElevations"); 
         pStyles = GetNode<Control>("GUI/RightPanel/VB/MC/VBStyles"); 
@@ -83,7 +87,19 @@ public class Editor : Spatial{
         buRibers = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3/CC/BuRibers");
         buRibers.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"riber"});
 
-        buGenMap.Connect("pressed", this, "generateSimplexNoise");
+        // PROCEDURAL GEN
+        lblNameMap = GetNode<LineEdit>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB1/txtNameMap");
+        sbSeedMap = GetNode<SpinBox>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB4/sbSeedMap");
+        sSizeMap = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB2/sSizeMap");
+        sP1 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB5/sP1");
+        sH1 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB6/sH1");
+        sP2 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB7/sP2");
+        sH2 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB8/sH2");
+        sP3 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB9/sP3");
+        sH3 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB10/sH3");
+
+        buGenMap = GetNode<Button>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0/MC/BuGenerate");
+        buGenMap.Connect("pressed", this, "buttonGenerateTerrain");
 
         // translate text GUI
         locateTexts();
@@ -150,7 +166,7 @@ public class Editor : Spatial{
         if (origin == null || target == null) return hx;
 
         Vector3 dir = target - origin;
-        Vector3 ray = origin + dir;// ray
+        Vector3 ray = origin + (dir*5);// ray
 
         var result = spaceState.IntersectRay(origin,ray,null,2147483647,true,false);
         if (result.Count > 0){
@@ -188,7 +204,12 @@ public class Editor : Spatial{
         Vector3[] mRay = camara.getMouseRay(); 
         Hexagon hx = ray(mRay[0],mRay[1]);
         if (hx != null){
-            lblSelectedPos2.Text = String.Format("({0},{1})",hx.hexData.row,hx.hexData.col);
+            lblSelectedPos2.Text = String.Format("({0},{1})",hx.hexData.row,hx.hexData.col); 
+            
+            if (actualToolSelected != ""){
+                exeTool(hx.hexData);
+            }
+            
             map.moveSelector(hx.hexData.row, hx.hexData.col);
         }else{
             lblSelectedPos2.Text ="";
@@ -237,50 +258,69 @@ public class Editor : Spatial{
         downbuttonclick(-1);
     }
 
+    private void buttonGenerateTerrain(){
+        //get datas
+        int sizeMap = (int)sSizeMap.Value;
+        int seed = (int)sbSeedMap.Value;
+        
+        //pass datas 
+        float [][] datas = { 
+            new float[]{(float)sP1.Value,(float)sH1.Value},//1pass 
+            new float[]{(float)sP2.Value,(float)sH2.Value},//2pass 
+            new float[]{(float)sP3.Value,(float)sH3.Value} //3pass 
+        }; 
+
+        //generate
+        generateSimplexNoise(sizeMap,seed,datas);
+    }
+
     //GENERACION CON RUIDO - BIOMAS
-    public void generateSimplexNoise(){
+    public void generateSimplexNoise(int sizeMap, int seed, float[][] datas){
+        //SIZE
         GD.Print("New map...");
-        int mapSize = mapSizeActual;
-        map.mapData = new MapData(mapSize);
+        map.mapData = new MapData(sizeMap);
+        float[,] dataTerrain = new float[sizeMap,sizeMap];
+        
+        //Ramdom
         Random rnd = new Random();
-        int seed = rnd.Next();
+        if (seed == 0) seed = rnd.Next();
+        
+        //Noise
         OpenSimplexNoise noise = new OpenSimplexNoise();
         noise.Seed = seed;
-
-        //pass datas
-        float [][] algoritmData = {
-            new float[]{1,10},//1pass 
-            new float[]{3,20},//2pass 
-            new float[]{5,30} //3pass 
-        };
-
-        //1 pass low noise
-        float heigthMulti = algoritmData[0][1];//2f;
-        noise.Period = algoritmData[0][0];//22;
         noise.Octaves = 8;
         noise.Lacunarity = 1.5f;
         noise.Persistence = 0.02f;
 
-        float[,] dataTerrain = new float[mapSize,mapSize];
-        for (int i = 0; i<mapSize; i++){
-            for (int j = 0; j<mapSize; j++){
+        //parameters algotitmi 
+        /*float [][] datas = { 
+            new float[]{1,10},//1pass 
+            new float[]{3,20},//2pass 
+            new float[]{5,30} //3pass 
+        }; */
+
+        //1 pass low noise (big areas)
+        noise.Period = datas[0][0]; float heigthMulti = datas[0][1];
+        for (int i = 0; i<sizeMap; i++){
+            for (int j = 0; j<sizeMap; j++){
                 dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
             }
         }
 
-        //2 pass
-        noise.Period = algoritmData[1][0]; heigthMulti =algoritmData[1][1];
-        for (int i = 0; i<mapSize; i++){
-            for (int j = 0; j<mapSize; j++){
+        //2 pass (medium elevations)
+        noise.Period = datas[1][0]; heigthMulti =datas[1][1];
+        for (int i = 0; i<sizeMap; i++){
+            for (int j = 0; j<sizeMap; j++){
                 dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
             }
         }
 
-        //3 pass y de paso cogemos cotas max y min
-        noise.Period = algoritmData[2][0]; heigthMulti = algoritmData[2][1];
-        float min = float.MaxValue; float max = float.MinValue;
-        for (int i = 0; i<mapSize; i++){
-            for (int j = 0; j<mapSize; j++){
+        //3 pass (max elevations) and get max and min heights
+        noise.Period = datas[2][0]; heigthMulti = datas[2][1];
+        float min = float.MaxValue; 
+        float max = float.MinValue;
+        for (int i = 0; i<sizeMap; i++){
+            for (int j = 0; j<sizeMap; j++){
                 dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
                 //minMax
                 float h =  dataTerrain[j,i];
@@ -290,10 +330,13 @@ public class Editor : Spatial{
         }
 
         //pasamos las alturas generedas a mis alturas, necesitamos las cotas:
-        for (int i = 0; i<mapSize; i++){
-            for (int j = 0; j<mapSize; j++){
+        for (int i = 0; i<sizeMap; i++){
+            for (int j = 0; j<sizeMap; j++){
                 float h =  dataTerrain[j,i];
                 float value = Mathf.InverseLerp(min,max,h);
+                if (value.Equals(float.NaN)) {
+                    value = 0;
+                }                
                 float lerp = Mathf.Lerp(0,9,value);
                 int height =  Mathf.RoundToInt(lerp);
 
@@ -305,9 +348,25 @@ public class Editor : Spatial{
 
         //Instanciar vista
         map.instanceAllMap();
-
-        //cierra panel
-        downbuttonclick(-1);
-
     }
+
+    //MANUAL EDITION
+    public void exeTool(HexaData hxd){
+        switch(actualToolSelected){
+            case "up":
+                if (hxd.height <= HexaData.MAX_HEIGHT){
+                    hxd.height++;
+                }
+                break;
+            case "down":
+                if (hxd.height >= 1 ){
+                    hxd.height--;
+                }
+            break;
+        }
+
+        hxd.colorIndex = hxd.height;
+        map.changeHex(hxd);
+    }
+
 }

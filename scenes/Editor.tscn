@@ -133,7 +133,7 @@ __meta__ = {
 }
 
 [node name="PButtons" type="Panel" parent="GUI/RightPanel/VB"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_right = 340.0
 margin_bottom = 80.0
 rect_min_size = Vector2( 300, 80 )
@@ -173,7 +173,6 @@ shortcut_in_tooltip = false
 enabled_focus_mode = 0
 
 [node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/PButtons/HB/CC/BUElevations"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -205,7 +204,7 @@ shortcut_in_tooltip = false
 enabled_focus_mode = 0
 
 [node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/PButtons/HB/CC2/BUStyles"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+self_modulate = Color( 0.988235, 0.988235, 0.988235, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -237,7 +236,7 @@ shortcut_in_tooltip = false
 enabled_focus_mode = 0
 
 [node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/PButtons/HB/CC3/BUGeneration"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+self_modulate = Color( 0.988235, 0.988235, 0.988235, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -269,7 +268,7 @@ shortcut_in_tooltip = false
 enabled_focus_mode = 0
 
 [node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/PButtons/HB/CC4/BUOptions"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+self_modulate = Color( 0.988235, 0.988235, 0.988235, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -310,7 +309,7 @@ __meta__ = {
 }
 
 [node name="PTitle" type="Panel" parent="GUI/RightPanel/VB/MC/VBElevations"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_right = 340.0
 margin_bottom = 50.0
 grow_vertical = 0
@@ -358,7 +357,7 @@ __meta__ = {
 }
 
 [node name="PContent" type="Panel" parent="GUI/RightPanel/VB/MC/VBElevations"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_top = 60.0
 margin_right = 340.0
 margin_bottom = 496.0
@@ -591,7 +590,7 @@ __meta__ = {
 }
 
 [node name="PTitle" type="Panel" parent="GUI/RightPanel/VB/MC/VBStyles"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_right = 340.0
 margin_bottom = 50.0
 grow_vertical = 0
@@ -639,7 +638,7 @@ __meta__ = {
 }
 
 [node name="PContent" type="Panel" parent="GUI/RightPanel/VB/MC/VBStyles"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_top = 60.0
 margin_right = 340.0
 margin_bottom = 496.0
@@ -872,7 +871,7 @@ __meta__ = {
 }
 
 [node name="PTitle" type="Panel" parent="GUI/RightPanel/VB/MC/VBGeneration"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_right = 340.0
 margin_bottom = 50.0
 grow_vertical = 0
@@ -912,15 +911,15 @@ __meta__ = {
 [node name="Label" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PTitle/HB"]
 margin_left = 44.0
 margin_top = 10.0
-margin_right = 140.0
+margin_right = 243.0
 margin_bottom = 29.0
-text = "GENERATION"
+text = "PROCEDURAL GENERATION"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="PContent" type="Panel" parent="GUI/RightPanel/VB/MC/VBGeneration"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_top = 60.0
 margin_right = 340.0
 margin_bottom = 496.0
@@ -968,58 +967,26 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB1"]
 margin_top = 5.0
-margin_right = 82.0
+margin_right = 44.0
 margin_bottom = 24.0
-text = "NAME MAP"
+text = "NAME"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="txtNameMap" type="TextEdit" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB1"]
-margin_left = 92.0
+[node name="txtNameMap" type="LineEdit" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB1"]
+margin_left = 54.0
 margin_right = 330.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-
-[node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
-margin_top = 60.0
-margin_right = 330.0
-margin_bottom = 89.0
-mouse_filter = 2
-size_flags_horizontal = 5
-size_flags_vertical = 5
-custom_constants/separation = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB2"]
-margin_top = 5.0
-margin_right = 70.0
-margin_bottom = 24.0
-text = "SIZE MAP"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="sbSizeMap" type="SpinBox" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB2"]
-margin_left = 80.0
-margin_right = 330.0
-margin_bottom = 29.0
-rect_min_size = Vector2( 100, 0 )
-mouse_default_cursor_shape = 1
-size_flags_horizontal = 3
-size_flags_vertical = 3
-min_value = 1.0
-max_value = 50.0
-value = 1.0
+max_length = 30
 
 [node name="HB3" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
-margin_top = 99.0
+margin_top = 60.0
 margin_right = 330.0
-margin_bottom = 124.0
+margin_bottom = 79.0
 mouse_filter = 2
 size_flags_horizontal = 5
 size_flags_vertical = 5
@@ -1030,7 +997,7 @@ __meta__ = {
 
 [node name="mbStyleMap" type="MenuButton" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB3"]
 margin_right = 330.0
-margin_bottom = 25.0
+margin_bottom = 19.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "STYLE MAP"
@@ -1039,10 +1006,43 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HB4" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
-margin_top = 134.0
+[node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 89.0
 margin_right = 330.0
-margin_bottom = 163.0
+margin_bottom = 108.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lblSizeMap" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB2"]
+margin_right = 70.0
+margin_bottom = 19.0
+text = "SIZE MAP"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sSizeMap" type="HSlider" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB2"]
+margin_left = 80.0
+margin_right = 330.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 50.0
+value = 1.0
+tick_count = 1
+
+[node name="HB4" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 118.0
+margin_right = 330.0
+margin_bottom = 141.0
 mouse_filter = 2
 size_flags_horizontal = 5
 size_flags_vertical = 5
@@ -1052,18 +1052,18 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB4"]
-margin_top = 5.0
+margin_top = 2.0
 margin_right = 37.0
-margin_bottom = 24.0
+margin_bottom = 21.0
 text = "SEED"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="sbSizeMap" type="SpinBox" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB4"]
+[node name="sbSeedMap" type="SpinBox" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB4"]
 margin_left = 47.0
 margin_right = 330.0
-margin_bottom = 29.0
+margin_bottom = 23.0
 rect_min_size = Vector2( 100, 0 )
 mouse_default_cursor_shape = 1
 size_flags_horizontal = 3
@@ -1072,9 +1072,220 @@ min_value = -999999.0
 max_value = 1e+07
 
 [node name="HBSEPARATOR2" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
-margin_top = 173.0
+margin_top = 151.0
 margin_right = 330.0
-margin_bottom = 198.0
+margin_bottom = 161.0
+rect_min_size = Vector2( 0, 10 )
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB5" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 171.0
+margin_right = 330.0
+margin_bottom = 190.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbldata" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB5"]
+margin_right = 68.0
+margin_bottom = 19.0
+text = "P1 Period"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sP1" type="HSlider" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB5"]
+margin_left = 78.0
+margin_right = 330.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+tick_count = 1
+
+[node name="HB6" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 200.0
+margin_right = 330.0
+margin_bottom = 219.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbldata" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB6"]
+margin_right = 68.0
+margin_bottom = 19.0
+text = "P1 Multip"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sH1" type="HSlider" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB6"]
+margin_left = 78.0
+margin_right = 330.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 50.0
+value = 1.0
+tick_count = 1
+
+[node name="HB7" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 229.0
+margin_right = 330.0
+margin_bottom = 248.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbldata" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB7"]
+margin_right = 68.0
+margin_bottom = 19.0
+text = "P2 Period"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sP2" type="HSlider" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB7"]
+margin_left = 78.0
+margin_right = 330.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+tick_count = 1
+
+[node name="HB8" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 258.0
+margin_right = 330.0
+margin_bottom = 277.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbldata" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB8"]
+margin_right = 68.0
+margin_bottom = 19.0
+text = "P2 Multip"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sH2" type="HSlider" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB8"]
+margin_left = 78.0
+margin_right = 330.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 50.0
+value = 1.0
+tick_count = 1
+
+[node name="HB9" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 287.0
+margin_right = 330.0
+margin_bottom = 306.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbldata" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB9"]
+margin_right = 68.0
+margin_bottom = 19.0
+text = "P3 Period"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sP3" type="HSlider" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB9"]
+margin_left = 78.0
+margin_right = 330.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 10.0
+value = 1.0
+tick_count = 1
+
+[node name="HB10" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 316.0
+margin_right = 330.0
+margin_bottom = 335.0
+mouse_filter = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="lbldata" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB10"]
+margin_right = 68.0
+margin_bottom = 19.0
+text = "P3 Multip"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="sH3" type="HSlider" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB10"]
+margin_left = 78.0
+margin_right = 330.0
+margin_bottom = 19.0
+rect_min_size = Vector2( 100, 0 )
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+min_value = 1.0
+max_value = 50.0
+value = 1.0
+tick_count = 1
+
+[node name="HBSEPARATOR3" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
+margin_top = 345.0
+margin_right = 330.0
+margin_bottom = 370.0
 rect_min_size = Vector2( 0, 25 )
 mouse_filter = 2
 size_flags_horizontal = 5
@@ -1085,9 +1296,9 @@ __meta__ = {
 }
 
 [node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB"]
-margin_top = 208.0
+margin_top = 380.0
 margin_right = 330.0
-margin_bottom = 258.0
+margin_bottom = 420.0
 grow_vertical = 0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -1095,45 +1306,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0"]
-margin_right = 50.0
-margin_bottom = 50.0
+[node name="MC" type="MarginContainer" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0"]
+margin_right = 330.0
+margin_bottom = 40.0
 mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+size_flags_horizontal = 3
 
-[node name="BuGenerate" type="Button" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0/CC"]
-margin_right = 50.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 50, 50 )
+[node name="BuGenerate" type="Button" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0/MC"]
+margin_right = 330.0
+margin_bottom = 40.0
+rect_min_size = Vector2( 40, 40 )
 mouse_default_cursor_shape = 2
-
-[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0/CC/BuGenerate"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = -5.0
-mouse_filter = 2
-texture = ExtResource( 9 )
-expand = true
-stretch_mode = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0"]
-margin_left = 54.0
-margin_top = 15.0
-margin_right = 80.0
-margin_bottom = 34.0
-text = "GO!"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+text = "GENERATE MAP"
 
 [node name="VBOptions" type="VBoxContainer" parent="GUI/RightPanel/VB/MC"]
 visible = false
@@ -1150,7 +1334,7 @@ __meta__ = {
 }
 
 [node name="PTitle" type="Panel" parent="GUI/RightPanel/VB/MC/VBOptions"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_right = 340.0
 margin_bottom = 50.0
 grow_vertical = 0
@@ -1198,7 +1382,7 @@ __meta__ = {
 }
 
 [node name="PContent" type="Panel" parent="GUI/RightPanel/VB/MC/VBOptions"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_top = 60.0
 margin_right = 340.0
 margin_bottom = 496.0
@@ -1395,7 +1579,7 @@ __meta__ = {
 }
 
 [node name="LPanel" type="Panel" parent="GUI/BottomPanel/HB"]
-self_modulate = Color( 1, 1, 1, 0.25098 )
+self_modulate = Color( 1, 1, 1, 0.490196 )
 margin_right = 248.0
 margin_bottom = 80.0
 mouse_filter = 2

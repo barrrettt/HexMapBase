@@ -4,6 +4,7 @@ using System;
 public class Hexagon : MeshInstance{
     public HexaData hexData;
     
+    // 10 colors
     private Color[] colors = new Color[]{
         new Color("#022340"),//blue dark
         new Color("#115999"),//b
@@ -15,11 +16,11 @@ public class Hexagon : MeshInstance{
         new Color("#2e210a"), //b dark
         new Color("#5e4e38"), //b light
         new Color("#ccc3b8"), //white
+        new Color("#ffffff"), //white w
     };
 
     public override void _Ready() {
         CreateHexagon(); // generate mesh, colors, heights
-
         //debug
         iGeo = new ImmediateGeometry();
         AddChild(iGeo);
@@ -99,7 +100,7 @@ public class Hexagon : MeshInstance{
         Vector3 pSv1= new Vector3(); Vector3 pSv2 = new Vector3();Vector3 pSv3= new Vector3();Vector3 pSv4= new Vector3();
 
         //NE
-        HexaData hdNE = hexData.vecinos[5];
+        HexaData hdNE = hexData.neighbours[5];
         if (hdNE != null){
             cOtherNE = colors[hdNE.colorIndex];
             pNEv1 = vertex[5];
@@ -113,7 +114,7 @@ public class Hexagon : MeshInstance{
         }
         
         //SE
-        HexaData hdSE = hexData.vecinos[0];
+        HexaData hdSE = hexData.neighbours[0];
         if (hdSE != null){
             cOtherE = colors[hdSE.colorIndex];
             pSEv1 = vertex[6];
@@ -127,7 +128,7 @@ public class Hexagon : MeshInstance{
         }
         
         //SE
-        HexaData hdSW = hexData.vecinos[1];
+        HexaData hdSW = hexData.neighbours[1];
         if (hdSW != null){
             cOtherSE = colors[hdSW.colorIndex];
             pSv1 = vertex[1];
@@ -155,7 +156,7 @@ public class Hexagon : MeshInstance{
             new int[]{3,4},new int[]{4,5}, new int[]{5,6}
         };
         for (int i = 0;i<6;i++){
-            if (hexData.vecinos[i] == null){
+            if (hexData.neighbours[i] == null){
                 int[] par = pares[i];
                 int der = par[0]; int izq = par[1];
                 Vector3 altoDer = vertex[der];
@@ -166,7 +167,7 @@ public class Hexagon : MeshInstance{
 
                 //en un sentido
                 int anterior = i-1; if (anterior<0) anterior=5;
-                if(hexData.vecinos[anterior] != null){
+                if(hexData.neighbours[anterior] != null){
                     //si anterior es no es null -> hay un hueco triangular
                     Vector3 upDer = altoDer;
                     Vector3 downDer = bajoDer;
@@ -181,7 +182,7 @@ public class Hexagon : MeshInstance{
 
                 //en el otro sentido hay que tapar tambien los triangulos:
                 int siguiente = i+1; if (siguiente>5) siguiente=0;
-                if(hexData.vecinos[siguiente] != null){
+                if(hexData.neighbours[siguiente] != null){
                     Vector3 upIzq = altoIzq;
                     Vector3 downIzq = bajoIzq;
                     //el punto que falta es del puente contrario a UpIzq, sabiendo la direccion del vecino se conoce el punto
@@ -242,6 +243,7 @@ public class Hexagon : MeshInstance{
     private void createPhysic(float height){
         CreateTrimeshCollision();
     }
+
 }
 
 

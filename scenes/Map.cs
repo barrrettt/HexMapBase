@@ -1,11 +1,10 @@
 using Godot;
 using System;
-using System.Diagnostics;
 
 public class Map : Spatial{
     
     private PackedScene resHexagon; 
-    private MeshInstance selector;
+    private MeshInstance selector; 
     private Hexagon[] hexagons; 
     public MapData mapData; 
 
@@ -24,11 +23,11 @@ public class Map : Spatial{
         AddChild(iGeo);
     }
 
-    public override void _Process(float delta){
+    public override void _Process(float delta){ 
         //indicadorVecinosDebug();
     }
 
-    private void generateDebugMap(){
+    private void generateDebugMap() { 
         mapData = new MapData(10);
         int index = 0; 
 
@@ -44,6 +43,8 @@ public class Map : Spatial{
     }
 
     public void instanceAllMap() { 
+        //hide selector
+        moveSelector(-1,-1);
         //borra lo anterior
         if (hexagons != null){
             foreach (Hexagon hx in hexagons) hx.QueueFree();
@@ -68,8 +69,36 @@ public class Map : Spatial{
         GD.Print("Mapa instanciado!");
     }
 
-    //SELECTOR
-    private HexaData hdSelected = null;
+    // EDIT TERRAIN
+    public void changeHex(HexaData newHxd){
+        //old
+        HexaData hxdOld = mapData.GetHexaData(newHxd.row,newHxd.col);
+        if (hxdOld == null)return;
+
+        //change datas
+        hxdOld = newHxd;
+
+        //get neibourgs
+        HexaData[] affecteds = new HexaData[7];
+        affecteds[0] = newHxd;
+        for (int i = 0; i< newHxd.neighbours.Length;i++){
+            affecteds[i+1] = newHxd.neighbours[i];
+        } 
+
+        //update
+        foreach (Hexagon hx in hexagons){
+            foreach (HexaData affected in affecteds){
+                if (affected == null)continue;
+                if (hx.hexData.row == affected.row && hx.hexData.col == affected.col){
+                    hx.CreateHexagon();
+                }
+            }
+        }
+        
+    }
+
+    // SELECTOR 
+    private HexaData hdSelected = null; 
     public void moveSelector(int row, int col){
         HexaData hdSelected = mapData.GetHexaData(row,col);
         if (hdSelected == null){
@@ -106,7 +135,7 @@ public class Map : Spatial{
         iGeo.Begin(Mesh.PrimitiveType.Lines);
         //pinta vecinos E
         for (int i=0;i<6;i++){
-            HexaData hdVecino = data.vecinos[i];
+            HexaData hdVecino = data.neighbours[i];
             if (hdVecino != null){
                 //GD.Print("Vecino "+ i+": "+hdVecino.ToString());
                 iGeo.SetUv(new Vector2());
@@ -120,6 +149,8 @@ public class Map : Spatial{
         }
         iGeo.End();
     }
+
+
 
 }
 
@@ -159,10 +190,10 @@ public class MapData{
                     oRow = row+1; oCol = col+1; 
                 } 
                 HexaData SE = GetHexaData(oRow,oCol); 
-                centro.vecinos[0] = SE; 
+                centro.neighbours[0] = SE; 
 
                 HexaData S = GetHexaData(row+1,col); 
-                centro.vecinos[1] = S; 
+                centro.neighbours[1] = S; 
 
                 if (!colimpar){ 
                     oRow = row; oCol = col-1; 
@@ -170,7 +201,7 @@ public class MapData{
                     oRow = row+1; oCol = col-1; 
                 } 
                 HexaData SW = GetHexaData(oRow,oCol); 
-                centro.vecinos[2] = SW; 
+                centro.neighbours[2] = SW; 
 
                 if (!colimpar){ 
                     oRow = row-1; oCol = col-1; 
@@ -178,10 +209,10 @@ public class MapData{
                     oRow = row; oCol = col-1; 
                 } 
                 HexaData NW = GetHexaData(oRow,oCol); 
-                centro.vecinos[3] = NW; 
+                centro.neighbours[3] = NW; 
 
                 HexaData N = GetHexaData(row-1,col); 
-                centro.vecinos[4] = N; 
+                centro.neighbours[4] = N; 
 
                 if (!colimpar){ 
                     oRow = row-1; oCol = col+1; 
@@ -189,7 +220,7 @@ public class MapData{
                     oRow = row; oCol = col+1; 
                 } 
                 HexaData NE = GetHexaData(oRow,oCol);  
-                centro.vecinos[5] = NE; 
+                centro.neighbours[5] = NE; 
 
             }
         }
@@ -238,11 +269,13 @@ public class MapData{
 
 // clase para datos del tile 
 public class HexaData{ 
+    //const
+    public static int MAX_HEIGHT = 10;
     public readonly int row, col; 
     public int colorIndex = 0,  height = 1; 
 
     // el primero es SE y continua sentido horario 
-    public HexaData[] vecinos = new HexaData[6]; 
+    public HexaData[] neighbours = new HexaData[6]; 
 
     public HexaData(int row, int col) { 
         this.row = row; 
