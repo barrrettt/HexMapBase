@@ -4,13 +4,14 @@ using System;
 public class Map : Spatial{
     
     private PackedScene resHexagon; 
-    private MeshInstance selector; 
+    private MeshInstance selector, overSelector; 
     private Hexagon[] hexagons; 
     public MapData mapData; 
 
     public override void _EnterTree(){
         resHexagon = ResourceLoader.Load("res://scenes/Hexagon.tscn") as PackedScene; 
         selector = GetNode<MeshInstance>("Selector");
+        overSelector = GetNode<MeshInstance>("OverSelector");
         
     }
     public override void _Ready(){ 
@@ -98,7 +99,6 @@ public class Map : Spatial{
     }
 
     // SELECTOR 
-    private HexaData hdSelected = null; 
     public void moveSelector(int row, int col){
         HexaData hdSelected = mapData.GetHexaData(row,col);
         if (hdSelected == null){
@@ -110,6 +110,20 @@ public class Map : Spatial{
             float height = Hexagon.HEIGHT_VALUE * hdSelected.height + 0.1f;
             pos = pos + new Vector3(0,height,0);
             selector.Translation = pos;
+        }
+    }
+
+    public void moveOver(int row, int col){
+        HexaData hdOver = mapData.GetHexaData(row,col);
+        if (hdOver == null){
+            overSelector.Visible = false;
+
+        }else{
+            overSelector.Visible = true;
+            Vector3 pos = mapData.getHexPosition(hdOver.row,hdOver.col);
+            float height = Hexagon.HEIGHT_VALUE * hdOver.height + 0.1f;
+            pos = pos + new Vector3(0,height,0);
+            overSelector.Translation = pos;
         }
     }
 

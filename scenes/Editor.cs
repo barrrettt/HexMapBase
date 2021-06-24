@@ -194,8 +194,10 @@ public class Editor : Spatial{
         Hexagon hx = ray(mRay[0],mRay[1]);
         if (hx != null){
             lblMousePos2.Text = String.Format("({0},{1})",hx.hexData.row,hx.hexData.col);
+            map.moveOver(hx.hexData.row, hx.hexData.col);
         }else{
             lblMousePos2.Text ="";
+            map.moveOver(-1,-1);
         }
     }
     
@@ -209,7 +211,6 @@ public class Editor : Spatial{
             if (actualToolSelected != ""){
                 exeTool(hx.hexData);
             }
-            
             map.moveSelector(hx.hexData.row, hx.hexData.col);
         }else{
             lblSelectedPos2.Text ="";
