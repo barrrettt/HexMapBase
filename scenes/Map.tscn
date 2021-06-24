@@ -1,12 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/Map.cs" type="Script" id=1]
-[ext_resource path="res://scenes/HexaSelector.cs" type="Script" id=2]
+[ext_resource path="res://scenes/terraindetails/HexaSelector.cs" type="Script" id=2]
 
 [sub_resource type="SpatialMaterial" id=1]
 vertex_color_use_as_albedo = true
 emission_enabled = true
-emission = Color( 0.968627, 0.972549, 0.388235, 1 )
+emission = Color( 1, 0.913725, 0, 1 )
 emission_energy = 1.0
 emission_operator = 0
 emission_on_uv2 = false
@@ -24,13 +24,43 @@ surfaces/0 = {
 "vertex_count": 6
 }
 
+[sub_resource type="SpatialMaterial" id=3]
+emission_enabled = true
+emission = Color( 1, 1, 1, 1 )
+emission_energy = 1.0
+emission_operator = 0
+emission_on_uv2 = false
+
+[sub_resource type="ArrayMesh" id=4]
+surfaces/0 = {
+"aabb": AABB( -0.7, 0, -0.606218, 1.4, 1e-05, 1.21245 ),
+"array_data": PoolByteArray( 50, 51, 179, 62, 0, 0, 0, 0, 23, 49, 27, 63, 249, 249, 242, 255, 0, 0, 0, 0, 52, 51, 179, 190, 0, 0, 0, 0, 22, 49, 27, 63, 249, 249, 242, 255, 0, 0, 0, 0, 51, 51, 51, 191, 0, 0, 0, 0, 211, 106, 131, 179, 249, 249, 242, 255, 0, 0, 0, 0, 49, 51, 179, 190, 0, 0, 0, 0, 23, 49, 27, 191, 249, 249, 242, 255, 0, 0, 0, 0, 49, 51, 179, 62, 0, 0, 0, 0, 23, 49, 27, 191, 249, 249, 242, 255, 0, 0, 0, 0, 51, 51, 51, 63, 0, 0, 0, 0, 211, 106, 3, 52, 249, 249, 242, 255, 0, 0, 0, 0 ),
+"array_index_data": PoolByteArray(  ),
+"blend_shape_data": [  ],
+"format": 97305,
+"index_count": 0,
+"primitive": 3,
+"skeleton_aabb": [  ],
+"vertex_count": 6
+}
+
 [node name="Map" type="Spatial"]
 script = ExtResource( 1 )
 
 [node name="Selector" type="MeshInstance" parent="."]
-transform = Transform( 0.814617, 0, 0, 0, 0.814617, 0, 0, 0, 0.814617, 0, 0, 0 )
+transform = Transform( 0.786664, 0, 0, 0, 0.786664, 0, 0, 0, 0.786664, 0, 0, 0 )
 material_override = SubResource( 1 )
 mesh = SubResource( 2 )
 material/0 = null
 script = ExtResource( 2 )
 color = Color( 0.972549, 0.843137, 0, 1 )
+
+[node name="Over" type="MeshInstance" parent="."]
+transform = Transform( 0.786664, 0, 0, 0, 0.786664, 0, 0, 0, 0.786664, 0, 0, 0 )
+material_override = SubResource( 3 )
+mesh = SubResource( 4 )
+material/0 = null
+script = ExtResource( 2 )
+color = Color( 0.980392, 0.976471, 0.952941, 1 )
+
+[node name="multimeshinstances" type="Spatial" parent="."]
