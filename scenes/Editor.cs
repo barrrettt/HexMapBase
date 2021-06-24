@@ -354,7 +354,7 @@ public class Editor : Spatial{
     public void exeTool(HexaData hxd){
         switch(actualToolSelected){
             case "up":
-                if (hxd.height <= HexaData.MAX_HEIGHT){
+                if (hxd.height < HexaData.MAX_HEIGHT){
                     hxd.height++;
                 }
                 break;

@@ -33,7 +33,7 @@ public class Map : Spatial{
 
         for (int i = 0; i< mapData.datas.Length;i++){ 
             mapData.datas[i].colorIndex = index;
-            mapData.datas[i].height = index+1; 
+            mapData.datas[i].height = index; 
             index++; 
             if (index >= 10){
                 index = 0;
