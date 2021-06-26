@@ -15,8 +15,6 @@ public class Map : Spatial{
         
     }
     public override void _Ready(){ 
-        //para pruebas
-        generateDebugMap(); 
         instanceAllMap(); 
         moveSelector(0,0);
         //debug vecinos
@@ -27,22 +25,7 @@ public class Map : Spatial{
     public override void _Process(float delta){ 
         //indicadorVecinosDebug();
     }
-
-    private void generateDebugMap() { 
-        mapData = new MapData(10);
-        int index = 0; 
-
-        for (int i = 0; i< mapData.datas.Length;i++){ 
-            mapData.datas[i].colorIndex = index;
-            mapData.datas[i].height = index; 
-            index++; 
-            if (index >= 10){
-                index = 0;
-            }
-                
-        }
-    }
-
+   
     public void instanceAllMap() { 
         //hide selector
         moveSelector(-1,-1);
@@ -62,7 +45,7 @@ public class Map : Spatial{
             hexagons[i] = hexagon;
 
             AddChild(hexagon); 
-            hexagon.CreateHexagon(); 
+            hexagon.Create(); 
             Vector3 pos = mapData.getHexPosition(hexaData.row,hexaData.col); 
             hexagon.Translation = pos; 
         }
@@ -91,7 +74,7 @@ public class Map : Spatial{
             foreach (HexaData affected in affecteds){
                 if (affected == null)continue;
                 if (hx.hexData.row == affected.row && hx.hexData.col == affected.col){
-                    hx.CreateHexagon();
+                    hx.Create();
                 }
             }
         }
@@ -163,7 +146,6 @@ public class Map : Spatial{
         }
         iGeo.End();
     }
-
 
 
 }
@@ -287,7 +269,7 @@ public class HexaData{
     public static int MAX_HEIGHT = 10;
     public readonly int row, col; 
     public int colorIndex = 0,  height = 1; 
-
+    public bool riber = false;
     // el primero es SE y continua sentido horario 
     public HexaData[] neighbours = new HexaData[6]; 
 

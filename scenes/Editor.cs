@@ -104,7 +104,15 @@ public class Editor : Spatial{
         // translate text GUI
         locateTexts();
 
-        //physics balls
+        //map debug
+        float [][] datas = { 
+            new float[]{1f,2f},//1pass 
+            new float[]{3f,6f},//2pass 
+            new float[]{10f,20f} //3pass 
+        }; 
+        generateSimplexNoise(10,0,datas);
+
+        //physics balls debug
         balls = new RigidBody[50];
         
         for (int i = 0;i<balls.Length;i++){
@@ -273,6 +281,9 @@ public class Editor : Spatial{
 
         //generate
         generateSimplexNoise(sizeMap,seed,datas);
+
+        //Instanciar toda la vista
+        map.instanceAllMap();
     }
 
     //GENERACION CON RUIDO - BIOMAS
@@ -346,9 +357,6 @@ public class Editor : Spatial{
                 hexaData.colorIndex = height;
             }
         }
-
-        //Instanciar vista
-        map.instanceAllMap();
     }
 
     //MANUAL EDITION
@@ -363,6 +371,10 @@ public class Editor : Spatial{
                 if (hxd.height >= 1 ){
                     hxd.height--;
                 }
+            break;
+
+            case "riber":
+                hxd.riber = !hxd.riber;
             break;
         }
 
