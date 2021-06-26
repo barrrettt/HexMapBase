@@ -33,6 +33,8 @@ public class Camara : Spatial{
     private void inputPC(float delta){
         if (!playerControl) return;
         Vector2 vel = new Vector2();
+        float yRot = 0;
+        float xRot = 0;
         float speed = 1;
 
         //ROTACIONES DE JOYPADS
@@ -65,7 +67,20 @@ public class Camara : Spatial{
         if (Input.IsActionPressed("ui_down")){
              vel.y = +1f;
         }
-
+        //rotates
+        if (Input.IsActionPressed("ui_turn_right")){
+            yRot = +1f;
+        }
+        if (Input.IsActionPressed("ui_turn_left")){
+            yRot = -1f;
+        }
+        if (Input.IsActionPressed("ui_page_up")){
+            xRot = +1f;
+        }
+        if (Input.IsActionPressed("ui_page_down")){
+            xRot = -1f;
+        }
+        //fast
         if (Input.IsActionPressed("ui_fast")){
             speed = 2f;
         }
@@ -74,6 +89,8 @@ public class Camara : Spatial{
         float valueX = Mathf.Clamp(vel.x,-1, 1) * JOYPAD_SENSITIVITY;
         float valueY = Mathf.Clamp(vel.y,-1, 1) * JOYPAD_SENSITIVITY;
 
+        RotateObjectLocal(Vector3.Up,yRot*speed*delta*1f);
+        camara.RotateObjectLocal(Vector3.Right,xRot*speed*delta*0.1f);
         TranslateObjectLocal(new Vector3(valueX,0,valueY)*speed*delta*50f);
 
         // ZOOM camara
