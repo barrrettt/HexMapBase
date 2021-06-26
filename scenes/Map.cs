@@ -42,6 +42,7 @@ public class Map : Spatial{
             Hexagon hexagon = (Hexagon)resHexagon.Instance(); 
             HexaData hexaData = mapData.datas[i]; 
             hexagon.hexData = hexaData; 
+            hexagon.hexData.hexagon = hexagon; //link with node object
             hexagons[i] = hexagon;
 
             AddChild(hexagon); 
@@ -268,10 +269,16 @@ public class HexaData{
     //const
     public static int MAX_HEIGHT = 10;
     public readonly int row, col; 
+    public HexaData[] neighbours = new HexaData[6]; // primero SE y continua sentido horario 
+    // aspect
     public int colorIndex = 0,  height = 1; 
+    
+    // riber system, 
     public bool riber = false;
-    // el primero es SE y continua sentido horario 
-    public HexaData[] neighbours = new HexaData[6]; 
+    public HexaData[] ribersOut = new HexaData[6]; //first SE and clock way: S, SW...
+
+    //reference with escene object
+    public Hexagon hexagon;
 
     public HexaData(int row, int col) { 
         this.row = row; 
@@ -282,4 +289,5 @@ public class HexaData{
         String str = String.Format("({0},{1})",this.row,this.col);
         return str;
     }
+
 }
