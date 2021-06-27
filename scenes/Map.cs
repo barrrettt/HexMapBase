@@ -37,17 +37,20 @@ public class Map : Spatial{
         //nuevos hexagon
         hexagons = new Hexagon[mapData.datas.Length];
 
-        // Actualizar vista con los datos
+        // instanciamos y asignamos las referencias
         for (int i = 0; i< mapData.datas.Length;i++){ 
             Hexagon hexagon = (Hexagon)resHexagon.Instance(); 
             HexaData hexaData = mapData.datas[i]; 
             hexagon.hexData = hexaData; 
             hexagon.hexData.hexagon = hexagon; //link with node object
             hexagons[i] = hexagon;
+        }
 
+        //al arbol de escenas y transladar
+        foreach (Hexagon hexagon in hexagons){
             AddChild(hexagon); 
             hexagon.Create(); 
-            Vector3 pos = mapData.getHexPosition(hexaData.row,hexaData.col); 
+            Vector3 pos = mapData.getHexPosition(hexagon.hexData.row, hexagon.hexData.col); 
             hexagon.Translation = pos; 
         }
 

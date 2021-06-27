@@ -23,6 +23,7 @@ public class Editor : Spatial{
     private Button buGenMap;
 
     //DEBUG 
+    int ballnumber = 0;
     private RigidBody[] balls; 
     //GENERATION
     private Random random = new Random(); 
@@ -113,7 +114,7 @@ public class Editor : Spatial{
         generateSimplexNoise(10,0,datas);
 
         //physics balls debug
-        balls = new RigidBody[50];
+        balls = new RigidBody[ballnumber];
         
         for (int i = 0;i<balls.Length;i++){
             RigidBody ball = new RigidBody();
