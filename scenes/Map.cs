@@ -94,7 +94,7 @@ public class Map : Spatial{
         }else{
             selector.Visible = true;
             Vector3 pos = mapData.getHexPosition(hdSelected.row,hdSelected.col);
-            float height = Hexagon.HEIGHT_VALUE * hdSelected.height + 0.1f;
+            float height = hdSelected.hexagon.getRealHeight() + 0.1f;
             pos = pos + new Vector3(0,height,0);
             selector.Translation = pos;
         }
@@ -108,7 +108,7 @@ public class Map : Spatial{
         }else{
             overSelector.Visible = true;
             Vector3 pos = mapData.getHexPosition(hdOver.row,hdOver.col);
-            float height = Hexagon.HEIGHT_VALUE * hdOver.height + 0.1f;
+            float height = hdOver.hexagon.getRealHeight() + 0.1f;
             pos = pos + new Vector3(0,height,0);
             overSelector.Translation = pos;
         }
@@ -130,7 +130,7 @@ public class Map : Spatial{
         HexaData data = mapData.datas[indexActualDebug];
         if (data == null) return;
         Vector3 me = mapData.getHexPosition(data.row,data.col);
-        me.y = data.height * Hexagon.HEIGHT_VALUE +0.1f;
+        me.y = data.hexagon.getRealHeight() +0.2f;
         me = me-Transform.origin;
 
         iGeo.Begin(Mesh.PrimitiveType.Lines);
@@ -143,7 +143,7 @@ public class Map : Spatial{
                 iGeo.AddVertex(me);
                 iGeo.SetUv(new Vector2(1,1));
                 Vector3 pos = mapData.getHexPosition(hdVecino.row, hdVecino.col);
-                pos.y = hdVecino.height * Hexagon.HEIGHT_VALUE + 0.1f;
+                pos.y = data.hexagon.getRealHeight() +0.1f;
                 pos = pos-Transform.origin;
                 iGeo.AddVertex(pos);
             }

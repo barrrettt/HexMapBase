@@ -21,15 +21,14 @@ public class Hexagon : MeshInstance{
 
     private Color colorRiber = new Color("#115999");//blue
 
-    public override void _Ready() {
-       // Create(); // generate mesh, colors, heights
-    }
-
-    public static float HEIGHT_VALUE =  0.5f; // real height = value * index
+    //Basic Metrics
     public static float SIZE_TOP = 0.75f;//0.75f; //radius top hex
 
     public float getRealHeight(){
-        return HEIGHT_VALUE * hexData.height;
+        float heightValue = 0.5f;
+        if (hexData.height<3) heightValue = 0.2f;
+        if (hexData.height>5) heightValue = 0.8f;
+        return heightValue * hexData.height;
     }
 
     // Main vertex
