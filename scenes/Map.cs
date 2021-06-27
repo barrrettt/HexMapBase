@@ -60,12 +60,13 @@ public class Map : Spatial{
     }
 
     // EDIT TERRAIN
-    private void changeHex(HexaData newHxd){
+    private void CreateAffectedHex(HexaData newHxd){
         //old
         HexaData hxdOld = mapData.GetHexaData(newHxd.row,newHxd.col);
         if (hxdOld == null)return;
 
         //change datas
+        newHxd.hexagon = hxdOld.hexagon;
         hxdOld = newHxd;
 
         //get neibourgs
@@ -73,18 +74,13 @@ public class Map : Spatial{
         affecteds[0] = newHxd;
         for (int i = 0; i< newHxd.neighbours.Length;i++){
             affecteds[i+1] = newHxd.neighbours[i];
-        } 
-
-        //update
-        foreach (Hexagon hx in hexagons){
-            foreach (HexaData affected in affecteds){
-                if (affected == null)continue;
-                if (hx.hexData.row == affected.row && hx.hexData.col == affected.col){
-                    hx.Create();
-                }
-            }
         }
-        
+
+        // update neigourgs
+        foreach (HexaData affected in affecteds){
+            if (affected == null)continue;
+            affected.hexagon.Create();
+        }
     }
 
     public void upTerrain(HexaData hxd){
@@ -92,7 +88,7 @@ public class Map : Spatial{
         if (hxd.height < HexaData.MAX_HEIGHT){
             hxd.height++;
             hxd.colorIndex = hxd.height;
-            changeHex(hxd);
+            CreateAffectedHex(hxd);
         }
     }
 
@@ -114,7 +110,7 @@ public class Map : Spatial{
         if (hxd.height >= 1 ){
             hxd.height--;
             hxd.colorIndex = hxd.height;
-            changeHex(hxd);
+            CreateAffectedHex(hxd);
         }
     }
 
@@ -129,6 +125,34 @@ public class Map : Spatial{
         foreach (HexaData hdt in terrain){
             downTerrain(hdt);
         }
+    }
+
+    public void createRiber(HexaData hxdOrigin, HexaData hxdEnd){
+        if (hxdOrigin == null || hxdEnd == null)return;
+        //riber cant up
+        if (hxdOrigin.height< hxdEnd.height) return;
+
+        bool finded = false;
+        for (int i = 0; i< hxdOrigin.neighbours.Length; i++){
+            if (hxdEnd == hxdOrigin.neighbours[i]) {
+                //Origin and end are Neighbours
+                hxdOrigin.riber = true;
+                hxdEnd.riber = true;
+                hxdOrigin.ribersOut[i] = hxdOrigin.neighbours[i];
+                finded = true;
+                break;
+            }
+        }
+        if (!finded)return;
+
+        CreateAffectedHex(hxdOrigin);
+        CreateAffectedHex(hxdEnd);
+    }
+
+    public void cleanRibers(HexaData hxd){
+        if (hxd == null) return;
+        hxd.riber = false;
+        hxd.ribersOut = new HexaData[6];
     }
 
     // SELECTOR 

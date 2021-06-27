@@ -14,6 +14,7 @@ public class Editor : Spatial{
     private Control pElevations, pStyles, pGeneration, pOptions;
     private Control[] panels;
     private String actualToolSelected = "";
+    private HexaData lastOrigin = null;
     private Label lblActualTool;
     private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers;
 
@@ -220,9 +221,13 @@ public class Editor : Spatial{
             if (actualToolSelected != ""){
                 exeTool(hx.hexData);
             }
+
             map.moveSelector(hx.hexData.row, hx.hexData.col);
+            lastOrigin = hx.hexData;
+
         }else{
             lblSelectedPos2.Text ="";
+            lastOrigin = null;
         }
     }
 
@@ -265,6 +270,7 @@ public class Editor : Spatial{
     private void buttonToolSelect(String toolname){
         actualToolSelected = toolname;
         lblActualTool.Text = toolname;
+        if (lastOrigin != null)  lblActualTool.Text += " Origin: " + lastOrigin.ToString();
         buttonPanelclick(-1);//hide panels
     }
 
@@ -367,12 +373,8 @@ public class Editor : Spatial{
             case "up2": map.up2Terrain(hxd); break;
             case "down":map.downTerrain(hxd); break;
             case "down2":map.down2Terrain(hxd); break;
-            case "riber":
-                hxd.riber = !hxd.riber;
-            break;
+            case "riber":map.createRiber(lastOrigin,hxd); break;
         }
-
-        
     }
 
 }
