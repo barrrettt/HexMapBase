@@ -27,17 +27,19 @@ public class Map : Spatial{
     }
    
     public void instanceAllMap() { 
-        //hide selector
+        //hide indicators
         moveSelector(-1,-1);
-        //borra lo anterior
+        moveOver(-1,-1);
+
+        // delete old map
         if (hexagons != null){
             foreach (Hexagon hx in hexagons) hx.QueueFree();
         }
         
-        //nuevos hexagon
+        //new array hexagons
         hexagons = new Hexagon[mapData.datas.Length];
 
-        // instanciamos y asignamos las referencias
+        // referencing and instancing...
         for (int i = 0; i< mapData.datas.Length;i++){ 
             Hexagon hexagon = (Hexagon)resHexagon.Instance(); 
             HexaData hexaData = mapData.datas[i]; 
@@ -46,7 +48,7 @@ public class Map : Spatial{
             hexagons[i] = hexagon;
         }
 
-        //al arbol de escenas y transladar
+        // to scene tree and translate
         foreach (Hexagon hexagon in hexagons){
             AddChild(hexagon); 
             hexagon.Create(); 
@@ -54,11 +56,11 @@ public class Map : Spatial{
             hexagon.Translation = pos; 
         }
 
-        GD.Print("Mapa instanciado!");
+        GD.Print("Map ready!");
     }
 
     // EDIT TERRAIN
-    public void changeHex(HexaData newHxd){
+    private void changeHex(HexaData newHxd){
         //old
         HexaData hxdOld = mapData.GetHexaData(newHxd.row,newHxd.col);
         if (hxdOld == null)return;
@@ -83,6 +85,50 @@ public class Map : Spatial{
             }
         }
         
+    }
+
+    public void upTerrain(HexaData hxd){
+        if (hxd == null) return;
+        if (hxd.height < HexaData.MAX_HEIGHT){
+            hxd.height++;
+            hxd.colorIndex = hxd.height;
+            changeHex(hxd);
+        }
+    }
+
+    public void up2Terrain(HexaData hxd){
+        if (hxd == null) return;
+        HexaData[] terrain = new HexaData[7];
+        terrain[0] = hxd;
+        for (int i = 1; i<terrain.Length;i++){
+            terrain[i] = hxd.neighbours[i-1];
+        }
+
+        foreach (HexaData hdt in terrain){
+            upTerrain(hdt);
+        }
+    }
+
+    public void downTerrain(HexaData hxd){
+        if (hxd == null) return;
+        if (hxd.height >= 1 ){
+            hxd.height--;
+            hxd.colorIndex = hxd.height;
+            changeHex(hxd);
+        }
+    }
+
+    public void down2Terrain(HexaData hxd){
+        if (hxd == null) return;
+        HexaData[] terrain = new HexaData[7];
+        terrain[0] = hxd;
+        for (int i = 1; i<terrain.Length;i++){
+            terrain[i] = hxd.neighbours[i-1];
+        }
+
+        foreach (HexaData hdt in terrain){
+            downTerrain(hdt);
+        }
     }
 
     // SELECTOR 

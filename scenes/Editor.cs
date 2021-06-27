@@ -62,31 +62,31 @@ public class Editor : Spatial{
         };
 
         // SIGNALS
-        buElevations.Connect("pressed", this, "downbuttonclick",new Godot.Collections.Array{0});
-        buStyles.Connect("pressed", this, "downbuttonclick",new Godot.Collections.Array{1});
-        buGeneration.Connect("pressed", this, "downbuttonclick",new Godot.Collections.Array{2});
-        buOptions.Connect("pressed", this, "downbuttonclick",new Godot.Collections.Array{3});
+        buElevations.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{0});
+        buStyles.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{1});
+        buGeneration.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{2});
+        buOptions.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{3});
 
         // TOOLS
         lblActualTool = GetNode<Label>("GUI/UpPanel/MC/HB/HB/lblTool");
 
         buUp = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB0/CC/BuUp");
-        buUp.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"up"});
+        buUp.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"up"});
         buUp2 = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB1/CC/BuUp2");
-        buUp2.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"up2"});
+        buUp2.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"up2"});
         buDown = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB2/CC/BuDown");
-        buDown.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"down"});
+        buDown.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"down"});
         buDown2 = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB3/CC/BuDown2");
-        buDown2.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"down2"});
+        buDown2.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"down2"});
 
         buStyle = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB0/CC/BuStyle");
-        buStyle.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"style"});
+        buStyle.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"style"});
         buDetail = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB1/CC/BuDetail");
-        buDetail.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"detail"});
+        buDetail.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detail"});
         buRoads = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB2/CC/BuRoads");
-        buRoads.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"road"});
+        buRoads.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"road"});
         buRibers = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3/CC/BuRibers");
-        buRibers.Connect("pressed", this, "buttonToolSelect",new Godot.Collections.Array{"riber"});
+        buRibers.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riber"});
 
         // PROCEDURAL GEN
         lblNameMap = GetNode<LineEdit>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB1/txtNameMap");
@@ -100,7 +100,7 @@ public class Editor : Spatial{
         sH3 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB10/sH3");
 
         buGenMap = GetNode<Button>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0/MC/BuGenerate");
-        buGenMap.Connect("pressed", this, "buttonGenerateTerrain");
+        buGenMap.Connect("pressed", this, nameof(buttonGenerateTerrain));
 
         // translate text GUI
         locateTexts();
@@ -247,7 +247,7 @@ public class Editor : Spatial{
 
     //GUI CONTROLS
     private bool deactivateInput = false;
-    private void downbuttonclick(int buttonIndex){
+    private void buttonPanelclick(int buttonIndex){
 
         Boolean allHides = true;
         for (int i = 0; i< panels.Length;i++){
@@ -265,7 +265,7 @@ public class Editor : Spatial{
     private void buttonToolSelect(String toolname){
         actualToolSelected = toolname;
         lblActualTool.Text = toolname;
-        downbuttonclick(-1);
+        buttonPanelclick(-1);//hide panels
     }
 
     private void buttonGenerateTerrain(){
@@ -280,7 +280,7 @@ public class Editor : Spatial{
             new float[]{(float)sP3.Value,(float)sH3.Value} //3pass 
         }; 
 
-        //generate
+        //generate data terrain
         generateSimplexNoise(sizeMap,seed,datas);
 
         //Instanciar toda la vista
@@ -363,24 +363,16 @@ public class Editor : Spatial{
     //MANUAL EDITION
     public void exeTool(HexaData hxd){
         switch(actualToolSelected){
-            case "up":
-                if (hxd.height < HexaData.MAX_HEIGHT){
-                    hxd.height++;
-                }
-                break;
-            case "down":
-                if (hxd.height >= 1 ){
-                    hxd.height--;
-                }
-            break;
-
+            case "up": map.upTerrain(hxd); break;
+            case "up2": map.up2Terrain(hxd); break;
+            case "down":map.downTerrain(hxd); break;
+            case "down2":map.down2Terrain(hxd); break;
             case "riber":
                 hxd.riber = !hxd.riber;
             break;
         }
 
-        hxd.colorIndex = hxd.height;
-        map.changeHex(hxd);
+        
     }
 
 }

@@ -25,9 +25,9 @@ public class Hexagon : MeshInstance{
     public static float SIZE_TOP = 0.75f;//0.75f; //radius top hex
 
     public float getRealHeight(){
-        float heightValue = 0.5f;
-        if (hexData.height<3) heightValue = 0.2f;
-        if (hexData.height>5) heightValue = 0.8f;
+        float heightValue = 0.4f;
+        if (hexData.height>5) heightValue = 0.5f;
+        if (hexData.height>8) heightValue = 0.6f;
         return heightValue * hexData.height;
     }
 
@@ -66,13 +66,14 @@ public class Hexagon : MeshInstance{
         Mesh = st.Commit(); 
 
         //Physic mesh 
-        CreateTrimeshCollision(); 
+        foreach(Node child in GetChildren()){child.QueueFree();}
+        CreateTrimeshCollision();
 
         //Rivers 
         CreateRivers(st);
     }
 
-     //Crea los 6 Tris con los vertex 
+     //Basic terrain
     private void CreateHexMetrics(SurfaceTool st){
         //metics
         float angle = (Mathf.Pi/6);// 30º slides
@@ -215,7 +216,7 @@ public class Hexagon : MeshInstance{
         
     }
 
-    // Crear rios 
+    // Ribers
     private void CreateRivers(SurfaceTool st){
         if (!hexData.riber) return;
         SpatialMaterial matRiver = new SpatialMaterial();
