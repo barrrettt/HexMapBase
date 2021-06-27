@@ -20,17 +20,19 @@ public class Hexagon : MeshInstance{
     };
 
     private Color colorRiber = new Color("#115999");//blue
-
-    //Basic Metrics
+    
+    //STATICS METRICS
     public static float SIZE_TOP = 0.75f;//0.75f; //radius top hex
-
+    public static float HEIGHT_RIBER_OFFSET = 0.05f;
+    public static float SIZE_RIBER = 0.50f;
     public float getRealHeight(){
         float heightValue = 0.4f;
-        if (hexData.height>5) heightValue = 0.5f;
-        if (hexData.height>8) heightValue = 0.6f;
-        return heightValue * hexData.height;
+        int height = hexData.getHeight();
+        if (height>5) heightValue = 0.5f;
+        if (height>8) heightValue = 0.6f;
+        return heightValue * height;
     }
-
+    
     // Main vertex
     public Vector3[] vertex = new Vector3[13];
     //Main Links vertex
@@ -38,11 +40,9 @@ public class Hexagon : MeshInstance{
     pSEv1 = new Vector3(), pSEv2= new Vector3(), pSEv3 = new Vector3(), pSEv4= new Vector3(), 
     pSv1= new Vector3(), pSv2 = new Vector3(), pSv3= new Vector3(), pSv4= new Vector3();
     //Rivers vertex
-    public static float HEIGHT_RIBER_OFFSET = 0.05f;
-    public static float SIZE_RIBER = 0.15f;
     public Vector3[] riberVertex = new Vector3[13];
     //River links
-    public Vector3 rpNEv1 = new Vector3(),  rpNEv2 = new Vector3(), rpNEv3 = new Vector3(), rpNEv4 = new Vector3(),
+    public Vector3 rpNEv1 = new Vector3(), rpNEv2 = new Vector3(), rpNEv3 = new Vector3(), rpNEv4 = new Vector3(),
     rpSEv1 = new Vector3(), rpSEv2 = new Vector3(), rpSEv3 = new Vector3(), rpSEv4 = new Vector3(),
     rpSv1 = new Vector3(), rpSv2 = new Vector3(), rpSv3 = new Vector3(), rpSv4 = new Vector3(),
     rpSWv1 = new Vector3(), rpSWv2 = new Vector3(), rpSWv3 = new Vector3(), rpSWv4 = new Vector3(),
@@ -261,12 +261,13 @@ public class Hexagon : MeshInstance{
         Color color = colorRiber;
 
         // pintar centros? 
-        bool linkSE = false;
-        bool linkS = false;
-        bool linkSW= false;
-        bool linkNW = false;
-        bool linkN = false;
-        bool linkNE = false;
+        bool linkSE = false, linkSE_in = false, linkSE_out = false;
+        bool linkS = false, linkS_in = false, linkS_out = false;
+        bool linkSW= false, linkSW_in = false, linkSW_out = false;
+        bool linkNW = false, linkNW_in = false, linkNW_out = false;
+        bool linkN = false, linkN_in = false, linkN_out = false;
+        bool linkNE = false, linkNE_in = false, linkNE_out = false;
+        
         int countRiberNeibours = 0;
         
         //metrics unions top links NE 
@@ -277,15 +278,6 @@ public class Hexagon : MeshInstance{
         rpNEv2 = rpNEv1 + offset;
         rpNEv3 = rpNEv4 + offset;
 
-        HexaData hdNE = hexData.neighbours[5];
-        if (hdNE != null){
-            if (hdNE.riber){
-                linkNE = true;
-                countRiberNeibours++;
-                createColorQuad(st,rpNEv1,rpNEv2,rpNEv3,rpNEv4,color,color);
-            }
-        }
-
         //metrics unions top links SE 
         rpSEv1 = riberVertex[12];
         rpSEv4 = riberVertex[2];
@@ -293,15 +285,6 @@ public class Hexagon : MeshInstance{
         offset = new Vector3(Mathf.Cos(ang)*distRiberTop,0,-Mathf.Sin(ang)*distRiberTop);
         rpSEv2 = rpSEv1 + offset;
         rpSEv3 = rpSEv4 + offset;
-
-        HexaData hdSE = hexData.neighbours[0];
-        if (hdSE != null){
-            if (hdSE.riber){
-                linkSE = true;
-                countRiberNeibours++;
-                createColorQuad(st,rpSEv1,rpSEv2,rpSEv3,rpSEv4,color,color);
-            }
-        }
 
         //metrics unions top links S 
         rpSv1 = riberVertex[2];
@@ -311,15 +294,6 @@ public class Hexagon : MeshInstance{
         rpSv2 = rpSv1 + offset;
         rpSv3 = rpSv4 + offset;
 
-        HexaData hdS = hexData.neighbours[1];
-        if (hdS != null){
-            if (hdS.riber){
-                linkS = true;
-                countRiberNeibours++;
-                createColorQuad(st,rpSv1,rpSv2,rpSv3,rpSv4,color,color);
-            }
-        }
-
         //metrics unions top links SW 
         rpSWv1 = riberVertex[4];
         rpSWv4 = riberVertex[6];
@@ -327,15 +301,6 @@ public class Hexagon : MeshInstance{
         offset = new Vector3(Mathf.Cos(ang)*distRiberTop,0,-Mathf.Sin(ang)*distRiberTop);
         rpSWv2 = rpSWv1 + offset;
         rpSWv3 = rpSWv4 + offset;
-
-        HexaData hdSW = hexData.neighbours[2];
-        if (hdSW != null){
-            if (hdSW.riber){
-                linkSW = true;
-                countRiberNeibours++;
-                createColorQuad(st,rpSWv1,rpSWv2,rpSWv3,rpSWv4,color,color);
-            }
-        }
 
         //metrics unions top links NW 
         rpNWv1 = riberVertex[6];
@@ -345,15 +310,6 @@ public class Hexagon : MeshInstance{
         rpNWv2 = rpNWv1 + offset;
         rpNWv3 = rpNWv4 + offset;
 
-        HexaData hdNW = hexData.neighbours[3];
-        if (hdNW != null){
-            if (hdNW.riber){
-                linkNW = true;
-                countRiberNeibours++;
-                createColorQuad(st,rpNWv1,rpNWv2,rpNWv3,rpNWv4,color,color);
-            }
-        }
-
         //metrics unions top links N 
         rpNv1 = riberVertex[8];
         rpNv4 = riberVertex[10];
@@ -362,14 +318,75 @@ public class Hexagon : MeshInstance{
         rpNv2 = rpNv1 + offset;
         rpNv3 = rpNv4 + offset;
 
-        HexaData hdN = hexData.neighbours[4];
-        if (hdN != null){
-            if (hdN.riber){
-                linkN = true;
+        // Ribers IN or OUT?
+        HexaData hdNE = hexData.neighbours[5];
+        if (hdNE != null){
+            linkNE_out = hexData.ribersOut[5] == hdNE;
+            linkNE_in = hdNE.ribersOut[2] == hexData;
+            if (hdNE.riber && (linkNE_out|| linkNE_in)){
+                linkNE = true;
                 countRiberNeibours++;
-                createColorQuad(st,rpNv1,rpNv2,rpNv3,rpNv4,color,color);
             }
         }
+        HexaData hdSE = hexData.neighbours[0];
+        if (hdSE != null){
+            linkSE_out = hexData.ribersOut[0] == hdSE;
+            linkSE_in = hdSE.ribersOut[3] == hexData;
+            if (hdSE.riber && (linkSE_out ||linkSE_in)){
+                linkSE = true;
+                countRiberNeibours++;
+            }
+        }
+
+        HexaData hdS = hexData.neighbours[1];
+        if (hdS != null){
+            linkS_out = hexData.ribersOut[1] == hdS;
+            linkS_in = hdS.ribersOut[4] == hexData;
+            if (hdS.riber && (linkS_out || linkS_in)){
+                linkS = true;
+                countRiberNeibours++;
+            }
+        }
+
+       
+        HexaData hdSW = hexData.neighbours[2];
+        if (hdSW != null){
+            linkSW_out = hexData.ribersOut[2] == hdSW;
+            linkSW_in = hdSW.ribersOut[5] == hexData;
+            if (hdSW.riber && (linkSW_out || linkSW_in)){
+                linkSW = true;
+                countRiberNeibours++;
+            }
+        }
+        HexaData hdNW = hexData.neighbours[3];
+        if (hdNW != null){
+            linkNW_out = hexData.ribersOut[3] == hdNW;
+            linkNW_in = hdNW.ribersOut[0] == hexData;
+            if (hdNW.riber && (linkNW_out || linkNW_in)){
+                linkNW = true;
+                countRiberNeibours++;       
+            }
+        }
+        HexaData hdN = hexData.neighbours[4];
+        if (hdN != null){
+            linkN_out = hexData.ribersOut[4] == hdN;
+            linkN_in = hdN.ribersOut[1] == hexData;
+            if (hdN.riber && (linkN_out || linkN_in)){
+                linkN = true;
+                countRiberNeibours++;
+            }
+        }
+
+        //LINKS TOP (bajo agua no)
+        if (!hexData.water){
+            if (linkNE) createColorQuad(st,rpNEv1,rpNEv2,rpNEv3,rpNEv4,color,color);
+            if (linkSE) createColorQuad(st,rpSEv1,rpSEv2,rpSEv3,rpSEv4,color,color);
+            if (linkS)  createColorQuad(st,rpSv1,rpSv2,rpSv3,rpSv4,color,color);
+            if (linkSW) createColorQuad(st,rpSWv1,rpSWv2,rpSWv3,rpSWv4,color,color);
+            if (linkNW) createColorQuad(st,rpNWv1,rpNWv2,rpNWv3,rpNWv4,color,color);
+            if (linkN) createColorQuad(st,rpNv1,rpNv2,rpNv3,rpNv4,color,color);
+        }
+
 
         //LARGUES LINKS 
         if (linkNE){
@@ -409,63 +426,64 @@ public class Hexagon : MeshInstance{
         }
 
 
-        //CENTRO PERO CON 12 TRIS
-        if (countRiberNeibours < 2  || countRiberNeibours > 3){
-            linkSE = linkS = linkSW = linkNW = linkN = linkNE = true;// un lago 
-        }
-        if (linkSE){
-            createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);//SE 0 
-        } 
-        if (linkS){
-            createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);//S  1 
-        } 
-        if (linkSW){
-            createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);//SW 2 
-        } 
-        if (linkNW){
-            createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);//NW 3 
-        }
-        if (linkN){
-            createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);//N  4 
-        } 
-        if (linkNE){
-            createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);//NE 5
-        } 
+        //CENTRO PERO CON 12 TRIS (bajo agua no)
+        if (!hexData.water){
+            if (countRiberNeibours < 2  || countRiberNeibours > 3){
+                linkSE = linkS = linkSW = linkNW = linkN = linkNE = true;// un lago 
+            }
+            if (linkSE){
+                createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);//SE 0 
+            } 
+            if (linkS){
+                createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);//S  1 
+            } 
+            if (linkSW){
+                createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);//SW 2 
+            } 
+            if (linkNW){
+                createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);//NW 3 
+            }
+            if (linkN){
+                createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);//N  4 
+            } 
+            if (linkNE){
+                createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);//NE 5
+            } 
 
-        //Tapar huecos feos del rio
-        if (countRiberNeibours>1){
-            if (linkSE && linkSW){
-                createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);
-            }
-            if (linkSE && linkNW){
-                createTri(st,riberVertex[0],riberVertex[2],riberVertex[6],color);
-                createTri(st,riberVertex[0],riberVertex[8],riberVertex[12],color);
-            }
-            if (linkSE && linkN){
-                createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);
-            }
-            if (linkS && linkNW){
-                createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);
-            }
-            if (linkS && linkN){
-                createTri(st,riberVertex[0],riberVertex[10],riberVertex[2],color);
-                createTri(st,riberVertex[0],riberVertex[4],riberVertex[8],color);
-            }
-            if (linkS && linkNE){
-                createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);
-            }
-            if (linkSW && linkN){
-                createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);
-            }
-            if (linkSW && linkNE){
-                createTri(st,riberVertex[0],riberVertex[6],riberVertex[10],color);
-                createTri(st,riberVertex[0],riberVertex[12],riberVertex[4],color);
-            }
-            if (linkNE && linkNW){
-                createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);
+            //Tapar huecos feos del rio
+            if (countRiberNeibours>1){
+                if (linkSE && linkSW){
+                    createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);
+                }
+                if (linkSE && linkNW){
+                    createTri(st,riberVertex[0],riberVertex[2],riberVertex[6],color);
+                    createTri(st,riberVertex[0],riberVertex[8],riberVertex[12],color);
+                }
+                if (linkSE && linkN){
+                    createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);
+                }
+                if (linkS && linkNW){
+                    createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);
+                }
+                if (linkS && linkN){
+                    createTri(st,riberVertex[0],riberVertex[10],riberVertex[2],color);
+                    createTri(st,riberVertex[0],riberVertex[4],riberVertex[8],color);
+                }
+                if (linkS && linkNE){
+                    createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);
+                }
+                if (linkSW && linkN){
+                    createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);
+                }
+                if (linkSW && linkNE){
+                    createTri(st,riberVertex[0],riberVertex[6],riberVertex[10],color);
+                    createTri(st,riberVertex[0],riberVertex[12],riberVertex[4],color);
+                }
+                if (linkNE && linkNW){
+                    createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);
+                }
             }
         }
-            
     }
 
     // AUX 

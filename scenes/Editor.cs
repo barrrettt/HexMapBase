@@ -16,7 +16,7 @@ public class Editor : Spatial{
     private String actualToolSelected = "";
     private HexaData lastOrigin = null;
     private Label lblActualTool;
-    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers;
+    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers, buRiberClear;
 
     private LineEdit lblNameMap;
     private SpinBox sbSeedMap;
@@ -48,25 +48,21 @@ public class Editor : Spatial{
         buGeneration= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC3/BUGeneration"); 
         buOptions= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC4/BUOptions"); 
 
-        
-
         pElevations = GetNode<Control>("GUI/RightPanel/VB/MC/VBElevations"); 
+        buElevations.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{0});
         pStyles = GetNode<Control>("GUI/RightPanel/VB/MC/VBStyles"); 
-        pGeneration = GetNode<Control>("GUI/RightPanel/VB/MC/VBGeneration"); 
+        buStyles.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{1});
+        pGeneration = GetNode<Control>("GUI/RightPanel/VB/MC/VBGeneration");
+        buGeneration.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{2});
         pOptions = GetNode<Control>("GUI/RightPanel/VB/MC/VBOptions"); 
-        
+        buOptions.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{3});
+
         panels = new Control[]{
             pElevations,
             pStyles,
             pGeneration,
             pOptions
         };
-
-        // SIGNALS
-        buElevations.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{0});
-        buStyles.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{1});
-        buGeneration.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{2});
-        buOptions.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{3});
 
         // TOOLS
         lblActualTool = GetNode<Label>("GUI/UpPanel/MC/HB/HB/lblTool");
@@ -86,8 +82,10 @@ public class Editor : Spatial{
         buDetail.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detail"});
         buRoads = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB2/CC/BuRoads");
         buRoads.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"road"});
-        buRibers = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3/CC/BuRibers");
+        buRibers = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC/BuRiber");
         buRibers.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riber"});
+        buRiberClear = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC/BuRiberClear");
+        buRiberClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riberclear"});
 
         // PROCEDURAL GEN
         lblNameMap = GetNode<LineEdit>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB1/txtNameMap");
@@ -223,11 +221,9 @@ public class Editor : Spatial{
             }
 
             map.moveSelector(hx.hexData.row, hx.hexData.col);
-            lastOrigin = hx.hexData;
 
         }else{
             lblSelectedPos2.Text ="";
-            lastOrigin = null;
         }
     }
 
@@ -270,7 +266,7 @@ public class Editor : Spatial{
     private void buttonToolSelect(String toolname){
         actualToolSelected = toolname;
         lblActualTool.Text = toolname;
-        if (lastOrigin != null)  lblActualTool.Text += " Origin: " + lastOrigin.ToString();
+        if (toolname != "" && lastOrigin != null)  lblActualTool.Text += " Origin: " + lastOrigin.ToString();
         buttonPanelclick(-1);//hide panels
     }
 
@@ -360,20 +356,27 @@ public class Editor : Spatial{
                 int height =  Mathf.RoundToInt(lerp);
 
                 HexaData hexaData = map.mapData.GetHexaData(i,j);
-                hexaData.height = height;
-                hexaData.colorIndex = height;
+                hexaData.setHeight(height);
             }
         }
     }
 
     //MANUAL EDITION
     public void exeTool(HexaData hxd){
+        
         switch(actualToolSelected){
             case "up": map.upTerrain(hxd); break;
             case "up2": map.up2Terrain(hxd); break;
             case "down":map.downTerrain(hxd); break;
             case "down2":map.down2Terrain(hxd); break;
-            case "riber":map.createRiber(lastOrigin,hxd); break;
+            case "riber":
+                map.createRiber(lastOrigin,hxd); 
+                lastOrigin = hxd;
+                break;
+            case "riberclear": 
+                map.cleanRibers(hxd); 
+                lastOrigin = null;
+                break;
         }
     }
 

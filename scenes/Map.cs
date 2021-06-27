@@ -18,10 +18,9 @@ public class Map : Spatial{
         instanceAllMap(); 
         moveSelector(0,0);
         //debug vecinos
-        iGeo = new ImmediateGeometry();
-        AddChild(iGeo);
+        //iGeo = new ImmediateGeometry();
+        //AddChild(iGeo);
     }
-
     public override void _Process(float delta){ 
         //indicadorVecinosDebug();
     }
@@ -85,9 +84,11 @@ public class Map : Spatial{
 
     public void upTerrain(HexaData hxd){
         if (hxd == null) return;
-        if (hxd.height < HexaData.MAX_HEIGHT){
-            hxd.height++;
-            hxd.colorIndex = hxd.height;
+        int height = hxd.getHeight();
+        if (height < HexaData.MAX_HEIGHT){
+            height++;
+            hxd.setHeight(height);
+            hxd.clearRibers();
             CreateAffectedHex(hxd);
         }
     }
@@ -107,9 +108,11 @@ public class Map : Spatial{
 
     public void downTerrain(HexaData hxd){
         if (hxd == null) return;
-        if (hxd.height >= 1 ){
-            hxd.height--;
-            hxd.colorIndex = hxd.height;
+        int height = hxd.getHeight();
+        if (height >= 1 ){
+            height--;
+            hxd.setHeight(height);
+            hxd.clearRibers();
             CreateAffectedHex(hxd);
         }
     }
@@ -130,7 +133,11 @@ public class Map : Spatial{
     public void createRiber(HexaData hxdOrigin, HexaData hxdEnd){
         if (hxdOrigin == null || hxdEnd == null)return;
         //riber cant up
-        if (hxdOrigin.height< hxdEnd.height) return;
+        if (hxdOrigin.getHeight()< hxdEnd.getHeight()) 
+            return;
+        //riber not in water
+        if (hxdOrigin.water) 
+            return;
 
         bool finded = false;
         for (int i = 0; i< hxdOrigin.neighbours.Length; i++){
@@ -151,8 +158,8 @@ public class Map : Spatial{
 
     public void cleanRibers(HexaData hxd){
         if (hxd == null) return;
-        hxd.riber = false;
-        hxd.ribersOut = new HexaData[6];
+        hxd.clearRibers();
+        CreateAffectedHex(hxd);
     }
 
     // SELECTOR 
@@ -341,13 +348,16 @@ public class MapData{
 public class HexaData{ 
     //const
     public static int MAX_HEIGHT = 10;
+    public static int WATER_LEVEL = 2;
     public readonly int row, col; 
     public HexaData[] neighbours = new HexaData[6]; // primero SE y continua sentido horario 
     // aspect
-    public int colorIndex = 0,  height = 1; 
+    public int colorIndex = 0;
+    private int height = 1; 
+    public bool water = false;
     
     // riber system, 
-    public bool riber = false;
+    public bool riber = false; 
     public HexaData[] ribersOut = new HexaData[6]; //first SE and clock way: S, SW...
 
     //reference with escene object
@@ -361,6 +371,22 @@ public class HexaData{
     public override String ToString(){
         String str = String.Format("({0},{1})",this.row,this.col);
         return str;
+    }
+
+    public void setHeight(int newheight){
+        if (newheight<0|| newheight > 10)return;
+        water = (newheight < WATER_LEVEL); 
+        colorIndex = newheight;
+        this.height = newheight;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public void clearRibers(){
+        riber = false;
+        ribersOut = new HexaData[6];
     }
 
 }

@@ -377,7 +377,7 @@ __meta__ = {
 }
 
 [node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB"]
-margin_right = 121.0
+margin_right = 157.0
 margin_bottom = 50.0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -427,7 +427,7 @@ __meta__ = {
 
 [node name="HB1" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB"]
 margin_top = 54.0
-margin_right = 121.0
+margin_right = 157.0
 margin_bottom = 104.0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -477,7 +477,7 @@ __meta__ = {
 
 [node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB"]
 margin_top = 108.0
-margin_right = 121.0
+margin_right = 157.0
 margin_bottom = 158.0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -527,7 +527,7 @@ __meta__ = {
 
 [node name="HB3" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB"]
 margin_top = 162.0
-margin_right = 121.0
+margin_right = 157.0
 margin_bottom = 212.0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -571,6 +571,106 @@ margin_top = 15.0
 margin_right = 121.0
 margin_bottom = 34.0
 text = "DOWN x2"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB4" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB"]
+margin_top = 216.0
+margin_right = 157.0
+margin_bottom = 266.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuRiber" type="Button" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC/BuRiber"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 16 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 97.0
+margin_bottom = 34.0
+text = "RIBER"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB5" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB"]
+margin_top = 270.0
+margin_right = 157.0
+margin_bottom = 320.0
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5"]
+margin_right = 50.0
+margin_bottom = 50.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuRiberClear" type="Button" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC"]
+margin_right = 50.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC/BuRiberClear"]
+self_modulate = Color( 0.654902, 0.0705882, 0.0823529, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 16 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5"]
+margin_left = 54.0
+margin_top = 15.0
+margin_right = 157.0
+margin_bottom = 34.0
+text = "CLEAR RIBERS"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -802,56 +902,6 @@ margin_top = 15.0
 margin_right = 104.0
 margin_bottom = 34.0
 text = "ROADS"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="HB3" type="HBoxContainer" parent="GUI/RightPanel/VB/MC/VBStyles/PContent/VB"]
-margin_top = 162.0
-margin_right = 106.0
-margin_bottom = 212.0
-mouse_filter = 2
-size_flags_horizontal = 3
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="CC" type="CenterContainer" parent="GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3"]
-margin_right = 50.0
-margin_bottom = 50.0
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="BuRibers" type="Button" parent="GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3/CC"]
-margin_right = 50.0
-margin_bottom = 50.0
-rect_min_size = Vector2( 50, 50 )
-mouse_default_cursor_shape = 2
-
-[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3/CC/BuRibers"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = -5.0
-mouse_filter = 2
-texture = ExtResource( 16 )
-expand = true
-stretch_mode = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Label" type="Label" parent="GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB3"]
-margin_left = 54.0
-margin_top = 15.0
-margin_right = 106.0
-margin_bottom = 34.0
-text = "RIBERS"
 __meta__ = {
 "_edit_use_anchors_": false
 }
