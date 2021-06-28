@@ -26,11 +26,11 @@ public class HexaSelector : MeshInstance{
         SpatialMaterial mat = (SpatialMaterial) MaterialOverride;
         //mat.AlbedoColor = color;
         st.SetMaterial(mat);
-        st.Begin(Mesh.PrimitiveType.LineLoop);
+        st.Begin(Mesh.PrimitiveType.Triangles);
 
         //vertices
         float height = 0f;
-        float size = 0.70f;
+        float size = 0.50f; float sizee = 0.70f;
         float sexto = Mathf.Pi/3;
 
         Vector3 v0 = new Vector3(0,height,0);//CENTRO
@@ -40,19 +40,33 @@ public class HexaSelector : MeshInstance{
         Vector3 v4 = new Vector3(Mathf.Cos(sexto * 4), height, Mathf.Sin(sexto*4)) * size;//NW
         Vector3 v5 = new Vector3(Mathf.Cos(sexto * 5), height, Mathf.Sin(sexto*5)) * size;//NE
         Vector3 v6 = new Vector3(Mathf.Cos(sexto * 6), height, Mathf.Sin(sexto*6)) * size;//E
+
+        Vector3 ev1 = new Vector3(Mathf.Cos(sexto * 1), height, Mathf.Sin(sexto*1)) * sizee;//SE EXTERIORES
+        Vector3 ev2 = new Vector3(Mathf.Cos(sexto * 2), height, Mathf.Sin(sexto*2)) * sizee;//SW
+        Vector3 ev3 = new Vector3(Mathf.Cos(sexto * 3), height, Mathf.Sin(sexto*3)) * sizee;//W
+        Vector3 ev4 = new Vector3(Mathf.Cos(sexto * 4), height, Mathf.Sin(sexto*4)) * sizee;//NW
+        Vector3 ev5 = new Vector3(Mathf.Cos(sexto * 5), height, Mathf.Sin(sexto*5)) * sizee;//NE
+        Vector3 ev6 = new Vector3(Mathf.Cos(sexto * 6), height, Mathf.Sin(sexto*6)) * sizee;//E
         
-        createLine(st,v1,color);
+
+        GeoAux.createQuad(st,v1,ev1,ev2,v2,color);
+        GeoAux.createQuad(st,v2,ev2,ev3,v3,color);
+        GeoAux.createQuad(st,v3,ev3,ev4,v4,color);
+        GeoAux.createQuad(st,v4,ev4,ev5,v5,color);
+        GeoAux.createQuad(st,v5,ev5,ev6,v6,color);
+        GeoAux.createQuad(st,v6,ev6,ev1,v1,color);
+        /*createLine(st,v1,color);
         createLine(st,v2,color);
         createLine(st,v3,color);
         createLine(st,v4,color);
         createLine(st,v5,color);
         createLine(st,v6,color);
-
+        */
         //FINALY
         var mesh = st.Commit();
         Mesh = mesh;
     }
-    
+
     private void createLine(SurfaceTool st, Vector3 v1,Color color){
         st.AddColor(color);
         st.AddUv(new Vector2());
