@@ -41,14 +41,19 @@ public class Hexagon : MeshInstance{
     pSv1= new Vector3(), pSv2 = new Vector3(), pSv3= new Vector3(), pSv4= new Vector3();
     //Rivers vertex
     public Vector3[] riberVertex = new Vector3[13];
-    //River links
+    //River links Top
     public Vector3 rpNEv1 = new Vector3(), rpNEv2 = new Vector3(), rpNEv3 = new Vector3(), rpNEv4 = new Vector3(),
     rpSEv1 = new Vector3(), rpSEv2 = new Vector3(), rpSEv3 = new Vector3(), rpSEv4 = new Vector3(),
     rpSv1 = new Vector3(), rpSv2 = new Vector3(), rpSv3 = new Vector3(), rpSv4 = new Vector3(),
     rpSWv1 = new Vector3(), rpSWv2 = new Vector3(), rpSWv3 = new Vector3(), rpSWv4 = new Vector3(),
     rpNWv1 = new Vector3(), rpNWv2 = new Vector3(), rpNWv3 = new Vector3(), rpNWv4 = new Vector3(),
     rpNv1 = new Vector3(), rpNv2 = new Vector3(), rpNv3 = new Vector3(), rpNv4 = new Vector3();
+    //River links largues
+    public Vector3 pNEv1Link = new Vector3(), pNEv2Link = new Vector3(),pNEv3Link = new Vector3(),pNEv4Link = new Vector3(),
+    pSEv1Link = new Vector3(), pSEv2Link = new Vector3(), pSEv3Link = new Vector3(), pSEv4Link = new Vector3(),
+    pSv1Link = new Vector3(), pSv2Link = new Vector3(), pSv3Link = new Vector3(), pSv4Link = new Vector3();
 
+    // CREATE HEXAGON:
     public void Create(){
         if (hexData == null) hexData = new HexaData(0,0);
 
@@ -96,12 +101,12 @@ public class Hexagon : MeshInstance{
         vertex[12] = new Vector3(Mathf.Cos(angle * 12)* SIZE_TOP, hValue, Mathf.Sin(angle*12)* SIZE_TOP);//E
         
         Color color = colors[hexData.colorIndex];//color del indexColor
-        createTri(st,vertex[0],vertex[12],vertex[2],color);//SE 
-        createTri(st,vertex[0],vertex[2],vertex[4],color);//S  
-        createTri(st,vertex[0],vertex[4],vertex[6],color);//SW 
-        createTri(st,vertex[0],vertex[6],vertex[8],color);//NW 
-        createTri(st,vertex[0],vertex[8],vertex[10],color);//N  
-        createTri(st,vertex[0],vertex[10],vertex[12],color);//NE 
+        GeoAux.createTri(st,vertex[0],vertex[12],vertex[2],color);//SE 
+        GeoAux.createTri(st,vertex[0],vertex[2],vertex[4],color);//S  
+        GeoAux.createTri(st,vertex[0],vertex[4],vertex[6],color);//SW 
+        GeoAux.createTri(st,vertex[0],vertex[6],vertex[8],color);//NW 
+        GeoAux.createTri(st,vertex[0],vertex[8],vertex[10],color);//N  
+        GeoAux.createTri(st,vertex[0],vertex[10],vertex[12],color);//NE 
     }
 
     private void CreateHexUnions(SurfaceTool st){
@@ -128,7 +133,7 @@ public class Hexagon : MeshInstance{
             Vector3 offset = new Vector3(Mathf.Cos(ang30)*dist,deltaH,-Mathf.Sin(ang30)*dist);
             pNEv2 = pNEv1 + offset;
             pNEv3 = pNEv4 + offset;
-            createColorQuad(st,pNEv1,pNEv2,pNEv3,pNEv4,cOtherNE,color);
+            GeoAux.createColorQuad(st,pNEv1,pNEv2,pNEv3,pNEv4,cOtherNE,color);
         }
         
         //SE
@@ -142,7 +147,7 @@ public class Hexagon : MeshInstance{
             Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH,-Mathf.Sin(ang)*dist);
             pSEv2 = pSEv1 + offset;
             pSEv3 = pSEv4 + offset;
-            createColorQuad(st,pSEv1,pSEv2,pSEv3,pSEv4,cOtherE,color);
+            GeoAux.createColorQuad(st,pSEv1,pSEv2,pSEv3,pSEv4,cOtherE,color);
         }
         
         //S
@@ -156,16 +161,16 @@ public class Hexagon : MeshInstance{
             Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH,-Mathf.Sin(ang)*dist);
             pSv2 = pSv1 + offset;
             pSv3 = pSv4 + offset;
-            createColorQuad(st,pSv1,pSv2,pSv3,pSv4,cOtherS,color);
+            GeoAux.createColorQuad(st,pSv1,pSv2,pSv3,pSv4,cOtherS,color);
         }
         
         //TRI Entre puentes NE-SE
         if (hdNE != null && hdSE != null){
-            createColorTri(st,pNEv4,pNEv3,pSEv2,color,cOtherNE,cOtherE);
+            GeoAux.createColorTri(st,pNEv4,pNEv3,pSEv2,color,cOtherNE,cOtherE);
         }
         //TRI entre puentes SE-S
         if (hdSE != null && hdS != null){
-            createColorTri(st,pSv1,pSEv3,pSv2,color,cOtherE,cOtherS);
+            GeoAux.createColorTri(st,pSv1,pSEv3,pSv2,color,cOtherE,cOtherS);
         }
 
         //FALDAS: si es borde de mapa(sin vecino) hay que tapar la cara
@@ -181,7 +186,7 @@ public class Hexagon : MeshInstance{
                 Vector3 bajoDer = new Vector3(vertex[der].x,0,vertex[der].z) * (4/3f);
                 Vector3 altoIzq = vertex[izq];
                 Vector3 bajoIzq = new Vector3(vertex[izq].x,0,vertex[izq].z) * (4/3f);
-                createColorQuad(st,altoDer,bajoDer,bajoIzq,altoIzq,color,color);
+                GeoAux.createColorQuad(st,altoDer,bajoDer,bajoIzq,altoIzq,color,color);
 
                 //en un sentido
                 int anterior = i-1; if (anterior<0) anterior=5;
@@ -195,7 +200,7 @@ public class Hexagon : MeshInstance{
                     if (par[0] == 2 && par[1]==4){ upDerOtro = pSEv3; otroC = cOtherE;}
                     if (par[0] == 4 && par[1]==6){ upDerOtro = pSv3; otroC = cOtherS;}
                     //tapa con el tri
-                    createColorTri(st,upDer,upDerOtro,downDer,color,otroC,color);
+                    GeoAux.createColorTri(st,upDer,upDerOtro,downDer,color,otroC,color);
                 }
 
                 //en el otro sentido hay que tapar tambien los triangulos:
@@ -209,7 +214,7 @@ public class Hexagon : MeshInstance{
                     if (par[0] == 10 && par[1]==12) {upIzqOtro = pSEv2; otroC = cOtherE;}
                     if (par[0] == 12 && par[1]==2) {upIzqOtro = pSv2; otroC = cOtherS;}
                     //tapa con el tri
-                    createColorTri(st,downIzq,upIzqOtro,upIzq,color,otroC,color);
+                    GeoAux.createColorTri(st,downIzq,upIzqOtro,upIzq,color,otroC,color);
                 }
             }
         }
@@ -379,12 +384,12 @@ public class Hexagon : MeshInstance{
 
         //LINKS TOP (bajo agua no)
         if (!hexData.water){
-            if (linkNE) createColorQuad(st,rpNEv1,rpNEv2,rpNEv3,rpNEv4,color,color);
-            if (linkSE) createColorQuad(st,rpSEv1,rpSEv2,rpSEv3,rpSEv4,color,color);
-            if (linkS)  createColorQuad(st,rpSv1,rpSv2,rpSv3,rpSv4,color,color);
-            if (linkSW) createColorQuad(st,rpSWv1,rpSWv2,rpSWv3,rpSWv4,color,color);
-            if (linkNW) createColorQuad(st,rpNWv1,rpNWv2,rpNWv3,rpNWv4,color,color);
-            if (linkN) createColorQuad(st,rpNv1,rpNv2,rpNv3,rpNv4,color,color);
+            if (linkNE) GeoAux.createColorQuad(st,rpNEv1,rpNEv2,rpNEv3,rpNEv4,color,color);
+            if (linkSE) GeoAux.createColorQuad(st,rpSEv1,rpSEv2,rpSEv3,rpSEv4,color,color);
+            if (linkS)  GeoAux.createColorQuad(st,rpSv1,rpSv2,rpSv3,rpSv4,color,color);
+            if (linkSW) GeoAux.createColorQuad(st,rpSWv1,rpSWv2,rpSWv3,rpSWv4,color,color);
+            if (linkNW) GeoAux.createColorQuad(st,rpNWv1,rpNWv2,rpNWv3,rpNWv4,color,color);
+            if (linkN) GeoAux.createColorQuad(st,rpNv1,rpNv2,rpNv3,rpNv4,color,color);
         }
 
 
@@ -392,37 +397,37 @@ public class Hexagon : MeshInstance{
         if (linkNE){
             float otherH = hdNE.hexagon.getRealHeight() + HEIGHT_RIBER_OFFSET;
             float deltaH = otherH - hValue;
-            Vector3 pNEv1Link = rpNEv2;
-            Vector3 pNEv4Link = rpNEv3;
+            pNEv1Link = rpNEv2;
+            pNEv4Link = rpNEv3;
             ang = Mathf.Pi/6; //30º 
             offset = new Vector3(Mathf.Cos(ang) * distLink, deltaH, -Mathf.Sin(ang) * distLink);
-            Vector3 pNEv2Link = pNEv1Link + offset;
-            Vector3 pNEv3Link = pNEv4Link + offset;
-            createColorQuad(st,pNEv1Link,pNEv2Link,pNEv3Link,pNEv4Link,color,color);
+            pNEv2Link = pNEv1Link + offset;
+            pNEv3Link = pNEv4Link + offset;
+            GeoAux.createColorQuad(st,pNEv1Link,pNEv2Link,pNEv3Link,pNEv4Link,color,color);
         }
 
         if (linkSE){
             float otherH = hdSE.hexagon.getRealHeight() + HEIGHT_RIBER_OFFSET;
             float deltaH = otherH - hValue;
-            Vector3 pSEv1Link = rpSEv2;
-            Vector3 pSEv4Link = rpSEv3;
+            pSEv1Link = rpSEv2;
+            pSEv4Link = rpSEv3;
             ang = -Mathf.Pi/6; //-30º 
             offset = new Vector3(Mathf.Cos(ang) * distLink, deltaH, -Mathf.Sin(ang) * distLink);
-            Vector3 pSEv2Link = pSEv1Link + offset;
-            Vector3 pSEv3Link = pSEv4Link + offset;
-            createColorQuad(st,pSEv1Link,pSEv2Link,pSEv3Link,pSEv4Link,color,color);
+            pSEv2Link = pSEv1Link + offset;
+            pSEv3Link = pSEv4Link + offset;
+            GeoAux.createColorQuad(st,pSEv1Link,pSEv2Link,pSEv3Link,pSEv4Link,color,color);
         }
 
         if (linkS){
             float otherH = hdS.hexagon.getRealHeight() + HEIGHT_RIBER_OFFSET;
             float deltaH = otherH - hValue;
-            Vector3 pSv1Link = rpSv2;
-            Vector3 pSv4Link = rpSv3;
+            pSv1Link = rpSv2;
+            pSv4Link = rpSv3;
             ang = -Mathf.Pi*3/6; //-90º 
             offset = new Vector3(Mathf.Cos(ang) * distLink, deltaH, -Mathf.Sin(ang) * distLink);
-            Vector3 pSv2Link = pSv1Link + offset;
-            Vector3 pSv3Link = pSv4Link + offset;
-            createColorQuad(st,pSv1Link,pSv2Link,pSv3Link,pSv4Link,color,color);
+            pSv2Link = pSv1Link + offset;
+            pSv3Link = pSv4Link + offset;
+            GeoAux.createColorQuad(st,pSv1Link,pSv2Link,pSv3Link,pSv4Link,color,color);
         }
 
 
@@ -432,89 +437,59 @@ public class Hexagon : MeshInstance{
                 linkSE = linkS = linkSW = linkNW = linkN = linkNE = true;// un lago 
             }
             if (linkSE){
-                createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);//SE 0 
+                GeoAux.createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);//SE 0 
             } 
             if (linkS){
-                createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);//S  1 
+                GeoAux.createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);//S  1 
             } 
             if (linkSW){
-                createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);//SW 2 
+                GeoAux.createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);//SW 2 
             } 
             if (linkNW){
-                createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);//NW 3 
+                GeoAux.createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);//NW 3 
             }
             if (linkN){
-                createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);//N  4 
+                GeoAux.createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);//N  4 
             } 
             if (linkNE){
-                createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);//NE 5
+                GeoAux.createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);//NE 5
             } 
 
             //Tapar huecos feos del rio
             if (countRiberNeibours>1){
                 if (linkSE && linkSW){
-                    createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);
                 }
                 if (linkSE && linkNW){
-                    createTri(st,riberVertex[0],riberVertex[2],riberVertex[6],color);
-                    createTri(st,riberVertex[0],riberVertex[8],riberVertex[12],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[2],riberVertex[6],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[8],riberVertex[12],color);
                 }
                 if (linkSE && linkN){
-                    createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);
                 }
                 if (linkS && linkNW){
-                    createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);
                 }
                 if (linkS && linkN){
-                    createTri(st,riberVertex[0],riberVertex[10],riberVertex[2],color);
-                    createTri(st,riberVertex[0],riberVertex[4],riberVertex[8],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[10],riberVertex[2],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[4],riberVertex[8],color);
                 }
                 if (linkS && linkNE){
-                    createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);
                 }
                 if (linkSW && linkN){
-                    createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);
                 }
                 if (linkSW && linkNE){
-                    createTri(st,riberVertex[0],riberVertex[6],riberVertex[10],color);
-                    createTri(st,riberVertex[0],riberVertex[12],riberVertex[4],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[6],riberVertex[10],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[12],riberVertex[4],color);
                 }
                 if (linkNE && linkNW){
-                    createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);
+                    GeoAux.createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);
                 }
             }
         }
     }
 
-    // AUX 
-    private void createColorQuad(SurfaceTool st, Vector3 v1,Vector3 v2,Vector3 v3,Vector3 v4,Color cOt, Color cMe){
-        //2 tris:
-        createColorTri(st,v1,v2,v3,cMe,cOt,cOt);
-        createColorTri(st,v3,v4,v1,cOt,cMe,cMe);
-    }
-
-    // AUX 
-    private void createColorTri(SurfaceTool st, Vector3 v1, Vector3 v2, Vector3 v3, Color c1, Color c2, Color c3){
-        st.AddColor(c1);
-        st.AddUv(new Vector2(0,0));
-        st.AddVertex(v1);
-        st.AddColor(c2);
-        st.AddUv(new Vector2(0,0));
-        st.AddVertex(v2);
-        st.AddColor(c3);
-        st.AddUv(new Vector2(0,0));
-        st.AddVertex(v3);
-    }
-
-    // AUX 
-    private void createTri(SurfaceTool st, Vector3 v1,Vector3 v2,Vector3 v3,Color color){
-        createColorTri(st,v1,v2,v3,color,color,color);
-    }
-    // AUX 
-    private void createQuad(SurfaceTool st, Vector3 v1,Vector3 v2,Vector3 v3,Vector3 v4,Color color){
-        //2 tris:
-        createTri(st,v1,v2,v3,color);
-        createTri(st,v3,v4,v1,color);
-    }
-
+   
 }
