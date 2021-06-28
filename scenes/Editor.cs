@@ -110,7 +110,7 @@ public class Editor : Spatial{
             new float[]{3f,6f},//2pass 
             new float[]{10f,20f} //3pass 
         }; 
-        generateSimplexNoise(10,0,datas);
+        generateSimplexNoise(25,0,datas);
 
         //physics balls debug
         balls = new RigidBody[ballnumber];
