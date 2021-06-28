@@ -54,9 +54,11 @@ public class Hexagon : MeshInstance{
     pSv1Link = new Vector3(), pSv2Link = new Vector3(), pSv3Link = new Vector3(), pSv4Link = new Vector3();
 
     // CREATE HEXAGON:
-    public void Create(){
+    private Random random;
+    public void Create(Random random){
         if (hexData == null) hexData = new HexaData(0,0);
-
+        this.random = random;
+        
         SpatialMaterial mat = (SpatialMaterial) MaterialOverride;
         SurfaceTool st = new SurfaceTool();
         st.SetMaterial(mat);

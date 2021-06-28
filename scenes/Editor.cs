@@ -3,6 +3,7 @@ using System;
 
 public class Editor : Spatial{
     private Camara camara;
+    private Spatial centro;
     private Map map;
 
     //GUI REFERENCES
@@ -30,7 +31,7 @@ public class Editor : Spatial{
     private Random random = new Random(); 
     public override void _EnterTree(){ 
         //Things
-        Spatial centro = GetNode<Spatial>("center"); 
+        centro = GetNode<Spatial>("center"); 
         map = centro.GetNode<Map>("Map"); 
         camara = centro.GetNode<Camara>("Camara"); 
         spaceState = GetWorld().DirectSpaceState; //physic ray neededs 
@@ -104,7 +105,18 @@ public class Editor : Spatial{
         // translate text GUI
         locateTexts();
 
-        //map debug
+    }
+    private void locateTexts(){
+        lblMousePos1.Text = "Mouse:";
+        lblCameraPos1.Text = "Camera:";
+        lblSelectedPos1.Text = "Selected:";
+        lblMousePos2.Text = "";
+        lblCameraPos2.Text = "";
+        lblSelectedPos2.Text = "";
+    }
+
+    public override void _Ready(){
+         //map debug
         float [][] datas = { 
             new float[]{1f,2f},//1pass 
             new float[]{3f,6f},//2pass 
@@ -123,20 +135,14 @@ public class Editor : Spatial{
             cs.Shape = sphere;
             CSGSphere csgs = new CSGSphere();
             csgs.Radius = 0.1f; csgs.RadialSegments = 12; csgs.Rings = 6;
-            ball.AddChild(cs);ball.AddChild(csgs);centro.AddChild(ball);
+            ball.AddChild(cs);
+            ball.AddChild(csgs);
+            centro.AddChild(ball);
             balls[i] = ball;
         }
-    }
-    private void locateTexts(){
-        lblMousePos1.Text = "Mouse:";
-        lblCameraPos1.Text = "Camera:";
-        lblSelectedPos1.Text = "Selected:";
-        lblMousePos2.Text = "";
-        lblCameraPos2.Text = "";
-        lblSelectedPos2.Text = "";
-    }
 
-    public override void _Ready(){
+        map.instanceAllMap(random); //Show all map
+
         GD.Print("Editor ready");
     }
 
@@ -266,7 +272,6 @@ public class Editor : Spatial{
     private void buttonToolSelect(String toolname){
         actualToolSelected = toolname;
         lblActualTool.Text = toolname;
-        if (toolname != "" && lastOrigin != null)  lblActualTool.Text += " Origin: " + lastOrigin.ToString();
         buttonPanelclick(-1);//hide panels
     }
 
@@ -286,7 +291,7 @@ public class Editor : Spatial{
         generateSimplexNoise(sizeMap,seed,datas);
 
         //Instanciar toda la vista
-        map.instanceAllMap();
+        map.instanceAllMap(random);
     }
 
     //GENERACION CON RUIDO - BIOMAS

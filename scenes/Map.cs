@@ -7,16 +7,16 @@ public class Map : Spatial{
     private MeshInstance selector, overSelector; 
     private Hexagon[] hexagons; 
     public MapData mapData; 
+    private Random random;
 
     public override void _EnterTree(){
         resHexagon = ResourceLoader.Load("res://scenes/Hexagon.tscn") as PackedScene; 
         selector = GetNode<MeshInstance>("Selector");
         overSelector = GetNode<MeshInstance>("OverSelector");
-        
+        if (random == null) random = new Random();
     }
+    
     public override void _Ready(){ 
-        instanceAllMap(); 
-        moveSelector(0,0);
         //debug vecinos
         //iGeo = new ImmediateGeometry();
         //AddChild(iGeo);
@@ -24,8 +24,11 @@ public class Map : Spatial{
     public override void _Process(float delta){ 
         //indicadorVecinosDebug();
     }
-   
-    public void instanceAllMap() { 
+    
+    
+    public void instanceAllMap(Random random) {
+        this.random = random;
+
         //hide indicators
         moveSelector(-1,-1);
         moveOver(-1,-1);
@@ -50,7 +53,7 @@ public class Map : Spatial{
         // to scene tree and translate
         foreach (Hexagon hexagon in hexagons){
             AddChild(hexagon); 
-            hexagon.Create(); 
+            hexagon.Create(random); 
             Vector3 pos = mapData.getHexPosition(hexagon.hexData.row, hexagon.hexData.col); 
             hexagon.Translation = pos; 
         }
@@ -78,7 +81,7 @@ public class Map : Spatial{
         // update neigourgs
         foreach (HexaData affected in affecteds){
             if (affected == null)continue;
-            affected.hexagon.Create();
+            affected.hexagon.Create(random);
         }
     }
 
