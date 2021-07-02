@@ -345,22 +345,18 @@ public class Hexagon : MeshInstance{
 
     // Ribers
     private void CreateRivers(SurfaceTool st){
-        if (!hexData.riber) return;
-        
-        MeshInstance miRiber = GetNode<MeshInstance>("Riber");
-        SpatialMaterial matRiver = (SpatialMaterial)miRiber.MaterialOverride;
-        matRiver.VertexColorUseAsAlbedo= true;
-        //st = new SurfaceTool();
+            
+        ShaderMaterial matRiver = (ShaderMaterial)riber.MaterialOverride;
         st.SetMaterial(matRiver);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         // Top links and inter links
-        CreateRiverUnions(st);
+        if (hexData.riber) CreateRiverUnions(st);
 
         //finaly
         st.GenerateNormals(); 
-        st.GenerateTangents(); 
-        miRiber.Mesh = st.Commit(); 
+        //st.GenerateTangents(); 
+        riber.Mesh = st.Commit(); 
     }
     
     private void CreateRiverUnions(SurfaceTool st){
