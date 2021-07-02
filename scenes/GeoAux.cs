@@ -33,4 +33,9 @@ public static class GeoAux{
         createTri(st,v3,v4,v1,color);
     }
 
+    // Random floats
+    public static float FloatRange(Random random, float min = 0.0f, float max = 1.0f) {
+        return (float) (random.NextDouble() * (max - min) + min);
+    }
+
 }

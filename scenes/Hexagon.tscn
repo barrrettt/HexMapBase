@@ -1,10 +1,22 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Hexagon.cs" type="Script" id=1]
 
 [sub_resource type="SpatialMaterial" id=1]
+flags_vertex_lighting = true
 vertex_color_use_as_albedo = true
+
+[sub_resource type="SpatialMaterial" id=2]
+flags_do_not_receive_shadows = true
+vertex_color_use_as_albedo = true
+refraction_enabled = true
+refraction_scale = 0.47
+refraction_texture_channel = 0
 
 [node name="Hexagon" type="MeshInstance"]
 material_override = SubResource( 1 )
+cast_shadow = 0
 script = ExtResource( 1 )
+
+[node name="Riber" type="MeshInstance" parent="."]
+material_override = SubResource( 2 )

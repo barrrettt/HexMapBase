@@ -24,13 +24,12 @@ public class HexaSelector : MeshInstance{
     private void crear(){
         var st = new SurfaceTool();
         SpatialMaterial mat = (SpatialMaterial) MaterialOverride;
-        //mat.AlbedoColor = color;
         st.SetMaterial(mat);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         //vertices
         float height = 0f;
-        float size = 0.50f; float sizee = 0.70f;
+        float size = 0.7f; float sizee = 0.9f;
         float sexto = Mathf.Pi/3;
 
         Vector3 v0 = new Vector3(0,height,0);//CENTRO

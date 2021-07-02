@@ -29,6 +29,9 @@ script = ExtResource( 1 )
 [node name="center" type="Spatial" parent="."]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="center"]
+transform = Transform( -0.759957, 0.597658, 0.255482, 0.181403, -0.18242, 0.966342, 0.624146, 0.780723, 0.0302142, 0.0155527, 6.91649, 0.0538796 )
+light_bake_mode = 0
+directional_shadow_mode = 0
 
 [node name="Camara" parent="center" instance=ExtResource( 4 )]
 

@@ -7,7 +7,7 @@ public class Map : Spatial{
     private MeshInstance selector, overSelector; 
     private Hexagon[] hexagons; 
     public MapData mapData; 
-    private Random random;
+    public Random random;
 
     public override void _EnterTree(){
         resHexagon = ResourceLoader.Load("res://scenes/Hexagon.tscn") as PackedScene; 
@@ -46,16 +46,18 @@ public class Map : Spatial{
             Hexagon hexagon = (Hexagon)resHexagon.Instance(); 
             HexaData hexaData = mapData.datas[i]; 
             hexagon.hexData = hexaData; 
-            hexagon.hexData.hexagon = hexagon; //link with node object
+            hexagon.CreateHexMetrics();//main geometry now
+
+            hexagon.hexData.hexagon = hexagon; 
             hexagons[i] = hexagon;
         }
 
         // to scene tree and translate
         foreach (Hexagon hexagon in hexagons){
             AddChild(hexagon); 
-            hexagon.Create(random); 
             Vector3 pos = mapData.getHexPosition(hexagon.hexData.row, hexagon.hexData.col); 
             hexagon.Translation = pos; 
+            hexagon.Create(this);//rest of geometry 
         }
 
         GD.Print("Map ready!");
@@ -81,16 +83,23 @@ public class Map : Spatial{
         // update neigourgs
         foreach (HexaData affected in affecteds){
             if (affected == null)continue;
-            affected.hexagon.Create(random);
+            affected.hexagon.CreateHexMetrics();
+            affected.hexagon.Create(this);
+           
         }
     }
 
     public void upTerrain(HexaData hxd){
         if (hxd == null) return;
-        int height = hxd.getHeight();
-        if (height < HexaData.MAX_HEIGHT){
-            height++;
-            hxd.setHeight(height);
+        if(hxd.setHeight(hxd.getHeight()+1)){
+            hxd.clearRibers();
+            CreateAffectedHex(hxd);
+        }
+    }
+
+    public void downTerrain(HexaData hxd){
+        if (hxd == null) return;
+        if(hxd.setHeight(hxd.getHeight()-1)){
             hxd.clearRibers();
             CreateAffectedHex(hxd);
         }
@@ -106,17 +115,6 @@ public class Map : Spatial{
 
         foreach (HexaData hdt in terrain){
             upTerrain(hdt);
-        }
-    }
-
-    public void downTerrain(HexaData hxd){
-        if (hxd == null) return;
-        int height = hxd.getHeight();
-        if (height >= 1 ){
-            height--;
-            hxd.setHeight(height);
-            hxd.clearRibers();
-            CreateAffectedHex(hxd);
         }
     }
 
@@ -323,8 +321,7 @@ public class MapData{
         if (data == null) return Vector3.Zero;
 
         //circunferencias del hexagono 
-        float offset = 1f; //Hexagon.SIZE_TOP; 
-        float outerRadius = 1.0f * offset; 
+        float outerRadius = 1.0f;
         float innerRadius = outerRadius * (Mathf.Sqrt(3)/2); 
         float sin60 = Mathf.Sin(Mathf.Pi/3); 
 
@@ -356,7 +353,7 @@ public class HexaData{
     public HexaData[] neighbours = new HexaData[6]; // primero SE y continua sentido horario 
     // aspect
     public int colorIndex = 0;
-    private int height = 1; 
+    public int height = 1; 
     public bool water = false;
     
     // riber system, 
@@ -376,11 +373,12 @@ public class HexaData{
         return str;
     }
 
-    public void setHeight(int newheight){
-        if (newheight<0|| newheight > 10)return;
+    public bool setHeight(int newheight){
+        if (newheight<0 || newheight > MAX_HEIGHT) return false;
         water = (newheight < WATER_LEVEL); 
         colorIndex = newheight;
         this.height = newheight;
+        return true;
     }
 
     public int getHeight(){

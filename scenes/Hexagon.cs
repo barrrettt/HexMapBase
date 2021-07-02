@@ -22,9 +22,16 @@ public class Hexagon : MeshInstance{
     private Color colorRiber = new Color("#115999");//blue
     
     //STATICS METRICS
-    public static float SIZE_TOP = 0.75f;//0.75f; //radius top hex
+    public static float SIZE_TOP = 0.75f;//0.75f; //radius top hex (1 max)
     public static float HEIGHT_RIBER_OFFSET = 0.05f;
     public static float SIZE_RIBER = 0.50f;
+
+    private MeshInstance riber;
+
+    public override void _EnterTree(){
+        riber = (MeshInstance)GetNode("Riber");
+    }
+
     public float getRealHeight(){
         float heightValue = 0.4f;
         int height = hexData.getHeight();
@@ -54,40 +61,47 @@ public class Hexagon : MeshInstance{
     pSv1Link = new Vector3(), pSv2Link = new Vector3(), pSv3Link = new Vector3(), pSv4Link = new Vector3();
 
     // CREATE HEXAGON:
-    private Random random;
-    public void Create(Random random){
+    private Map map;
+    public void Create(Map map){
         if (hexData == null) hexData = new HexaData(0,0);
-        this.random = random;
+        this.map = map;
         
         SpatialMaterial mat = (SpatialMaterial) MaterialOverride;
+        mat.VertexColorUseAsAlbedo= true;
+        MaterialOverride = mat;
+
         SurfaceTool st = new SurfaceTool();
         st.SetMaterial(mat);
         st.Begin(Mesh.PrimitiveType.Triangles);
+
+        CreateUnions(st);  //Unions and holes
         
-        CreateHexMetrics(st); // Main hexagon and metrics
-        CreateHexUnions(st);  //Unions and holes
-        
-        // FINALLY 
+        // FINALLY  Commit a
         st.GenerateNormals(); 
         st.GenerateTangents(); 
         Mesh = st.Commit(); 
 
         //Physic mesh 
-        foreach(Node child in GetChildren()){child.QueueFree();}
-        CreateTrimeshCollision();
+        foreach (Node child in GetChildren()){
+            if (child == riber) 
+                continue;
+            child.QueueFree(); //delete old physics
+        }
+        CreateTrimeshCollision(); //new physics
 
-        //Rivers 
+        //Rivers
         CreateRivers(st);
+        
     }
 
-     //Basic terrain
-    private void CreateHexMetrics(SurfaceTool st){
+     //Basic terrain geometry, before create!
+    public void CreateHexMetrics(){
         //metics
         float angle = (Mathf.Pi/6);// 30º slides
         float hValue = getRealHeight();
         float innerRadius = (Mathf.Sqrt(3)/2)*SIZE_TOP; //med
 
-        //vertices
+        //MAIN vertices: TOP
         vertex[0] = new Vector3(0,hValue,0);//CENTRO
         vertex[1] = new Vector3(Mathf.Cos(angle * 1)* innerRadius, hValue, Mathf.Sin(angle*1)* innerRadius);// med E y SE
         vertex[2] = new Vector3(Mathf.Cos(angle * 2)* SIZE_TOP, hValue, Mathf.Sin(angle*2)* SIZE_TOP) ;//SE
@@ -102,137 +116,10 @@ public class Hexagon : MeshInstance{
         vertex[11] = new Vector3(Mathf.Cos(angle * 11)* innerRadius, hValue, Mathf.Sin(angle*11)* innerRadius);// med E y SE
         vertex[12] = new Vector3(Mathf.Cos(angle * 12)* SIZE_TOP, hValue, Mathf.Sin(angle*12)* SIZE_TOP);//E
         
-        Color color = colors[hexData.colorIndex];//color del indexColor
-        GeoAux.createTri(st,vertex[0],vertex[12],vertex[2],color);//SE 
-        GeoAux.createTri(st,vertex[0],vertex[2],vertex[4],color);//S  
-        GeoAux.createTri(st,vertex[0],vertex[4],vertex[6],color);//SW 
-        GeoAux.createTri(st,vertex[0],vertex[6],vertex[8],color);//NW 
-        GeoAux.createTri(st,vertex[0],vertex[8],vertex[10],color);//N  
-        GeoAux.createTri(st,vertex[0],vertex[10],vertex[12],color);//NE 
-    }
-
-    private void CreateHexUnions(SurfaceTool st){
-
-        //cosas
-        float innerRadius = 1f * (Mathf.Sqrt(3)/2)*SIZE_TOP; 
-        float dist = 2*innerRadius/3;//distancia del puente
-        float height = getRealHeight();
-
-        //colors
-        Color color = colors[hexData.colorIndex];//color del indexColor
-        Color cOtherNE = colors[hexData.colorIndex];
-        Color cOtherE = colors[hexData.colorIndex];
-        Color cOtherS = colors[hexData.colorIndex];
-        
-        //NE
-        HexaData hdNE = hexData.neighbours[5];
-        if (hdNE != null){
-            cOtherNE = colors[hdNE.colorIndex];
-            pNEv1 = vertex[10];
-            pNEv4 = vertex[12];
-            float ang30 = Mathf.Pi/6; //30º
-            float deltaH = (hdNE.hexagon.getRealHeight()- height);
-            Vector3 offset = new Vector3(Mathf.Cos(ang30)*dist,deltaH,-Mathf.Sin(ang30)*dist);
-            pNEv2 = pNEv1 + offset;
-            pNEv3 = pNEv4 + offset;
-            GeoAux.createColorQuad(st,pNEv1,pNEv2,pNEv3,pNEv4,cOtherNE,color);
-        }
-        
-        //SE
-        HexaData hdSE = hexData.neighbours[0];
-        if (hdSE != null){
-            cOtherE = colors[hdSE.colorIndex];
-            pSEv1 = vertex[12];
-            pSEv4 = vertex[2];
-            float ang = -Mathf.Pi/6; //-30º
-            float deltaH = (hdSE.hexagon.getRealHeight()- height);
-            Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH,-Mathf.Sin(ang)*dist);
-            pSEv2 = pSEv1 + offset;
-            pSEv3 = pSEv4 + offset;
-            GeoAux.createColorQuad(st,pSEv1,pSEv2,pSEv3,pSEv4,cOtherE,color);
-        }
-        
-        //S
-        HexaData hdS = hexData.neighbours[1];
-        if (hdS != null){
-            cOtherS = colors[hdS.colorIndex];
-            pSv1 = vertex[2];
-            pSv4 = vertex[4];
-            float ang = -Mathf.Pi/2; //-90º
-            float deltaH = (hdS.hexagon.getRealHeight()- height);
-            Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH,-Mathf.Sin(ang)*dist);
-            pSv2 = pSv1 + offset;
-            pSv3 = pSv4 + offset;
-            GeoAux.createColorQuad(st,pSv1,pSv2,pSv3,pSv4,cOtherS,color);
-        }
-        
-        //TRI Entre puentes NE-SE
-        if (hdNE != null && hdSE != null){
-            GeoAux.createColorTri(st,pNEv4,pNEv3,pSEv2,color,cOtherNE,cOtherE);
-        }
-        //TRI entre puentes SE-S
-        if (hdSE != null && hdS != null){
-            GeoAux.createColorTri(st,pSv1,pSEv3,pSv2,color,cOtherE,cOtherS);
-        }
-
-        //FALDAS: si es borde de mapa(sin vecino) hay que tapar la cara
-        int[][] pares = {
-            new int[]{12,2},new int[]{2,4}, new int[]{4,6},
-            new int[]{6,8},new int[]{8,10}, new int[]{10,12}
-        };
-        for (int i = 0;i<6;i++){
-            if (hexData.neighbours[i] == null){
-                int[] par = pares[i];
-                int der = par[0]; int izq = par[1];
-                Vector3 altoDer = vertex[der];
-                Vector3 bajoDer = new Vector3(vertex[der].x,0,vertex[der].z) * (4/3f);
-                Vector3 altoIzq = vertex[izq];
-                Vector3 bajoIzq = new Vector3(vertex[izq].x,0,vertex[izq].z) * (4/3f);
-                GeoAux.createColorQuad(st,altoDer,bajoDer,bajoIzq,altoIzq,color,color);
-
-                //en un sentido
-                int anterior = i-1; if (anterior<0) anterior=5;
-                if(hexData.neighbours[anterior] != null){
-                    //si anterior es no es null -> hay un hueco triangular
-                    Vector3 upDer = altoDer;
-                    Vector3 downDer = bajoDer;
-                    //el punto que falta es del vector del puente contrario a upDer, sabiendo la direccion del vecino conozco el punto
-                    Vector3 upDerOtro = upDer; Color otroC = color;
-                    if (par[0] == 12 && par[1]==2){ upDerOtro = pNEv3; otroC = cOtherNE;}
-                    if (par[0] == 2 && par[1]==4){ upDerOtro = pSEv3; otroC = cOtherE;}
-                    if (par[0] == 4 && par[1]==6){ upDerOtro = pSv3; otroC = cOtherS;}
-                    //tapa con el tri
-                    GeoAux.createColorTri(st,upDer,upDerOtro,downDer,color,otroC,color);
-                }
-
-                //en el otro sentido hay que tapar tambien los triangulos:
-                int siguiente = i+1; if (siguiente>5) siguiente=0;
-                if(hexData.neighbours[siguiente] != null){
-                    Vector3 upIzq = altoIzq;
-                    Vector3 downIzq = bajoIzq;
-                    //el punto que falta es del puente contrario a UpIzq, sabiendo la direccion del vecino se conoce el punto
-                    Vector3 upIzqOtro = upIzq; Color otroC = color;
-                    if (par[0] == 8 && par[1]==10) {upIzqOtro = pNEv2; otroC = cOtherNE;}
-                    if (par[0] == 10 && par[1]==12) {upIzqOtro = pSEv2; otroC = cOtherE;}
-                    if (par[0] == 12 && par[1]==2) {upIzqOtro = pSv2; otroC = cOtherS;}
-                    //tapa con el tri
-                    GeoAux.createColorTri(st,downIzq,upIzqOtro,upIzq,color,otroC,color);
-                }
-            }
-        }
-        
-    }
-
-    // Ribers
-    private void CreateRivers(SurfaceTool st){
-        if (!hexData.riber) return;
-        SpatialMaterial matRiver = new SpatialMaterial();
-        st.SetMaterial(matRiver);
-
-        //metics
-        float angle =  (Mathf.Pi/6);//doceavos de circunferencias
-        float hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
-        float innerRadius = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
+        //RIVERS vertices top
+        angle =  (Mathf.Pi/6);//doceavos de circunferencias
+        hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
+        innerRadius = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
         
         riberVertex[0] = new Vector3(0,hValue,0);//CENTRO
         riberVertex[1] = new Vector3(Mathf.Cos(angle * 1)* innerRadius, hValue, Mathf.Sin(angle*1)* innerRadius);// med E y SE
@@ -248,6 +135,224 @@ public class Hexagon : MeshInstance{
         riberVertex[11] = new Vector3(Mathf.Cos(angle * 11)* innerRadius, hValue, Mathf.Sin(angle*11)* innerRadius);//med
         riberVertex[12] = new Vector3(Mathf.Cos(angle * 12)* SIZE_RIBER, hValue, Mathf.Sin(angle*12)* SIZE_RIBER);//E
 
+    }
+
+    private void CreateUnions(SurfaceTool st){
+
+        //cosas
+        float innerRadius = 1f * (Mathf.Sqrt(3)/2)*SIZE_TOP; 
+        float dist =  innerRadius * 2/3;//distancia del puente
+        float height = getRealHeight();
+
+        //colors
+        Color color = colors[hexData.colorIndex];//color del indexColor
+        Color cOtherNE = color;
+        Color cOtherSE = color;
+        Color cOtherS = color;
+
+        //TOP TRIS, NOW!
+        GeoAux.createTri(st,vertex[0],vertex[12],vertex[2],color);//SE 
+        GeoAux.createTri(st,vertex[0],vertex[2],vertex[4],color);//S  
+        GeoAux.createTri(st,vertex[0],vertex[4],vertex[6],color);//SW 
+        GeoAux.createTri(st,vertex[0],vertex[6],vertex[8],color);//NW 
+        GeoAux.createTri(st,vertex[0],vertex[8],vertex[10],color);//N  
+        GeoAux.createTri(st,vertex[0],vertex[10],vertex[12],color);//NE 
+
+        float deltaH_NE = 0;
+        float deltaH_SE = 0;
+        float deltaH_S = 0;
+        
+        //NE
+        HexaData hdNE = hexData.neighbours[5];
+        if (hdNE != null){
+            cOtherNE = colors[hdNE.colorIndex];
+            pNEv1 = vertex[10];
+            pNEv4 = vertex[12];
+            float ang = Mathf.Pi/6; //30º
+            deltaH_NE = (hdNE.hexagon.getRealHeight() - height);
+            Vector3 offset = new Vector3(Mathf.Cos(ang)*dist, deltaH_NE ,-Mathf.Sin(ang)*dist);
+            pNEv2 = pNEv1 + offset;
+            pNEv3 = pNEv4 + offset;
+            //GeoAux.createColorQuad(st,pNEv1,pNEv2,pNEv3,pNEv4,cOtherNE,color);
+            if (deltaH_NE < 0) {
+                GeoAux.createQuad(st,pNEv1,pNEv2,pNEv3,pNEv4,color);
+            }else{
+                GeoAux.createQuad(st,pNEv1,pNEv2,pNEv3,pNEv4,cOtherNE);
+            }
+            
+        }
+        
+        //SE
+        HexaData hdSE = hexData.neighbours[0];
+        if (hdSE != null){
+            cOtherSE = colors[hdSE.colorIndex];
+            pSEv1 = vertex[12];
+            pSEv4 = vertex[2];
+            float ang = -Mathf.Pi/6; //-30º
+            deltaH_SE = (hdSE.hexagon.getRealHeight()- height);
+            Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH_SE,-Mathf.Sin(ang)*dist);
+            pSEv2 = pSEv1 + offset;
+            pSEv3 = pSEv4 + offset;
+            //GeoAux.createColorQuad(st,pSEv1,pSEv2,pSEv3,pSEv4,cOtherE,color);
+            if (deltaH_SE < 0) {
+                GeoAux.createQuad(st,pSEv1,pSEv2,pSEv3,pSEv4,color);
+            }else{
+                GeoAux.createQuad(st,pSEv1,pSEv2,pSEv3,pSEv4,cOtherSE);
+            }
+        }
+        
+        //S
+        HexaData hdS = hexData.neighbours[1];
+        if (hdS != null){
+            cOtherS = colors[hdS.colorIndex];
+            pSv1 = vertex[2];
+            pSv4 = vertex[4];
+            float ang = -Mathf.Pi/2; //-90º
+            deltaH_S = (hdS.hexagon.getRealHeight()- height);
+            Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH_S,-Mathf.Sin(ang)*dist);
+            pSv2 = pSv1 + offset;
+            pSv3 = pSv4 + offset;
+            //GeoAux.createColorQuad(st,pSv1,pSv2,pSv3,pSv4,cOtherS,color);
+            if (deltaH_S < 0){ GeoAux.createQuad(st,pSv1,pSv2,pSv3,pSv4,color);
+            }else{
+                GeoAux.createQuad(st,pSv1,pSv2,pSv3,pSv4,cOtherS);
+            }
+        }
+        
+        //TRI Entre puentes NE-SE
+        if (hdNE != null && hdSE != null){
+            //GeoAux.createColorTri(st,pNEv4,pNEv3,pSEv2,color,cOtherNE,cOtherSE);
+            if (deltaH_NE<=0 && deltaH_SE<=0){ 
+                GeoAux.createTri(st,pNEv4,pNEv3,pSEv2,color);
+            }else{
+                if (deltaH_NE<deltaH_SE){
+                    GeoAux.createTri(st,pNEv4,pNEv3,pSEv2,cOtherSE);
+                }else{
+                    GeoAux.createTri(st,pNEv4,pNEv3,pSEv2,cOtherNE);
+                }
+            }
+            
+        }
+        //TRI entre puentes SE-S
+        if (hdSE != null && hdS != null){
+            //GeoAux.createColorTri(st,pSv1,pSEv3,pSv2,color,cOtherSE,cOtherS);
+            if (deltaH_SE<=0 && deltaH_S <=0) {
+                GeoAux.createTri(st,pSv1,pSEv3,pSv2,color);
+            }else{
+                if (deltaH_SE<deltaH_S){
+                    GeoAux.createTri(st,pSv1,pSEv3,pSv2,cOtherS); 
+                }else{
+                    GeoAux.createTri(st,pSv1,pSEv3,pSv2,cOtherSE);
+                }
+            }
+        }
+
+        //FALDAS: si es borde de mapa(sin vecino) hay que tapar la cara
+        int[][] pares = {
+            new int[]{12,2},new int[]{2,4}, new int[]{4,6},
+            new int[]{6,8},new int[]{8,10}, new int[]{10,12}
+        };
+        for (int i = 0;i<6;i++){
+            if (hexData.neighbours[i] == null){
+                int[] par = pares[i];
+                int der = par[0]; int izq = par[1];
+                Vector3 altoDer = vertex[der];
+                Vector3 bajoDer = new Vector3(vertex[der].x,0,vertex[der].z) * (4/3f);
+                Vector3 altoIzq = vertex[izq];
+                Vector3 bajoIzq = new Vector3(vertex[izq].x,0,vertex[izq].z) * (4/3f);
+                //Quad que baja recto en el hueco en donde no hay vecino
+                //GeoAux.createColorQuad(st,altoDer,bajoDer,bajoIzq,altoIzq,color,color);
+                GeoAux.createQuad(st,altoDer,bajoDer,bajoIzq,altoIzq,color);
+
+                //en un sentido
+                int anterior = i-1; if (anterior<0) anterior=5;
+                if(hexData.neighbours[anterior] != null){
+                    //si anterior es no es null -> hay un hueco triangular
+                    Vector3 upDer = altoDer;
+                    Vector3 downDer = bajoDer;
+                    //el punto que falta es del vector del puente contrario a upDer, sabiendo la direccion del vecino conozco el punto
+                    Vector3 upDerOtro = upDer; 
+                    Color otroC = color;
+                    if (par[0] == 12 && par[1]==2){ 
+                        upDerOtro = pNEv3;
+                        if (deltaH_NE>0){
+                            otroC = cOtherNE;
+                        }else{
+                            otroC = color;
+                        }
+                    }
+                    if (par[0] == 2 && par[1]==4){ 
+                        upDerOtro = pSEv3; 
+                        if (deltaH_SE>0){
+                            otroC = cOtherSE;
+                        }else{
+                            otroC = color;
+                        }
+                    }
+                    if (par[0] == 4 && par[1]==6){ 
+                        upDerOtro = pSv3; 
+                        
+                        if (deltaH_S<0){
+                            otroC = color;
+                        }else{
+                            otroC = cOtherS;
+                        }
+                    }
+                    //tapa con el tri
+                    //GeoAux.createColorTri(st,upDer,upDerOtro,downDer,color,otroC,color);
+                    GeoAux.createTri(st,upDer,upDerOtro,downDer,otroC);
+                }
+
+                //en el otro sentido hay que tapar tambien los triangulos:
+                int siguiente = i+1; if (siguiente>5) siguiente=0;
+                if(hexData.neighbours[siguiente] != null){
+                    Vector3 upIzq = altoIzq;
+                    Vector3 downIzq = bajoIzq;
+                    //el punto que falta es del puente contrario a UpIzq, sabiendo la direccion del vecino se conoce el punto
+                    Vector3 upIzqOtro = upIzq; 
+                    Color otroC = color;
+                    if (par[0] == 8 && par[1]==10) {
+                        upIzqOtro = pNEv2; 
+                        if (deltaH_NE>0){
+                            otroC = cOtherNE;
+                        }else{
+                            otroC = color;
+                        }
+                    }
+                    if (par[0] == 10 && par[1]==12) {
+                        upIzqOtro = pSEv2; 
+                        if (deltaH_SE>0){ 
+                            otroC = cOtherSE;
+                        }else{
+                            otroC = color;
+                        }
+                    }
+                    if (par[0] == 12 && par[1]==2) {
+                        upIzqOtro = pSv2; 
+                        if (deltaH_S<0){
+                            otroC = color;
+                        }else{
+                            otroC = cOtherS;
+                        }
+                    }
+                    //tapa con el tri
+                    //GeoAux.createColorTri(st,downIzq,upIzqOtro,upIzq,color,otroC,color);
+                    GeoAux.createTri(st,downIzq,upIzqOtro,upIzq,otroC);
+                }
+            }
+        }
+    }
+
+    // Ribers
+    private void CreateRivers(SurfaceTool st){
+        if (!hexData.riber) return;
+        
+        MeshInstance miRiber = GetNode<MeshInstance>("Riber");
+        SpatialMaterial matRiver = (SpatialMaterial)miRiber.MaterialOverride;
+        matRiver.VertexColorUseAsAlbedo= true;
+        //st = new SurfaceTool();
+        st.SetMaterial(matRiver);
+        st.Begin(Mesh.PrimitiveType.Triangles);
 
         // Top links and inter links
         CreateRiverUnions(st);
@@ -255,7 +360,7 @@ public class Hexagon : MeshInstance{
         //finaly
         st.GenerateNormals(); 
         st.GenerateTangents(); 
-        Mesh = st.Commit(); 
+        miRiber.Mesh = st.Commit(); 
     }
     
     private void CreateRiverUnions(SurfaceTool st){
@@ -405,7 +510,19 @@ public class Hexagon : MeshInstance{
             offset = new Vector3(Mathf.Cos(ang) * distLink, deltaH, -Mathf.Sin(ang) * distLink);
             pNEv2Link = pNEv1Link + offset;
             pNEv3Link = pNEv4Link + offset;
-            GeoAux.createColorQuad(st,pNEv1Link,pNEv2Link,pNEv3Link,pNEv4Link,color,color);
+            if (deltaH != 0){
+                //drop water -> regular link
+                GeoAux.createColorQuad(st,pNEv1Link,pNEv2Link,pNEv3Link,pNEv4Link,color,color);
+            }else{
+                float displacement =  GeoAux.FloatRange(map.random,-1,1) * SIZE_RIBER / 5;
+                Vector3 dirnormalRandom = (pNEv2Link - pNEv3Link).Normalized() * displacement;
+                Vector3 pmedNEv1v2 = pNEv1Link + (pNEv2Link - pNEv1Link)/2;
+                Vector3 pmedNEv4v3 = pNEv4Link + (pNEv3Link - pNEv4Link)/2;
+                Vector3 dV1 = pmedNEv1v2 + dirnormalRandom;
+                Vector3 dV2 = pmedNEv4v3 + dirnormalRandom;
+                GeoAux.createColorQuad(st,pNEv1Link,dV1,dV2,pNEv4Link,color,color);
+                GeoAux.createColorQuad(st,dV1,pNEv2Link,pNEv3Link,dV2,color,color);
+            }
         }
 
         if (linkSE){
@@ -417,7 +534,19 @@ public class Hexagon : MeshInstance{
             offset = new Vector3(Mathf.Cos(ang) * distLink, deltaH, -Mathf.Sin(ang) * distLink);
             pSEv2Link = pSEv1Link + offset;
             pSEv3Link = pSEv4Link + offset;
-            GeoAux.createColorQuad(st,pSEv1Link,pSEv2Link,pSEv3Link,pSEv4Link,color,color);
+            if (deltaH != 0){
+                //drop water -> regular link
+                GeoAux.createColorQuad(st,pSEv1Link,pSEv2Link,pSEv3Link,pSEv4Link,color,color);
+            }else{
+                float displacement =  GeoAux.FloatRange(map.random,-1,1) * SIZE_RIBER / 5;
+                Vector3 dirnormalRandom = (pSEv2Link - pSEv3Link).Normalized() * displacement;
+                Vector3 pmedSEv1v2 = pSEv1Link + (pSEv2Link - pSEv1Link)/2;
+                Vector3 pmedSEv4v3 = pSEv4Link + (pSEv3Link - pSEv4Link)/2;
+                Vector3 dV1 = pmedSEv1v2 + dirnormalRandom;
+                Vector3 dV2 = pmedSEv4v3 + dirnormalRandom;
+                GeoAux.createColorQuad(st,pSEv1Link,dV1,dV2,pSEv4Link,color,color);
+                GeoAux.createColorQuad(st,dV1,pSEv2Link,pSEv3Link,dV2,color,color);
+            }
         }
 
         if (linkS){
@@ -429,9 +558,20 @@ public class Hexagon : MeshInstance{
             offset = new Vector3(Mathf.Cos(ang) * distLink, deltaH, -Mathf.Sin(ang) * distLink);
             pSv2Link = pSv1Link + offset;
             pSv3Link = pSv4Link + offset;
-            GeoAux.createColorQuad(st,pSv1Link,pSv2Link,pSv3Link,pSv4Link,color,color);
+            if (deltaH != 0){
+                //drop water -> regular link
+                GeoAux.createColorQuad(st,pSv1Link,pSv2Link,pSv3Link,pSv4Link,color,color);
+            }else{
+                float displacement =  GeoAux.FloatRange(map.random,-1,1) * SIZE_RIBER / 5;
+                Vector3 dirnormalRandom = (pSv2Link - pSv3Link).Normalized() * displacement;
+                Vector3 pmedSv1v2 = pSv1Link + (pSv2Link - pSv1Link)/2;
+                Vector3 pmedSv4v3 = pSv4Link + (pSv3Link - pSv4Link)/2;
+                Vector3 dV1 = pmedSv1v2 + dirnormalRandom;
+                Vector3 dV2 = pmedSv4v3 + dirnormalRandom;
+                GeoAux.createColorQuad(st,pSv1Link,dV1,dV2,pSv4Link,color,color);
+                GeoAux.createColorQuad(st,dV1,pSv2Link,pSv3Link,dV2,color,color);
+            }
         }
-
 
         //CENTRO PERO CON 12 TRIS (bajo agua no)
         if (!hexData.water){
@@ -493,5 +633,5 @@ public class Hexagon : MeshInstance{
         }
     }
 
-   
+    
 }
