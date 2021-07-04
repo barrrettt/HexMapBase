@@ -44,12 +44,14 @@ public class Map : Spatial{
         // referencing and instancing...
         for (int i = 0; i< mapData.datas.Length;i++){ 
             Hexagon hexagon = (Hexagon)resHexagon.Instance(); 
+            
             HexaData hexaData = mapData.datas[i]; 
             hexagon.hexData = hexaData; 
             hexagon.CreateHexMetrics();//main geometry now
 
             hexagon.hexData.hexagon = hexagon; 
             hexagons[i] = hexagon;
+            hexagon.Name = String.Format("H {0},{1}",hexaData.row,hexaData.col);
         }
 
         // to scene tree and translate
@@ -235,7 +237,7 @@ public class Map : Spatial{
 //clase para los datos del mapa
 public class MapData{
     private int sizeMap;
-    public HexaData[] datas;
+    public HexaData[] datas; 
 
     public MapData(int sizeMap){
         this.sizeMap = sizeMap;
