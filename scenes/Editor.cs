@@ -3,7 +3,7 @@ using System;
 
 public class Editor : Spatial{
     private Camara camara;
-    private Spatial centro;
+    private WorldEnvironment centro;
     private Map map;
 
     //GUI REFERENCES
@@ -31,7 +31,7 @@ public class Editor : Spatial{
     private Random random = new Random(); 
     public override void _EnterTree(){ 
         //Things
-        centro = GetNode<Spatial>("center"); 
+        centro = GetNode<WorldEnvironment>("center"); 
         map = centro.GetNode<Map>("Map"); 
         camara = centro.GetNode<Camara>("Camara"); 
         spaceState = GetWorld().DirectSpaceState; //physic ray neededs 
