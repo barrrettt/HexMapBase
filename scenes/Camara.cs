@@ -27,7 +27,7 @@ public class Camara : Spatial{
 
     // CONTROL PC
     private const float JOYPAD_SENSITIVITY = 0.05f, JOYPAD_DEADZONE = 0.15f;
-    private const float ZOOM_MIN = 0.8f, ZOOM_MAX = 10f, ZOOM_SPEED = 0.01f;
+    private const float ZOOM_MIN = 0.2f, ZOOM_MAX = 10f, ZOOM_SPEED = 0.01f;
     private float zoom = 1f; 
 
     private void inputPC(float delta){
