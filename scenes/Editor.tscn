@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://scenes/Editor.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Map.tscn" type="PackedScene" id=2]
@@ -19,6 +19,7 @@
 [ext_resource path="res://src/vectorial/paint-brush.svg" type="Texture" id=17]
 [ext_resource path="res://src/vectorial/disk.svg" type="Texture" id=18]
 [ext_resource path="res://src/vectorial/file-delete.svg" type="Texture" id=19]
+[ext_resource path="res://default_env.tres" type="Environment" id=20]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 5 )
@@ -26,7 +27,8 @@ shader = ExtResource( 5 )
 [node name="Editor" type="Spatial"]
 script = ExtResource( 1 )
 
-[node name="center" type="Spatial" parent="."]
+[node name="center" type="WorldEnvironment" parent="."]
+environment = ExtResource( 20 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="center"]
 transform = Transform( -0.759957, 0.597658, 0.255482, 0.181403, -0.18242, 0.966342, 0.624146, 0.780723, 0.0302142, 0.0155527, 6.91649, 0.0538796 )
