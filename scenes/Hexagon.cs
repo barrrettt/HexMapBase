@@ -3,7 +3,6 @@ using System;
 
 public class Hexagon : MeshInstance{
     public HexaData hexData;
-    
     // 10 colors
     private Color[] colors = new Color[]{
         new Color("#022340"),//blue dark
@@ -18,28 +17,48 @@ public class Hexagon : MeshInstance{
         new Color("#ccc3b8"), //white
         new Color("#ffffff"), //white w
     };
-
     private Color colorRiber = new Color("#115999");//blue
-    
     //STATICS METRICS
     public static float SIZE_TOP = 0.75f;//0.75f; //radius top hex (1 max)
     public static float HEIGHT_RIBER_OFFSET = 0.05f;
     public static float SIZE_RIBER = 0.50f;
+    public static float HEIGHT_REAL_SEA = 0.40f;
 
+    //Children geometry
     private MeshInstance riber;
+
+    private MeshInstance sea;
+   
 
     public override void _EnterTree(){
         riber = (MeshInstance)GetNode("Riber");
+        sea = (MeshInstance)GetNode("Sea");
     }
 
     public float getRealHeight(){
-        float heightValue = 0.4f;
+        float heightValue = 0.0f;
         int height = hexData.getHeight();
-        if (height>5) heightValue = 0.5f;
-        if (height>8) heightValue = 0.6f;
-        return heightValue * height;
+        switch (height){
+            case 0: heightValue = 0.0f; break;
+            case 1: heightValue = 0.2f; break;//water
+            case 2: heightValue = 0.5f; break;//beach
+            case 3: heightValue = 0.8f; break;//grass
+            case 4: heightValue = 1.2f; break;//grass2
+            case 5: heightValue = 1.5f; break;//forest
+            case 6: heightValue = 2.0f; break;//mountain 1
+            case 7: heightValue = 2.8f; break; 
+            case 8: heightValue = 3.2f; break;
+            case 9: heightValue = 3.6f; break;
+            case 10: heightValue = 4.0f; break;
+            default: heightValue = 4.6f+ (height-10)*0.4f; break;
+        }
+        return heightValue;
     }
-    
+    // metrics
+    public float innerRadius;
+    public float innerRadiusRiber;
+    public float ang30;
+
     // Main vertex
     public Vector3[] vertex = new Vector3[13];
     //Main Links vertex
@@ -62,6 +81,49 @@ public class Hexagon : MeshInstance{
 
     // CREATE HEXAGON:
     private Map map;
+
+     //Basic terrain geometry, before create!
+    public void CreateHexMetrics(){
+        //metics
+        ang30 = (Mathf.Pi/6);// 30º slides
+        float hValue = getRealHeight();
+        innerRadius = (Mathf.Sqrt(3)/2)*SIZE_TOP; //med
+
+        //MAIN vertices: TOP
+        vertex[0] = new Vector3(0,hValue,0);//CENTRO
+        vertex[1] = new Vector3(Mathf.Cos(ang30 * 1)* innerRadius, hValue, Mathf.Sin(ang30*1)* innerRadius);// med E y SE
+        vertex[2] = new Vector3(Mathf.Cos(ang30 * 2)* SIZE_TOP, hValue, Mathf.Sin(ang30*2)* SIZE_TOP) ;//SE
+        vertex[3] = new Vector3(Mathf.Cos(ang30 * 3)* innerRadius, hValue, Mathf.Sin(ang30*3)* innerRadius);// med
+        vertex[4] = new Vector3(Mathf.Cos(ang30 * 4)* SIZE_TOP, hValue, Mathf.Sin(ang30*4)* SIZE_TOP);//SW
+        vertex[5] = new Vector3(Mathf.Cos(ang30 * 5)* innerRadius, hValue, Mathf.Sin(ang30*5)* innerRadius);// med E y SE
+        vertex[6] = new Vector3(Mathf.Cos(ang30 * 6)* SIZE_TOP, hValue, Mathf.Sin(ang30*6)* SIZE_TOP);//W
+        vertex[7] = new Vector3(Mathf.Cos(ang30 * 7)* innerRadius, hValue, Mathf.Sin(ang30*7)* innerRadius);// med E y SE
+        vertex[8] = new Vector3(Mathf.Cos(ang30 * 8)* SIZE_TOP, hValue, Mathf.Sin(ang30*8)* SIZE_TOP);//NW
+        vertex[9] = new Vector3(Mathf.Cos(ang30 * 9)* innerRadius, hValue, Mathf.Sin(ang30*9)* innerRadius);// med E y SE
+        vertex[10] = new Vector3(Mathf.Cos(ang30 * 10)* SIZE_TOP, hValue, Mathf.Sin(ang30*10)* SIZE_TOP);//NE
+        vertex[11] = new Vector3(Mathf.Cos(ang30 * 11)* innerRadius, hValue, Mathf.Sin(ang30*11)* innerRadius);// med E y SE
+        vertex[12] = new Vector3(Mathf.Cos(ang30 * 12)* SIZE_TOP, hValue, Mathf.Sin(ang30*12)* SIZE_TOP);//E
+        
+        //RIVERS vertices top
+        hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
+        innerRadiusRiber = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
+        
+        riberVertex[0] = new Vector3(0,hValue,0);//CENTRO
+        riberVertex[1] = new Vector3(Mathf.Cos(ang30 * 1)* innerRadiusRiber, hValue, Mathf.Sin(ang30*1)* innerRadiusRiber);// med E y SE
+        riberVertex[2] = new Vector3(Mathf.Cos(ang30 * 2)* SIZE_RIBER, hValue, Mathf.Sin(ang30*2)* SIZE_RIBER);//SE
+        riberVertex[3] = new Vector3(Mathf.Cos(ang30 * 3)* innerRadiusRiber, hValue, Mathf.Sin(ang30*3)* innerRadiusRiber);//med 
+        riberVertex[4] = new Vector3(Mathf.Cos(ang30 * 4)* SIZE_RIBER, hValue, Mathf.Sin(ang30*4)* SIZE_RIBER);//SW
+        riberVertex[5] = new Vector3(Mathf.Cos(ang30 * 5)* innerRadiusRiber, hValue, Mathf.Sin(ang30*5)* innerRadiusRiber);//med
+        riberVertex[6] = new Vector3(Mathf.Cos(ang30 * 6)* SIZE_RIBER, hValue, Mathf.Sin(ang30*6)* SIZE_RIBER);//W
+        riberVertex[7] = new Vector3(Mathf.Cos(ang30 * 7)* innerRadiusRiber, hValue, Mathf.Sin(ang30*7)* innerRadiusRiber) ;//med
+        riberVertex[8] = new Vector3(Mathf.Cos(ang30 * 8)* SIZE_RIBER, hValue, Mathf.Sin(ang30*8)* SIZE_RIBER);//NW
+        riberVertex[9] = new Vector3(Mathf.Cos(ang30 * 9)* innerRadiusRiber, hValue, Mathf.Sin(ang30*9)* innerRadiusRiber);//med
+        riberVertex[10] = new Vector3(Mathf.Cos(ang30 * 10)* SIZE_RIBER, hValue, Mathf.Sin(ang30*10)* SIZE_RIBER);//NE
+        riberVertex[11] = new Vector3(Mathf.Cos(ang30 * 11)* innerRadiusRiber, hValue, Mathf.Sin(ang30*11)* innerRadiusRiber);//med
+        riberVertex[12] = new Vector3(Mathf.Cos(ang30 * 12)* SIZE_RIBER, hValue, Mathf.Sin(ang30*12)* SIZE_RIBER);//E
+
+    }
+
     public void Create(Map map){
         if (hexData == null) hexData = new HexaData(0,0);
         this.map = map;
@@ -83,64 +145,25 @@ public class Hexagon : MeshInstance{
 
         //Physic mesh 
         foreach (Node child in GetChildren()){
-            if (child == riber) 
-                continue;
+            if (child == riber || child == sea) 
+                continue; //ribers and sea no
             child.QueueFree(); //delete old physics
         }
-        CreateTrimeshCollision(); //new physics
+
+        //new physics
+        CreateTrimeshCollision(); 
 
         //Rivers
         CreateRivers(st);
         
-    }
-
-     //Basic terrain geometry, before create!
-    public void CreateHexMetrics(){
-        //metics
-        float angle = (Mathf.Pi/6);// 30º slides
-        float hValue = getRealHeight();
-        float innerRadius = (Mathf.Sqrt(3)/2)*SIZE_TOP; //med
-
-        //MAIN vertices: TOP
-        vertex[0] = new Vector3(0,hValue,0);//CENTRO
-        vertex[1] = new Vector3(Mathf.Cos(angle * 1)* innerRadius, hValue, Mathf.Sin(angle*1)* innerRadius);// med E y SE
-        vertex[2] = new Vector3(Mathf.Cos(angle * 2)* SIZE_TOP, hValue, Mathf.Sin(angle*2)* SIZE_TOP) ;//SE
-        vertex[3] = new Vector3(Mathf.Cos(angle * 3)* innerRadius, hValue, Mathf.Sin(angle*3)* innerRadius);// med
-        vertex[4] = new Vector3(Mathf.Cos(angle * 4)* SIZE_TOP, hValue, Mathf.Sin(angle*4)* SIZE_TOP);//SW
-        vertex[5] = new Vector3(Mathf.Cos(angle * 5)* innerRadius, hValue, Mathf.Sin(angle*5)* innerRadius);// med E y SE
-        vertex[6] = new Vector3(Mathf.Cos(angle * 6)* SIZE_TOP, hValue, Mathf.Sin(angle*6)* SIZE_TOP);//W
-        vertex[7] = new Vector3(Mathf.Cos(angle * 7)* innerRadius, hValue, Mathf.Sin(angle*7)* innerRadius);// med E y SE
-        vertex[8] = new Vector3(Mathf.Cos(angle * 8)* SIZE_TOP, hValue, Mathf.Sin(angle*8)* SIZE_TOP);//NW
-        vertex[9] = new Vector3(Mathf.Cos(angle * 9)* innerRadius, hValue, Mathf.Sin(angle*9)* innerRadius);// med E y SE
-        vertex[10] = new Vector3(Mathf.Cos(angle * 10)* SIZE_TOP, hValue, Mathf.Sin(angle*10)* SIZE_TOP);//NE
-        vertex[11] = new Vector3(Mathf.Cos(angle * 11)* innerRadius, hValue, Mathf.Sin(angle*11)* innerRadius);// med E y SE
-        vertex[12] = new Vector3(Mathf.Cos(angle * 12)* SIZE_TOP, hValue, Mathf.Sin(angle*12)* SIZE_TOP);//E
-        
-        //RIVERS vertices top
-        angle =  (Mathf.Pi/6);//doceavos de circunferencias
-        hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
-        innerRadius = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
-        
-        riberVertex[0] = new Vector3(0,hValue,0);//CENTRO
-        riberVertex[1] = new Vector3(Mathf.Cos(angle * 1)* innerRadius, hValue, Mathf.Sin(angle*1)* innerRadius);// med E y SE
-        riberVertex[2] = new Vector3(Mathf.Cos(angle * 2)* SIZE_RIBER, hValue, Mathf.Sin(angle*2)* SIZE_RIBER);//SE
-        riberVertex[3] = new Vector3(Mathf.Cos(angle * 3)* innerRadius, hValue, Mathf.Sin(angle*3)* innerRadius);//med 
-        riberVertex[4] = new Vector3(Mathf.Cos(angle * 4)* SIZE_RIBER, hValue, Mathf.Sin(angle*4)* SIZE_RIBER);//SW
-        riberVertex[5] = new Vector3(Mathf.Cos(angle * 5)* innerRadius, hValue, Mathf.Sin(angle*5)* innerRadius);//med
-        riberVertex[6] = new Vector3(Mathf.Cos(angle * 6)* SIZE_RIBER, hValue, Mathf.Sin(angle*6)* SIZE_RIBER);//W
-        riberVertex[7] = new Vector3(Mathf.Cos(angle * 7)* innerRadius, hValue, Mathf.Sin(angle*7)* innerRadius) ;//med
-        riberVertex[8] = new Vector3(Mathf.Cos(angle * 8)* SIZE_RIBER, hValue, Mathf.Sin(angle*8)* SIZE_RIBER);//NW
-        riberVertex[9] = new Vector3(Mathf.Cos(angle * 9)* innerRadius, hValue, Mathf.Sin(angle*9)* innerRadius);//med
-        riberVertex[10] = new Vector3(Mathf.Cos(angle * 10)* SIZE_RIBER, hValue, Mathf.Sin(angle*10)* SIZE_RIBER);//NE
-        riberVertex[11] = new Vector3(Mathf.Cos(angle * 11)* innerRadius, hValue, Mathf.Sin(angle*11)* innerRadius);//med
-        riberVertex[12] = new Vector3(Mathf.Cos(angle * 12)* SIZE_RIBER, hValue, Mathf.Sin(angle*12)* SIZE_RIBER);//E
+        //Sea
+        CreateSea(st);
 
     }
 
     private void CreateUnions(SurfaceTool st){
 
         //cosas
-        float innerRadius = 1f * (Mathf.Sqrt(3)/2)*SIZE_TOP; 
         float dist =  innerRadius * 2/3;//distancia del puente
         float height = getRealHeight();
 
@@ -173,7 +196,6 @@ public class Hexagon : MeshInstance{
             Vector3 offset = new Vector3(Mathf.Cos(ang)*dist, deltaH_NE ,-Mathf.Sin(ang)*dist);
             pNEv2 = pNEv1 + offset;
             pNEv3 = pNEv4 + offset;
-            //GeoAux.createColorQuad(st,pNEv1,pNEv2,pNEv3,pNEv4,cOtherNE,color);
             if (deltaH_NE < 0) {
                 GeoAux.createQuad(st,pNEv1,pNEv2,pNEv3,pNEv4,color);
             }else{
@@ -193,7 +215,6 @@ public class Hexagon : MeshInstance{
             Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH_SE,-Mathf.Sin(ang)*dist);
             pSEv2 = pSEv1 + offset;
             pSEv3 = pSEv4 + offset;
-            //GeoAux.createColorQuad(st,pSEv1,pSEv2,pSEv3,pSEv4,cOtherE,color);
             if (deltaH_SE < 0) {
                 GeoAux.createQuad(st,pSEv1,pSEv2,pSEv3,pSEv4,color);
             }else{
@@ -212,7 +233,6 @@ public class Hexagon : MeshInstance{
             Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH_S,-Mathf.Sin(ang)*dist);
             pSv2 = pSv1 + offset;
             pSv3 = pSv4 + offset;
-            //GeoAux.createColorQuad(st,pSv1,pSv2,pSv3,pSv4,cOtherS,color);
             if (deltaH_S < 0){ GeoAux.createQuad(st,pSv1,pSv2,pSv3,pSv4,color);
             }else{
                 GeoAux.createQuad(st,pSv1,pSv2,pSv3,pSv4,cOtherS);
@@ -261,7 +281,6 @@ public class Hexagon : MeshInstance{
                 Vector3 altoIzq = vertex[izq];
                 Vector3 bajoIzq = new Vector3(vertex[izq].x,0,vertex[izq].z) * (4/3f);
                 //Quad que baja recto en el hueco en donde no hay vecino
-                //GeoAux.createColorQuad(st,altoDer,bajoDer,bajoIzq,altoIzq,color,color);
                 GeoAux.createQuad(st,altoDer,bajoDer,bajoIzq,altoIzq,color);
 
                 //en un sentido
@@ -361,11 +380,9 @@ public class Hexagon : MeshInstance{
     
     private void CreateRiverUnions(SurfaceTool st){
         // Things 
-        float innerRadius = (Mathf.Sqrt(3)/2)*SIZE_TOP; 
-        float innerRadiusRiber = (Mathf.Sqrt(3)/2)*SIZE_RIBER; 
         float distRiberTop = innerRadius - innerRadiusRiber;
         float hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
-        float distLink = 2*innerRadius/3;//distancia del puente
+        float distLink = innerRadius * 2/3;//distancia del puente
         Color color = colorRiber;
 
         // pintar centros? 
@@ -445,7 +462,6 @@ public class Hexagon : MeshInstance{
                 countRiberNeibours++;
             }
         }
-
         HexaData hdS = hexData.neighbours[1];
         if (hdS != null){
             linkS_out = hexData.ribersOut[1] == hdS;
@@ -455,8 +471,6 @@ public class Hexagon : MeshInstance{
                 countRiberNeibours++;
             }
         }
-
-       
         HexaData hdSW = hexData.neighbours[2];
         if (hdSW != null){
             linkSW_out = hexData.ribersOut[2] == hdSW;
@@ -484,17 +498,15 @@ public class Hexagon : MeshInstance{
                 countRiberNeibours++;
             }
         }
-
         //LINKS TOP (bajo agua no)
         if (!hexData.water){
-            if (linkNE) GeoAux.createColorQuad(st,rpNEv1,rpNEv2,rpNEv3,rpNEv4,color,color);
-            if (linkSE) GeoAux.createColorQuad(st,rpSEv1,rpSEv2,rpSEv3,rpSEv4,color,color);
-            if (linkS)  GeoAux.createColorQuad(st,rpSv1,rpSv2,rpSv3,rpSv4,color,color);
-            if (linkSW) GeoAux.createColorQuad(st,rpSWv1,rpSWv2,rpSWv3,rpSWv4,color,color);
-            if (linkNW) GeoAux.createColorQuad(st,rpNWv1,rpNWv2,rpNWv3,rpNWv4,color,color);
-            if (linkN) GeoAux.createColorQuad(st,rpNv1,rpNv2,rpNv3,rpNv4,color,color);
+            if (linkNE) GeoAux.createQuad(st,rpNEv1,rpNEv2,rpNEv3,rpNEv4,color);
+            if (linkSE) GeoAux.createQuad(st,rpSEv1,rpSEv2,rpSEv3,rpSEv4,color);
+            if (linkS)  GeoAux.createQuad(st,rpSv1,rpSv2,rpSv3,rpSv4,color);
+            if (linkSW) GeoAux.createQuad(st,rpSWv1,rpSWv2,rpSWv3,rpSWv4,color);
+            if (linkNW) GeoAux.createQuad(st,rpNWv1,rpNWv2,rpNWv3,rpNWv4,color);
+            if (linkN) GeoAux.createQuad(st,rpNv1,rpNv2,rpNv3,rpNv4,color);
         }
-
 
         //LARGUES LINKS 
         if (linkNE){
@@ -502,13 +514,13 @@ public class Hexagon : MeshInstance{
             float deltaH = otherH - hValue;
             pNEv1Link = rpNEv2;
             pNEv4Link = rpNEv3;
-            ang = Mathf.Pi/6; //30º 
+            ang = Mathf.Pi*1/6; //30º 
             offset = new Vector3(Mathf.Cos(ang) * distLink, deltaH, -Mathf.Sin(ang) * distLink);
             pNEv2Link = pNEv1Link + offset;
             pNEv3Link = pNEv4Link + offset;
             if (deltaH != 0){
                 //drop water -> regular link
-                GeoAux.createColorQuad(st,pNEv1Link,pNEv2Link,pNEv3Link,pNEv4Link,color,color);
+                GeoAux.createQuad(st,pNEv1Link,pNEv2Link,pNEv3Link,pNEv4Link,color);
             }else{
                 float displacement =  GeoAux.FloatRange(map.random,-1,1) * SIZE_RIBER / 5;
                 Vector3 dirnormalRandom = (pNEv2Link - pNEv3Link).Normalized() * displacement;
@@ -516,8 +528,8 @@ public class Hexagon : MeshInstance{
                 Vector3 pmedNEv4v3 = pNEv4Link + (pNEv3Link - pNEv4Link)/2;
                 Vector3 dV1 = pmedNEv1v2 + dirnormalRandom;
                 Vector3 dV2 = pmedNEv4v3 + dirnormalRandom;
-                GeoAux.createColorQuad(st,pNEv1Link,dV1,dV2,pNEv4Link,color,color);
-                GeoAux.createColorQuad(st,dV1,pNEv2Link,pNEv3Link,dV2,color,color);
+                GeoAux.createQuad(st,pNEv1Link,dV1,dV2,pNEv4Link,color);
+                GeoAux.createQuad(st,dV1,pNEv2Link,pNEv3Link,dV2,color);
             }
         }
 
@@ -526,13 +538,17 @@ public class Hexagon : MeshInstance{
             float deltaH = otherH - hValue;
             pSEv1Link = rpSEv2;
             pSEv4Link = rpSEv3;
-            ang = -Mathf.Pi/6; //-30º 
-            offset = new Vector3(Mathf.Cos(ang) * distLink, deltaH, -Mathf.Sin(ang) * distLink);
+
+            ang = Mathf.Pi*-1/6; //-30º 
+            offset = new Vector3(Mathf.Cos(ang) * distLink, 0, -Mathf.Sin(ang) * distLink);
+            offset.y = deltaH;
+            
             pSEv2Link = pSEv1Link + offset;
             pSEv3Link = pSEv4Link + offset;
+            
             if (deltaH != 0){
                 //drop water -> regular link
-                GeoAux.createColorQuad(st,pSEv1Link,pSEv2Link,pSEv3Link,pSEv4Link,color,color);
+                GeoAux.createQuad(st,pSEv1Link,pSEv2Link,pSEv3Link,pSEv4Link,color);
             }else{
                 float displacement =  GeoAux.FloatRange(map.random,-1,1) * SIZE_RIBER / 5;
                 Vector3 dirnormalRandom = (pSEv2Link - pSEv3Link).Normalized() * displacement;
@@ -540,8 +556,8 @@ public class Hexagon : MeshInstance{
                 Vector3 pmedSEv4v3 = pSEv4Link + (pSEv3Link - pSEv4Link)/2;
                 Vector3 dV1 = pmedSEv1v2 + dirnormalRandom;
                 Vector3 dV2 = pmedSEv4v3 + dirnormalRandom;
-                GeoAux.createColorQuad(st,pSEv1Link,dV1,dV2,pSEv4Link,color,color);
-                GeoAux.createColorQuad(st,dV1,pSEv2Link,pSEv3Link,dV2,color,color);
+                GeoAux.createQuad(st,pSEv1Link,dV1,dV2,pSEv4Link,color);
+                GeoAux.createQuad(st,dV1,pSEv2Link,pSEv3Link,dV2,color);
             }
         }
 
@@ -556,7 +572,7 @@ public class Hexagon : MeshInstance{
             pSv3Link = pSv4Link + offset;
             if (deltaH != 0){
                 //drop water -> regular link
-                GeoAux.createColorQuad(st,pSv1Link,pSv2Link,pSv3Link,pSv4Link,color,color);
+                GeoAux.createQuad(st,pSv1Link,pSv2Link,pSv3Link,pSv4Link,color);
             }else{
                 float displacement =  GeoAux.FloatRange(map.random,-1,1) * SIZE_RIBER / 5;
                 Vector3 dirnormalRandom = (pSv2Link - pSv3Link).Normalized() * displacement;
@@ -564,8 +580,8 @@ public class Hexagon : MeshInstance{
                 Vector3 pmedSv4v3 = pSv4Link + (pSv3Link - pSv4Link)/2;
                 Vector3 dV1 = pmedSv1v2 + dirnormalRandom;
                 Vector3 dV2 = pmedSv4v3 + dirnormalRandom;
-                GeoAux.createColorQuad(st,pSv1Link,dV1,dV2,pSv4Link,color,color);
-                GeoAux.createColorQuad(st,dV1,pSv2Link,pSv3Link,dV2,color,color);
+                GeoAux.createQuad(st,pSv1Link,dV1,dV2,pSv4Link,color);
+                GeoAux.createQuad(st,dV1,pSv2Link,pSv3Link,dV2,color);
             }
         }
 
@@ -629,5 +645,122 @@ public class Hexagon : MeshInstance{
         }
     }
 
-    
+    //water
+    private void CreateSea(SurfaceTool st){
+        ShaderMaterial matSea = (ShaderMaterial)sea.MaterialOverride;
+        st.SetMaterial(matSea);
+        st.Begin(Mesh.PrimitiveType.Triangles);
+
+        // Top links and inter links
+        if (hexData.height<2) 
+            CreateSeaWater(st);
+
+        //finaly
+        st.GenerateNormals(); 
+        //st.GenerateTangents(); 
+        sea.Mesh = st.Commit(); 
+    }
+
+    private void CreateSeaWater(SurfaceTool st){
+        
+        float hValue = HEIGHT_REAL_SEA;
+        float distwater = innerRadius * 2/3;//water radius
+        float ang30 = (Mathf.Pi/6);// 30º slides
+        Color color = colorRiber;
+
+        //el top pero con mas altura
+        Vector3[] watervertex = new Vector3[13];
+
+        for (int i = 0; i<vertex.Length; i++){
+            Vector3 v = vertex[i];
+            watervertex[i] = new Vector3(v.x,HEIGHT_REAL_SEA,v.z);
+        }
+
+        //top water
+        GeoAux.createTri(st,watervertex[0],watervertex[12],watervertex[2],color);//SE 
+        GeoAux.createTri(st,watervertex[0],watervertex[2],watervertex[4],color);//S  
+        GeoAux.createTri(st,watervertex[0],watervertex[4],watervertex[6],color);//SW 
+        GeoAux.createTri(st,watervertex[0],watervertex[6],watervertex[8],color);//NW 
+        GeoAux.createTri(st,watervertex[0],watervertex[8],watervertex[10],color);//N 
+        GeoAux.createTri(st,watervertex[0],watervertex[10],watervertex[12],color);//NE 
+
+        // links with other
+        HexaData hdNE = hexData.neighbours[5];
+        Vector3 pwNEv1 = new Vector3(pNEv1.x,HEIGHT_REAL_SEA,pNEv1.z);
+        Vector3 pwNEv2 = new Vector3(pNEv2.x,HEIGHT_REAL_SEA,pNEv2.z);
+        Vector3 pwNEv3 = new Vector3(pNEv3.x,HEIGHT_REAL_SEA,pNEv3.z);
+        Vector3 pwNEv4 = new Vector3(pNEv4.x,HEIGHT_REAL_SEA,pNEv4.z);
+
+        HexaData hdSE = hexData.neighbours[0];
+        Vector3 pwSEv1 = new Vector3(pSEv1.x,HEIGHT_REAL_SEA,pSEv1.z);
+        Vector3 pwSEv2 = new Vector3(pSEv2.x,HEIGHT_REAL_SEA,pSEv2.z);
+        Vector3 pwSEv3 = new Vector3(pSEv3.x,HEIGHT_REAL_SEA,pSEv3.z);
+        Vector3 pwSEv4 = new Vector3(pSEv4.x,HEIGHT_REAL_SEA,pSEv4.z);
+
+        HexaData hdS = hexData.neighbours[1];
+        Vector3 pwSv1 = new Vector3(pSv1.x,HEIGHT_REAL_SEA,pSv1.z);
+        Vector3 pwSv2 = new Vector3(pSv2.x,HEIGHT_REAL_SEA,pSv2.z);
+        Vector3 pwSv3 = new Vector3(pSv3.x,HEIGHT_REAL_SEA,pSv3.z);
+        Vector3 pwSv4 = new Vector3(pSv4.x,HEIGHT_REAL_SEA,pSv4.z);
+
+        //siempre se construyen estes:
+        GeoAux.createQuad(st,pwNEv1,pwNEv2,pwNEv3,pwNEv4,color); //NE
+        GeoAux.createQuad(st,pwSEv1,pwSEv2,pwSEv3,pwSEv4,color); //SE
+        GeoAux.createQuad(st,pwSv1,pwSv2,pwSv3,pwSv4,color); //S
+        
+        //tri holes links
+        GeoAux.createTri(st,pwNEv4,pwNEv3,pwSEv2,color);//NE-SE
+        GeoAux.createTri(st,pwSv1,pwSEv3,pwSv2,color); //SE-S
+
+        // links with ground (no water)
+        HexaData hdSW = hexData.neighbours[2];
+        Vector3 pwSWv1 = watervertex[4];
+        Vector3 pwSWv4 = watervertex[6];
+        float ang = ang30*7;
+        Vector3 offset = new Vector3(Mathf.Cos(ang) * distwater, 0, -Mathf.Sin(ang) * distwater);
+        Vector3 pwSWv2 = pwSWv1 + offset;
+        Vector3 pwSWv3 = pwSWv4 + offset;
+        
+        HexaData hdNW = hexData.neighbours[3];
+        ang = ang30*5; 
+        offset = new Vector3(Mathf.Cos(ang) * distwater, 0, -Mathf.Sin(ang) * distwater);
+        Vector3 pwNWv1 = watervertex[6];
+        Vector3 pwNWv4= watervertex[8];
+        Vector3 pwNWv2 = pwNWv1 + offset;
+        Vector3 pwNWv3= pwNWv4 + offset;
+
+        HexaData hdN = hexData.neighbours[4];
+        ang = ang30*3; 
+        offset = new Vector3(Mathf.Cos(ang) * distwater, 0, -Mathf.Sin(ang) * distwater);
+        Vector3 pwNv1 = watervertex[8];
+        Vector3 pwNv4 = watervertex[10];
+        Vector3 pwNv2 = pwNv1 + offset;
+        Vector3 pwNv3 = pwNv4 + offset;
+
+
+        if (hdSW != null && !hdSW.water){
+            GeoAux.createQuad(st,pwSWv1,pwSWv2,pwSWv3,pwSWv4,color);
+            if (hdS!= null) 
+                GeoAux.createTri(st,pwSv4,pwSv3,pwSWv2,color);//S-SW
+        }
+        
+        if (hdNW != null && !hdNW.water){
+            GeoAux.createQuad(st,pwNWv1,pwNWv2,pwNWv3,pwNWv4,color);
+            if (hdSW!= null && !hdSW.water) 
+                GeoAux.createTri(st,pwSWv4,pwSWv3,pwNWv2,color);//SW-NW
+        }
+        
+        if (hdN != null && !hdN.water){
+            GeoAux.createQuad(st,pwNv1,pwNv2,pwNv3,pwNv4,color);
+            if (hdNW!= null && !hdNW.water)
+                GeoAux.createTri(st,pwNWv4,pwNWv3,pwNv2,color);//NW-N
+        }
+
+        //ultimo tri superior
+        if (hdN != null && !hdN.water){
+            if (hdNE!= null )
+                GeoAux.createTri(st,pwNv4,pwNv3,pwNEv2,color);//N-NE
+        }
+    }
+
 }
