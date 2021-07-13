@@ -42,11 +42,11 @@ public static class GeoAux{
         st.AddVertex(v3);
 
         st.AddColor(color);
-        st.AddUv(new Vector2(1,0));
+        st.AddUv(new Vector2(0,0));
         st.AddVertex(v4);
 
         st.AddColor(color);
-        st.AddUv(new Vector2(0,1));
+        st.AddUv(new Vector2(1,0));
         st.AddVertex(v1);
         
     }
