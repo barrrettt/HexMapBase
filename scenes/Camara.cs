@@ -8,6 +8,10 @@ public class Camara : Spatial{
     public Boolean isPC = true;
     private Camera camara;
     private Vector3 offsetCamera = new Vector3(0f,20.25f,11.25f);
+    private const float ZOOM_MIN = 0.30f, ZOOM_MAX = 2.5f, ZOOM_SPEED = 0.01f;
+    private float zoom = 1f; 
+    public Vector2 movelimitsTopLeft = new Vector2 (0,0);
+    public Vector2 movelimitsDownRight = new Vector2 (10,10);
 
     public override void _Ready() {
         // mobil o PC
@@ -16,6 +20,10 @@ public class Camara : Spatial{
 
         //referancia
         camara = GetNode<Camera>("Camara");
+
+        //max zoom
+        zoom = ZOOM_MAX;
+        camara.Translation =  offsetCamera * zoom;
     }
 
     public override void _Process(float delta){
@@ -34,8 +42,6 @@ public class Camara : Spatial{
 
     // CONTROL PC
     private const float SENSITIVITY_PC = 0.05f, JOYPAD_DEADZONE = 0.15f;
-    private const float ZOOM_MIN = 0.2f, ZOOM_MAX = 10f, ZOOM_SPEED = 0.01f;
-    private float zoom = 1f; 
 
     private void inputPC(float delta){
         Vector2 vel = new Vector2();
@@ -176,13 +182,26 @@ public class Camara : Spatial{
 
     }
 
+    // GAME MOVE
+    public void move(Vector2 worldpos){
+        Translation = new Vector3(worldpos.x,0,worldpos.y);
+    }
+
     // AUX movement, rotation and zoom
     private void move(Vector2 vel,Vector2 rot, float speed,float delta){
 
+        //rotation
         RotateObjectLocal(Vector3.Up,rot.y*speed*delta*1f);
         camara.RotateObjectLocal(Vector3.Right,rot.x*speed*delta*0.1f);
+
+        //move and limits
+        if(Translation.x <= movelimitsTopLeft.x && vel.x<0 ) vel.x = 0; //limit left
+        if(Translation.z <= movelimitsTopLeft.y && vel.y<0 ) vel.y = 0; //limit up
+        if(Translation.x >= movelimitsDownRight.x && vel.x>0 ) vel.x = 0; //limit right
+        if(Translation.z >= movelimitsDownRight.y && vel.y>0 ) vel.y = 0; //limit down
         TranslateObjectLocal(new Vector3(vel.x,0,vel.y)*speed*delta*50f);
 
+        //zoom and limits
         if (zoom <= ZOOM_MIN) zoom = ZOOM_MIN;
         if (zoom >= ZOOM_MAX) zoom = ZOOM_MAX;
         Vector3 result = offsetCamera * zoom;

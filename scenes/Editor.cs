@@ -143,6 +143,8 @@ public class Editor : Spatial{
 
         map.instanceAllMap(random); //Show all map
 
+        initcamera();//camera to center
+
         GD.Print("Editor ready");
     }
 
@@ -233,6 +235,19 @@ public class Editor : Spatial{
         }
     }
 
+    //camera init: limits and center
+    private void initcamera(){
+        //calculate camera limits
+        int size = map.mapData.getSize();
+        Vector3 pos = map.mapData.getHexPosition(size-1,size-1);
+        camara.movelimitsTopLeft = new Vector2 (0,0);
+        camara.movelimitsDownRight = new Vector2 (pos.x,pos.z);
+
+        //center point
+        pos = map.mapData.getHexPosition(size/2,size/2);
+        camara.move(new Vector2(pos.x,pos.z));
+    }
+
     //DEBUG PHYSICS
     private void physicDebug(){
         foreach (RigidBody ball in balls){
@@ -292,6 +307,9 @@ public class Editor : Spatial{
 
         //Instanciar toda la vista
         map.instanceAllMap(random);
+
+        //camera to center
+        initcamera();
     }
 
     //GENERACION CON RUIDO - BIOMAS
