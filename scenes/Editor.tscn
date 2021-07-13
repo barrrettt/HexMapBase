@@ -21,7 +21,6 @@
 [ext_resource path="res://src/vectorial/file-delete.svg" type="Texture" id=19]
 [ext_resource path="res://src/environments/default_env.tres" type="Environment" id=20]
 
-
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 5 )
 
@@ -32,7 +31,7 @@ script = ExtResource( 1 )
 environment = ExtResource( 20 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="center"]
-transform = Transform( -0.759957, 0.597658, 0.255482, 0.181403, -0.18242, 0.966342, 0.624146, 0.780723, 0.0302142, 0.0155527, 6.91649, 0.0538796 )
+transform = Transform( 0.990202, -0.0188642, 0.138359, -0.136797, 0.0678467, 0.988273, -0.0280302, -0.997517, 0.0646014, 0.0155525, 6.91649, 0.0538797 )
 light_bake_mode = 0
 directional_shadow_mode = 0
 
@@ -599,13 +598,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BuRiber" type="Button" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC"]
+[node name="BuRiver" type="Button" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC"]
 margin_right = 50.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 50, 50 )
 mouse_default_cursor_shape = 2
 
-[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC/BuRiber"]
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC/BuRiver"]
 self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -649,13 +648,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BuRiberClear" type="Button" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC"]
+[node name="BuRiverClear" type="Button" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC"]
 margin_right = 50.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 50, 50 )
 mouse_default_cursor_shape = 2
 
-[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC/BuRiberClear"]
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC/BuRiverClear"]
 self_modulate = Color( 0.654902, 0.0705882, 0.0823529, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0

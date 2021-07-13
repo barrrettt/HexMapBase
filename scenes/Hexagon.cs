@@ -17,7 +17,7 @@ public class Hexagon : MeshInstance{
         new Color("#ccc3b8"), //white
         new Color("#ffffff"), //white w
     };
-    private Color colorRiber = new Color("#115999");//blue
+    private Color colorRiver = new Color("#115999");//blue
     //STATICS METRICS
     public static float SIZE_TOP = 0.75f;//0.75f; //radius top hex (1 max)
     public static float HEIGHT_RIBER_OFFSET = 0.05f;
@@ -25,13 +25,13 @@ public class Hexagon : MeshInstance{
     public static float HEIGHT_REAL_SEA = 0.40f;
 
     //Children geometry
-    private MeshInstance riber;
+    private MeshInstance river;
 
     private MeshInstance sea;
    
 
     public override void _EnterTree(){
-        riber = (MeshInstance)GetNode("Riber");
+        river = (MeshInstance)GetNode("River");
         sea = (MeshInstance)GetNode("Sea");
     }
 
@@ -56,7 +56,7 @@ public class Hexagon : MeshInstance{
     }
     // metrics
     public float innerRadius;
-    public float innerRadiusRiber;
+    public float innerRadiusRiver;
     public float ang30;
 
     // Main vertex
@@ -66,7 +66,7 @@ public class Hexagon : MeshInstance{
     pSEv1 = new Vector3(), pSEv2= new Vector3(), pSEv3 = new Vector3(), pSEv4= new Vector3(), 
     pSv1= new Vector3(), pSv2 = new Vector3(), pSv3= new Vector3(), pSv4= new Vector3();
     //Rivers vertex
-    public Vector3[] riberVertex = new Vector3[13];
+    public Vector3[] riverVertex = new Vector3[13];
     //River links Top
     public Vector3 rpNEv1 = new Vector3(), rpNEv2 = new Vector3(), rpNEv3 = new Vector3(), rpNEv4 = new Vector3(),
     rpSEv1 = new Vector3(), rpSEv2 = new Vector3(), rpSEv3 = new Vector3(), rpSEv4 = new Vector3(),
@@ -106,21 +106,21 @@ public class Hexagon : MeshInstance{
         
         //RIVERS vertices top
         hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
-        innerRadiusRiber = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
+        innerRadiusRiver = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
         
-        riberVertex[0] = new Vector3(0,hValue,0);//CENTRO
-        riberVertex[1] = new Vector3(Mathf.Cos(ang30 * 1)* innerRadiusRiber, hValue, Mathf.Sin(ang30*1)* innerRadiusRiber);// med E y SE
-        riberVertex[2] = new Vector3(Mathf.Cos(ang30 * 2)* SIZE_RIBER, hValue, Mathf.Sin(ang30*2)* SIZE_RIBER);//SE
-        riberVertex[3] = new Vector3(Mathf.Cos(ang30 * 3)* innerRadiusRiber, hValue, Mathf.Sin(ang30*3)* innerRadiusRiber);//med 
-        riberVertex[4] = new Vector3(Mathf.Cos(ang30 * 4)* SIZE_RIBER, hValue, Mathf.Sin(ang30*4)* SIZE_RIBER);//SW
-        riberVertex[5] = new Vector3(Mathf.Cos(ang30 * 5)* innerRadiusRiber, hValue, Mathf.Sin(ang30*5)* innerRadiusRiber);//med
-        riberVertex[6] = new Vector3(Mathf.Cos(ang30 * 6)* SIZE_RIBER, hValue, Mathf.Sin(ang30*6)* SIZE_RIBER);//W
-        riberVertex[7] = new Vector3(Mathf.Cos(ang30 * 7)* innerRadiusRiber, hValue, Mathf.Sin(ang30*7)* innerRadiusRiber) ;//med
-        riberVertex[8] = new Vector3(Mathf.Cos(ang30 * 8)* SIZE_RIBER, hValue, Mathf.Sin(ang30*8)* SIZE_RIBER);//NW
-        riberVertex[9] = new Vector3(Mathf.Cos(ang30 * 9)* innerRadiusRiber, hValue, Mathf.Sin(ang30*9)* innerRadiusRiber);//med
-        riberVertex[10] = new Vector3(Mathf.Cos(ang30 * 10)* SIZE_RIBER, hValue, Mathf.Sin(ang30*10)* SIZE_RIBER);//NE
-        riberVertex[11] = new Vector3(Mathf.Cos(ang30 * 11)* innerRadiusRiber, hValue, Mathf.Sin(ang30*11)* innerRadiusRiber);//med
-        riberVertex[12] = new Vector3(Mathf.Cos(ang30 * 12)* SIZE_RIBER, hValue, Mathf.Sin(ang30*12)* SIZE_RIBER);//E
+        riverVertex[0] = new Vector3(0,hValue,0);//CENTRO
+        riverVertex[1] = new Vector3(Mathf.Cos(ang30 * 1)* innerRadiusRiver, hValue, Mathf.Sin(ang30*1)* innerRadiusRiver);// med E y SE
+        riverVertex[2] = new Vector3(Mathf.Cos(ang30 * 2)* SIZE_RIBER, hValue, Mathf.Sin(ang30*2)* SIZE_RIBER);//SE
+        riverVertex[3] = new Vector3(Mathf.Cos(ang30 * 3)* innerRadiusRiver, hValue, Mathf.Sin(ang30*3)* innerRadiusRiver);//med 
+        riverVertex[4] = new Vector3(Mathf.Cos(ang30 * 4)* SIZE_RIBER, hValue, Mathf.Sin(ang30*4)* SIZE_RIBER);//SW
+        riverVertex[5] = new Vector3(Mathf.Cos(ang30 * 5)* innerRadiusRiver, hValue, Mathf.Sin(ang30*5)* innerRadiusRiver);//med
+        riverVertex[6] = new Vector3(Mathf.Cos(ang30 * 6)* SIZE_RIBER, hValue, Mathf.Sin(ang30*6)* SIZE_RIBER);//W
+        riverVertex[7] = new Vector3(Mathf.Cos(ang30 * 7)* innerRadiusRiver, hValue, Mathf.Sin(ang30*7)* innerRadiusRiver) ;//med
+        riverVertex[8] = new Vector3(Mathf.Cos(ang30 * 8)* SIZE_RIBER, hValue, Mathf.Sin(ang30*8)* SIZE_RIBER);//NW
+        riverVertex[9] = new Vector3(Mathf.Cos(ang30 * 9)* innerRadiusRiver, hValue, Mathf.Sin(ang30*9)* innerRadiusRiver);//med
+        riverVertex[10] = new Vector3(Mathf.Cos(ang30 * 10)* SIZE_RIBER, hValue, Mathf.Sin(ang30*10)* SIZE_RIBER);//NE
+        riverVertex[11] = new Vector3(Mathf.Cos(ang30 * 11)* innerRadiusRiver, hValue, Mathf.Sin(ang30*11)* innerRadiusRiver);//med
+        riverVertex[12] = new Vector3(Mathf.Cos(ang30 * 12)* SIZE_RIBER, hValue, Mathf.Sin(ang30*12)* SIZE_RIBER);//E
 
     }
 
@@ -145,8 +145,8 @@ public class Hexagon : MeshInstance{
 
         //Physic mesh 
         foreach (Node child in GetChildren()){
-            if (child == riber || child == sea) 
-                continue; //ribers and sea no
+            if (child == river || child == sea) 
+                continue; //rivers and sea no
             child.QueueFree(); //delete old physics
         }
 
@@ -362,28 +362,28 @@ public class Hexagon : MeshInstance{
         }
     }
 
-    // Ribers
+    // Rivers
     private void CreateRivers(SurfaceTool st){
             
-        ShaderMaterial matRiver = (ShaderMaterial)riber.MaterialOverride;
+        ShaderMaterial matRiver = (ShaderMaterial)river.MaterialOverride;
         st.SetMaterial(matRiver);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         // Top links and inter links
-        if (hexData.riber) CreateRiverUnions(st);
+        if (hexData.river) CreateRiverUnions(st);
 
         //finaly
         st.GenerateNormals(); 
         //st.GenerateTangents(); 
-        riber.Mesh = st.Commit(); 
+        river.Mesh = st.Commit(); 
     }
     
     private void CreateRiverUnions(SurfaceTool st){
         // Things 
-        float distRiberTop = innerRadius - innerRadiusRiber;
+        float distRiverTop = innerRadius - innerRadiusRiver;
         float hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
         float distLink = innerRadius * 2/3;//distancia del puente
-        Color color = colorRiber;
+        Color color = colorRiver;
 
         // pintar centros? 
         bool linkSE = false, linkSE_in = false, linkSE_out = false;
@@ -393,109 +393,109 @@ public class Hexagon : MeshInstance{
         bool linkN = false, linkN_in = false, linkN_out = false;
         bool linkNE = false, linkNE_in = false, linkNE_out = false;
         
-        int countRiberNeibours = 0;
+        int countRiverNeibours = 0;
         
         //metrics unions top links NE 
-        rpNEv1 = riberVertex[10];
-        rpNEv4 = riberVertex[12];
+        rpNEv1 = riverVertex[10];
+        rpNEv4 = riverVertex[12];
         float ang = Mathf.Pi/6; //30º 
-        Vector3 offset = new Vector3(Mathf.Cos(ang)*distRiberTop,0,-Mathf.Sin(ang)*distRiberTop);
+        Vector3 offset = new Vector3(Mathf.Cos(ang)*distRiverTop,0,-Mathf.Sin(ang)*distRiverTop);
         rpNEv2 = rpNEv1 + offset;
         rpNEv3 = rpNEv4 + offset;
 
         //metrics unions top links SE 
-        rpSEv1 = riberVertex[12];
-        rpSEv4 = riberVertex[2];
+        rpSEv1 = riverVertex[12];
+        rpSEv4 = riverVertex[2];
         ang = -Mathf.Pi/6; //-30º 
-        offset = new Vector3(Mathf.Cos(ang)*distRiberTop,0,-Mathf.Sin(ang)*distRiberTop);
+        offset = new Vector3(Mathf.Cos(ang)*distRiverTop,0,-Mathf.Sin(ang)*distRiverTop);
         rpSEv2 = rpSEv1 + offset;
         rpSEv3 = rpSEv4 + offset;
 
         //metrics unions top links S 
-        rpSv1 = riberVertex[2];
-        rpSv4 = riberVertex[4];
+        rpSv1 = riverVertex[2];
+        rpSv4 = riverVertex[4];
         ang = -Mathf.Pi/2; //-90º 
-        offset = new Vector3(Mathf.Cos(ang)*distRiberTop,0,-Mathf.Sin(ang)*distRiberTop);
+        offset = new Vector3(Mathf.Cos(ang)*distRiverTop,0,-Mathf.Sin(ang)*distRiverTop);
         rpSv2 = rpSv1 + offset;
         rpSv3 = rpSv4 + offset;
 
         //metrics unions top links SW 
-        rpSWv1 = riberVertex[4];
-        rpSWv4 = riberVertex[6];
+        rpSWv1 = riverVertex[4];
+        rpSWv4 = riverVertex[6];
         ang = -Mathf.Pi*5/6; //-90º 
-        offset = new Vector3(Mathf.Cos(ang)*distRiberTop,0,-Mathf.Sin(ang)*distRiberTop);
+        offset = new Vector3(Mathf.Cos(ang)*distRiverTop,0,-Mathf.Sin(ang)*distRiverTop);
         rpSWv2 = rpSWv1 + offset;
         rpSWv3 = rpSWv4 + offset;
 
         //metrics unions top links NW 
-        rpNWv1 = riberVertex[6];
-        rpNWv4 = riberVertex[8];
+        rpNWv1 = riverVertex[6];
+        rpNWv4 = riverVertex[8];
         ang = Mathf.Pi*5/6; //150º 
-        offset = new Vector3(Mathf.Cos(ang)*distRiberTop,0,-Mathf.Sin(ang)*distRiberTop);
+        offset = new Vector3(Mathf.Cos(ang)*distRiverTop,0,-Mathf.Sin(ang)*distRiverTop);
         rpNWv2 = rpNWv1 + offset;
         rpNWv3 = rpNWv4 + offset;
 
         //metrics unions top links N 
-        rpNv1 = riberVertex[8];
-        rpNv4 = riberVertex[10];
+        rpNv1 = riverVertex[8];
+        rpNv4 = riverVertex[10];
         ang = Mathf.Pi*3/6; //90º 
-        offset = new Vector3(Mathf.Cos(ang)*distRiberTop,0,-Mathf.Sin(ang)*distRiberTop);
+        offset = new Vector3(Mathf.Cos(ang)*distRiverTop,0,-Mathf.Sin(ang)*distRiverTop);
         rpNv2 = rpNv1 + offset;
         rpNv3 = rpNv4 + offset;
 
-        // Ribers IN or OUT?
+        // Rivers IN or OUT?
         HexaData hdNE = hexData.neighbours[5];
         if (hdNE != null){
-            linkNE_out = hexData.ribersOut[5] == hdNE;
-            linkNE_in = hdNE.ribersOut[2] == hexData;
-            if (hdNE.riber && (linkNE_out|| linkNE_in)){
+            linkNE_out = hexData.riversOut[5] == hdNE;
+            linkNE_in = hdNE.riversOut[2] == hexData;
+            if (hdNE.river && (linkNE_out|| linkNE_in)){
                 linkNE = true;
-                countRiberNeibours++;
+                countRiverNeibours++;
             }
         }
         HexaData hdSE = hexData.neighbours[0];
         if (hdSE != null){
-            linkSE_out = hexData.ribersOut[0] == hdSE;
-            linkSE_in = hdSE.ribersOut[3] == hexData;
-            if (hdSE.riber && (linkSE_out ||linkSE_in)){
+            linkSE_out = hexData.riversOut[0] == hdSE;
+            linkSE_in = hdSE.riversOut[3] == hexData;
+            if (hdSE.river && (linkSE_out ||linkSE_in)){
                 linkSE = true;
-                countRiberNeibours++;
+                countRiverNeibours++;
             }
         }
         HexaData hdS = hexData.neighbours[1];
         if (hdS != null){
-            linkS_out = hexData.ribersOut[1] == hdS;
-            linkS_in = hdS.ribersOut[4] == hexData;
-            if (hdS.riber && (linkS_out || linkS_in)){
+            linkS_out = hexData.riversOut[1] == hdS;
+            linkS_in = hdS.riversOut[4] == hexData;
+            if (hdS.river && (linkS_out || linkS_in)){
                 linkS = true;
-                countRiberNeibours++;
+                countRiverNeibours++;
             }
         }
         HexaData hdSW = hexData.neighbours[2];
         if (hdSW != null){
-            linkSW_out = hexData.ribersOut[2] == hdSW;
-            linkSW_in = hdSW.ribersOut[5] == hexData;
-            if (hdSW.riber && (linkSW_out || linkSW_in)){
+            linkSW_out = hexData.riversOut[2] == hdSW;
+            linkSW_in = hdSW.riversOut[5] == hexData;
+            if (hdSW.river && (linkSW_out || linkSW_in)){
                 linkSW = true;
-                countRiberNeibours++;
+                countRiverNeibours++;
             }
         }
         HexaData hdNW = hexData.neighbours[3];
         if (hdNW != null){
-            linkNW_out = hexData.ribersOut[3] == hdNW;
-            linkNW_in = hdNW.ribersOut[0] == hexData;
-            if (hdNW.riber && (linkNW_out || linkNW_in)){
+            linkNW_out = hexData.riversOut[3] == hdNW;
+            linkNW_in = hdNW.riversOut[0] == hexData;
+            if (hdNW.river && (linkNW_out || linkNW_in)){
                 linkNW = true;
-                countRiberNeibours++;       
+                countRiverNeibours++;       
             }
         }
         HexaData hdN = hexData.neighbours[4];
         if (hdN != null){
-            linkN_out = hexData.ribersOut[4] == hdN;
-            linkN_in = hdN.ribersOut[1] == hexData;
-            if (hdN.riber && (linkN_out || linkN_in)){
+            linkN_out = hexData.riversOut[4] == hdN;
+            linkN_in = hdN.riversOut[1] == hexData;
+            if (hdN.river && (linkN_out || linkN_in)){
                 linkN = true;
-                countRiberNeibours++;
+                countRiverNeibours++;
             }
         }
         //LINKS TOP (bajo agua no)
@@ -587,59 +587,59 @@ public class Hexagon : MeshInstance{
 
         //CENTRO PERO CON 12 TRIS (bajo agua no)
         if (!hexData.water){
-            if (countRiberNeibours < 2  || countRiberNeibours > 3){
+            if (countRiverNeibours < 2  || countRiverNeibours > 3){
                 linkSE = linkS = linkSW = linkNW = linkN = linkNE = true;// un lago 
             }
             if (linkSE){
-                GeoAux.createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);//SE 0 
+                GeoAux.createTri(st,riverVertex[0],riverVertex[12],riverVertex[2],color);//SE 0 
             } 
             if (linkS){
-                GeoAux.createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);//S  1 
+                GeoAux.createTri(st,riverVertex[0],riverVertex[2],riverVertex[4],color);//S  1 
             } 
             if (linkSW){
-                GeoAux.createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);//SW 2 
+                GeoAux.createTri(st,riverVertex[0],riverVertex[4],riverVertex[6],color);//SW 2 
             } 
             if (linkNW){
-                GeoAux.createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);//NW 3 
+                GeoAux.createTri(st,riverVertex[0],riverVertex[6],riverVertex[8],color);//NW 3 
             }
             if (linkN){
-                GeoAux.createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);//N  4 
+                GeoAux.createTri(st,riverVertex[0],riverVertex[8],riverVertex[10],color);//N  4 
             } 
             if (linkNE){
-                GeoAux.createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);//NE 5
+                GeoAux.createTri(st,riverVertex[0],riverVertex[10],riverVertex[12],color);//NE 5
             } 
 
             //Tapar huecos feos del rio
-            if (countRiberNeibours>1){
+            if (countRiverNeibours>1){
                 if (linkSE && linkSW){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[2],riberVertex[4],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[2],riverVertex[4],color);
                 }
                 if (linkSE && linkNW){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[2],riberVertex[6],color);
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[8],riberVertex[12],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[2],riverVertex[6],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[8],riverVertex[12],color);
                 }
                 if (linkSE && linkN){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[10],riberVertex[12],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[10],riverVertex[12],color);
                 }
                 if (linkS && linkNW){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[4],riberVertex[6],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[4],riverVertex[6],color);
                 }
                 if (linkS && linkN){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[10],riberVertex[2],color);
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[4],riberVertex[8],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[10],riverVertex[2],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[4],riverVertex[8],color);
                 }
                 if (linkS && linkNE){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[12],riberVertex[2],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[12],riverVertex[2],color);
                 }
                 if (linkSW && linkN){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[6],riberVertex[8],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[6],riverVertex[8],color);
                 }
                 if (linkSW && linkNE){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[6],riberVertex[10],color);
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[12],riberVertex[4],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[6],riverVertex[10],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[12],riverVertex[4],color);
                 }
                 if (linkNE && linkNW){
-                    GeoAux.createTri(st,riberVertex[0],riberVertex[8],riberVertex[10],color);
+                    GeoAux.createTri(st,riverVertex[0],riverVertex[8],riverVertex[10],color);
                 }
             }
         }
@@ -666,7 +666,7 @@ public class Hexagon : MeshInstance{
         float hValue = HEIGHT_REAL_SEA;
         float distwater = innerRadius * 2/3;//water radius
         float ang30 = (Mathf.Pi/6);// 30º slides
-        Color color = colorRiber;
+        Color color = colorRiver;
 
         //el top pero con mas altura
         Vector3[] watervertex = new Vector3[13];
@@ -736,7 +736,6 @@ public class Hexagon : MeshInstance{
         Vector3 pwNv4 = watervertex[10];
         Vector3 pwNv2 = pwNv1 + offset;
         Vector3 pwNv3 = pwNv4 + offset;
-
 
         if (hdSW != null && !hdSW.water){
             GeoAux.createQuad(st,pwSWv1,pwSWv2,pwSWv3,pwSWv4,color);

@@ -17,7 +17,7 @@ public class Editor : Spatial{
     private String actualToolSelected = "";
     private HexaData lastOrigin = null;
     private Label lblActualTool;
-    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRibers, buRiberClear;
+    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRivers, buRiverClear;
 
     private LineEdit lblNameMap;
     private SpinBox sbSeedMap;
@@ -83,10 +83,10 @@ public class Editor : Spatial{
         buDetail.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detail"});
         buRoads = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB2/CC/BuRoads");
         buRoads.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"road"});
-        buRibers = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC/BuRiber");
-        buRibers.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riber"});
-        buRiberClear = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC/BuRiberClear");
-        buRiberClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riberclear"});
+        buRivers = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC/BuRiver");
+        buRivers.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"river"});
+        buRiverClear = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC/BuRiverClear");
+        buRiverClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riverclear"});
 
         // PROCEDURAL GEN
         lblNameMap = GetNode<LineEdit>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB1/txtNameMap");
@@ -152,7 +152,7 @@ public class Editor : Spatial{
     }
 
     public override void _PhysicsProcess(float delta){
-        mousePosOver();
+        if (camara.isPC) mousePosOver(); //on mobile no over indicator
         cameraPosOver();
     }
 
@@ -374,12 +374,12 @@ public class Editor : Spatial{
             case "up2": map.up2Terrain(hxd); break;
             case "down":map.downTerrain(hxd); break;
             case "down2":map.down2Terrain(hxd); break;
-            case "riber":
-                map.createRiber(lastOrigin,hxd); 
+            case "river":
+                map.createRiver(lastOrigin,hxd); 
                 lastOrigin = hxd;
                 break;
-            case "riberclear": 
-                map.cleanRibers(hxd); 
+            case "riverclear": 
+                map.cleanRivers(hxd); 
                 lastOrigin = null;
                 break;
         }

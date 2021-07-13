@@ -94,7 +94,7 @@ public class Map : Spatial{
     public void upTerrain(HexaData hxd){
         if (hxd == null) return;
         if(hxd.setHeight(hxd.getHeight()+1)){
-            hxd.clearRibers();
+            hxd.clearRivers();
             CreateAffectedHex(hxd);
         }
     }
@@ -102,7 +102,7 @@ public class Map : Spatial{
     public void downTerrain(HexaData hxd){
         if (hxd == null) return;
         if(hxd.setHeight(hxd.getHeight()-1)){
-            hxd.clearRibers();
+            hxd.clearRivers();
             CreateAffectedHex(hxd);
         }
     }
@@ -133,12 +133,12 @@ public class Map : Spatial{
         }
     }
 
-    public void createRiber(HexaData hxdOrigin, HexaData hxdEnd){
+    public void createRiver(HexaData hxdOrigin, HexaData hxdEnd){
         if (hxdOrigin == null || hxdEnd == null)return;
-        //riber cant up
+        //river cant up
         if (hxdOrigin.getHeight()< hxdEnd.getHeight()) 
             return;
-        //riber not in water
+        //river not in water
         if (hxdOrigin.water) 
             return;
 
@@ -146,9 +146,9 @@ public class Map : Spatial{
         for (int i = 0; i< hxdOrigin.neighbours.Length; i++){
             if (hxdEnd == hxdOrigin.neighbours[i]) {
                 //Origin and end are Neighbours
-                hxdOrigin.riber = true;
-                hxdEnd.riber = true;
-                hxdOrigin.ribersOut[i] = hxdOrigin.neighbours[i];
+                hxdOrigin.river = true;
+                hxdEnd.river = true;
+                hxdOrigin.riversOut[i] = hxdOrigin.neighbours[i];
                 finded = true;
                 break;
             }
@@ -159,9 +159,9 @@ public class Map : Spatial{
         CreateAffectedHex(hxdEnd);
     }
 
-    public void cleanRibers(HexaData hxd){
+    public void cleanRivers(HexaData hxd){
         if (hxd == null) return;
-        hxd.clearRibers();
+        hxd.clearRivers();
         CreateAffectedHex(hxd);
     }
 
@@ -358,9 +358,9 @@ public class HexaData{
     public int height = 1; 
     public bool water = false;
     
-    // riber system, 
-    public bool riber = false; 
-    public HexaData[] ribersOut = new HexaData[6]; //first SE and clock way: S, SW...
+    // river system, 
+    public bool river = false; 
+    public HexaData[] riversOut = new HexaData[6]; //first SE and clock way: S, SW...
 
     //reference with escene object
     public Hexagon hexagon;
@@ -387,9 +387,9 @@ public class HexaData{
         return height;
     }
 
-    public void clearRibers(){
-        riber = false;
-        ribersOut = new HexaData[6];
+    public void clearRivers(){
+        river = false;
+        riversOut = new HexaData[6];
     }
 
 }
