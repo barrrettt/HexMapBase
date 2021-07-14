@@ -13,6 +13,7 @@ public class Editor : Spatial{
     private Button buElevations, buStyles, buGeneration, buOptions;
 
     private Control pElevations, pStyles, pGeneration, pOptions;
+    private Control pTools;
     private Control[] panels;
     private String actualToolSelected = "";
     private HexaData lastOrigin = null;
@@ -36,27 +37,34 @@ public class Editor : Spatial{
         camara = centro.GetNode<Camara>("Camara"); 
         spaceState = GetWorld().DirectSpaceState; //physic ray neededs 
 
-        //GUI
+        //GUI panel top
+        lblActualTool = GetNode<Label>("GUI/UpPanel/HB/HB/lblTool");
+
+        //GUI panel botton
         lblMousePos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB1/Label");
-        lblCameraPos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB2/Label");
-        lblSelectedPos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB3/Label");
         lblMousePos2 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB1/Label2");
+        lblCameraPos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB2/Label");
         lblCameraPos2 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB2/Label2");
+        lblSelectedPos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB3/Label");
         lblSelectedPos2 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB3/Label2");
 
-        buElevations = GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC/BUElevations"); 
-        buStyles= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC2/BUStyles"); 
-        buGeneration= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC3/BUGeneration"); 
-        buOptions= GetNode<Button>("GUI/RightPanel/VB/PButtons/HB/CC4/BUOptions"); 
+        //right pane buttons
+        buElevations = GetNode<Button>("GUI/RightPanel/Right/PButtons/HB/CC/BUElevations"); 
+        buStyles= GetNode<Button>("GUI/RightPanel/Right/PButtons/HB/CC2/BUStyles"); 
+        buGeneration= GetNode<Button>("GUI/RightPanel/Right/PButtons/HB/CC3/BUGeneration"); 
+        buOptions= GetNode<Button>("GUI/RightPanel/Right/PButtons/HB/CC4/BUOptions"); 
 
-        pElevations = GetNode<Control>("GUI/RightPanel/VB/MC/VBElevations"); 
         buElevations.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{0});
-        pStyles = GetNode<Control>("GUI/RightPanel/VB/MC/VBStyles"); 
         buStyles.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{1});
-        pGeneration = GetNode<Control>("GUI/RightPanel/VB/MC/VBGeneration");
         buGeneration.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{2});
-        pOptions = GetNode<Control>("GUI/RightPanel/VB/MC/VBOptions"); 
         buOptions.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{3});
+
+        //subpanels
+        pTools = GetNode<Control>("GUI/RightPanel/Right/PTools");
+        pElevations = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations"); 
+        pStyles = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles"); 
+        pGeneration = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration");
+        pOptions = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions"); 
 
         panels = new Control[]{
             pElevations,
@@ -66,40 +74,41 @@ public class Editor : Spatial{
         };
 
         // TOOLS
-        lblActualTool = GetNode<Label>("GUI/UpPanel/MC/HB/HB/lblTool");
 
-        buUp = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB0/CC/BuUp");
+        buUp = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuUp");
+        buUp2 = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuUp2");
+        buDown = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuDown");
+        buDown2 = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuDown2");
+        buRivers = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuRiver");
+        buRiverClear = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuRiverClear");
+        buStyle = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuStyle");
+
+        buDetail = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuDetail");
+        buRoads = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoads");
+
         buUp.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"up"});
-        buUp2 = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB1/CC/BuUp2");
         buUp2.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"up2"});
-        buDown = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB2/CC/BuDown");
         buDown.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"down"});
-        buDown2 = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB3/CC/BuDown2");
         buDown2.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"down2"});
-
-        buStyle = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB0/CC/BuStyle");
-        buStyle.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"style"});
-        buDetail = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB1/CC/BuDetail");
-        buDetail.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detail"});
-        buRoads = GetNode<Button>("GUI/RightPanel/VB/MC/VBStyles/PContent/VB/HB2/CC/BuRoads");
-        buRoads.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"road"});
-        buRivers = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB4/CC/BuRiver");
         buRivers.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"river"});
-        buRiverClear = GetNode<Button>("GUI/RightPanel/VB/MC/VBElevations/PContent/VB/HB5/CC/BuRiverClear");
         buRiverClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riverclear"});
 
-        // PROCEDURAL GEN
-        lblNameMap = GetNode<LineEdit>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB1/txtNameMap");
-        sbSeedMap = GetNode<SpinBox>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB4/sbSeedMap");
-        sSizeMap = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB2/sSizeMap");
-        sP1 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB5/sP1");
-        sH1 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB6/sH1");
-        sP2 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB7/sP2");
-        sH2 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB8/sH2");
-        sP3 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB9/sP3");
-        sH3 = GetNode<HSlider>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB10/sH3");
+        buStyle.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"style"});
+        buDetail.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detail"});
+        buRoads.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"road"});
 
-        buGenMap = GetNode<Button>("GUI/RightPanel/VB/MC/VBGeneration/PContent/VB/HB0/MC/BuGenerate");
+        // PROCEDURAL GEN
+        lblNameMap = GetNode<LineEdit>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1/txtNameMap");
+        sbSeedMap = GetNode<SpinBox>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB4/sbSeedMap");
+        sSizeMap = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB2/sSizeMap");
+        sP1 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB5/sP1");
+        sH1 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB6/sH1");
+        sP2 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB7/sP2");
+        sH2 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB8/sH2");
+        sP3 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB9/sP3");
+        sH3 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB10/sH3");
+
+        buGenMap = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0/MC/BuGenerate");
         buGenMap.Connect("pressed", this, nameof(buttonGenerateTerrain));
 
         // translate text GUI
@@ -280,7 +289,11 @@ public class Editor : Spatial{
             }
             allHides &= !panels[i].Visible;
         }
+                
+        //panel base se muestra si alguien visible
+        pTools.Visible = !allHides;
 
+        //si algun panel activo, camara no responde a acciones
         camara.playerControl = allHides;
     }
 

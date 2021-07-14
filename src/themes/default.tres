@@ -38,6 +38,7 @@ border_width_left = 2
 border_color = Color( 0, 0, 0, 1 )
 
 [sub_resource type="DynamicFont" id=11]
+size = 24
 font_data = ExtResource( 1 )
 
 [resource]
