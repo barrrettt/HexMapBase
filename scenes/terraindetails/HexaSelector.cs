@@ -54,22 +54,10 @@ public class HexaSelector : MeshInstance{
         GeoAux.createQuad(st,v4,ev4,ev5,v5,color);
         GeoAux.createQuad(st,v5,ev5,ev6,v6,color);
         GeoAux.createQuad(st,v6,ev6,ev1,v1,color);
-        /*createLine(st,v1,color);
-        createLine(st,v2,color);
-        createLine(st,v3,color);
-        createLine(st,v4,color);
-        createLine(st,v5,color);
-        createLine(st,v6,color);
-        */
+
         //FINALY
         var mesh = st.Commit();
         Mesh = mesh;
-    }
-
-    private void createLine(SurfaceTool st, Vector3 v1,Color color){
-        st.AddColor(color);
-        st.AddUv(new Vector2());
-        st.AddVertex(v1);
     }
 
 }
