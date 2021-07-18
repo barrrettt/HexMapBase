@@ -21,10 +21,6 @@ run/main_scene="res://Main.tscn"
 boot_splash/bg_color=Color( 0.286275, 0.054902, 0.509804, 1 )
 config/icon="res://icon.png"
 
-[debug]
-
-settings/stdout/print_fps=true
-
 [display]
 
 window/size/width=1920
