@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scenes/Editor.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Map.tscn" type="PackedScene" id=2]
-[ext_resource path="res://src/themes/default.tres" type="Theme" id=3]
+[ext_resource path="res://src/themes/EditorAndroidTheme.tres" type="Theme" id=3]
 [ext_resource path="res://scenes/Camara.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/shaders/circles.shader" type="Shader" id=5]
 [ext_resource path="res://src/vectorial/doble-down.svg" type="Texture" id=6]
