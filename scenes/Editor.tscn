@@ -65,30 +65,28 @@ __meta__ = {
 margin_left = 14.0
 margin_top = 14.0
 margin_right = 1906.0
-margin_bottom = 66.0
+margin_bottom = 43.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="HB" type="HBoxContainer" parent="GUI/UpPanel/HB"]
 margin_right = 471.0
-margin_bottom = 52.0
+margin_bottom = 29.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Label" type="Label" parent="GUI/UpPanel/HB/HB"]
-margin_top = 11.0
 margin_right = 45.0
-margin_bottom = 40.0
+margin_bottom = 29.0
 custom_colors/font_color = Color( 0.521569, 0.521569, 0.521569, 1 )
 text = "Tool"
 
 [node name="lblTool" type="Label" parent="GUI/UpPanel/HB/HB"]
 margin_left = 53.0
-margin_top = 11.0
 margin_right = 108.0
-margin_bottom = 40.0
+margin_bottom = 29.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 text = "None"
 
@@ -96,7 +94,7 @@ text = "None"
 self_modulate = Color( 1, 1, 1, 0 )
 margin_left = 479.0
 margin_right = 1892.0
-margin_bottom = 52.0
+margin_bottom = 29.0
 mouse_filter = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -195,8 +193,8 @@ mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="BUStyles" type="Button" parent="GUI/RightPanel/Right/PButtons/HB/CC2"]
-margin_left = 23.0
-margin_right = 113.0
+margin_left = 24.0
+margin_right = 114.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 90, 90 )
 focus_mode = 0
@@ -261,8 +259,8 @@ mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="BUOptions" type="Button" parent="GUI/RightPanel/Right/PButtons/HB/CC4"]
-margin_left = 23.0
-margin_right = 113.0
+margin_left = 24.0
+margin_right = 114.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 90, 90 )
 focus_mode = 0
@@ -567,7 +565,7 @@ __meta__ = {
 [node name="VBGeneration" type="PanelContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB"]
 visible = false
 self_modulate = Color( 0, 0, 0, 0 )
-margin_right = 586.0
+margin_right = 560.0
 margin_bottom = 1338.0
 grow_horizontal = 0
 grow_vertical = 0
@@ -577,7 +575,7 @@ size_flags_horizontal = 3
 [node name="VB" type="VBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration"]
 margin_left = 14.0
 margin_top = 14.0
-margin_right = 572.0
+margin_right = 546.0
 margin_bottom = 1324.0
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -587,7 +585,7 @@ __meta__ = {
 }
 
 [node name="HBSEPARATOR" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 20, 20 )
 mouse_filter = 2
@@ -600,7 +598,7 @@ __meta__ = {
 
 [node name="HB1" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 40.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 130.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -621,7 +619,7 @@ __meta__ = {
 
 [node name="txtNameMap" type="LineEdit" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1"]
 margin_left = 77.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
@@ -630,7 +628,7 @@ max_length = 30
 
 [node name="HB3" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 150.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 240.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -642,7 +640,7 @@ __meta__ = {
 }
 
 [node name="mbStyleMap" type="MenuButton" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB3"]
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -654,7 +652,7 @@ __meta__ = {
 
 [node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 260.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 350.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -676,7 +674,7 @@ __meta__ = {
 
 [node name="sSizeMap" type="HSlider" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB2"]
 margin_left = 115.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 mouse_default_cursor_shape = 1
 size_flags_horizontal = 3
@@ -688,7 +686,7 @@ tick_count = 1
 
 [node name="HB4" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 370.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 460.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -710,7 +708,7 @@ __meta__ = {
 
 [node name="sbSeedMap" type="SpinBox" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB4"]
 margin_left = 68.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 0 )
 mouse_default_cursor_shape = 1
@@ -722,7 +720,7 @@ align = 1
 
 [node name="HBSEPARATOR2" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 480.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 500.0
 rect_min_size = Vector2( 20, 20 )
 mouse_filter = 2
@@ -735,7 +733,7 @@ __meta__ = {
 
 [node name="HB5" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 520.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 610.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -757,7 +755,7 @@ __meta__ = {
 
 [node name="sP1" type="HSlider" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB5"]
 margin_left = 110.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 0 )
 mouse_default_cursor_shape = 1
@@ -770,7 +768,7 @@ tick_count = 1
 
 [node name="HB6" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 630.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 720.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -792,7 +790,7 @@ __meta__ = {
 
 [node name="sH1" type="HSlider" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB6"]
 margin_left = 109.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 0 )
 mouse_default_cursor_shape = 1
@@ -805,7 +803,7 @@ tick_count = 1
 
 [node name="HB7" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 740.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 830.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -827,7 +825,7 @@ __meta__ = {
 
 [node name="sP2" type="HSlider" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB7"]
 margin_left = 110.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 0 )
 mouse_default_cursor_shape = 1
@@ -840,7 +838,7 @@ tick_count = 1
 
 [node name="HB8" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 850.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 940.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -862,7 +860,7 @@ __meta__ = {
 
 [node name="sH2" type="HSlider" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB8"]
 margin_left = 109.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 0 )
 mouse_default_cursor_shape = 1
@@ -875,7 +873,7 @@ tick_count = 1
 
 [node name="HB9" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 960.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 1050.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -897,7 +895,7 @@ __meta__ = {
 
 [node name="sP3" type="HSlider" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB9"]
 margin_left = 110.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 0 )
 mouse_default_cursor_shape = 1
@@ -910,7 +908,7 @@ tick_count = 1
 
 [node name="HB10" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 1070.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 1160.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -932,7 +930,7 @@ __meta__ = {
 
 [node name="sH3" type="HSlider" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB10"]
 margin_left = 109.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 0 )
 mouse_default_cursor_shape = 1
@@ -945,7 +943,7 @@ tick_count = 1
 
 [node name="HBSEPARATOR3" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 1180.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 1200.0
 rect_min_size = Vector2( 20, 20 )
 mouse_filter = 2
@@ -958,7 +956,7 @@ __meta__ = {
 
 [node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 1220.0
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 1310.0
 grow_vertical = 0
 rect_min_size = Vector2( 90, 90 )
@@ -969,13 +967,13 @@ __meta__ = {
 }
 
 [node name="MC" type="MarginContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0"]
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="BuGenerate" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0/MC"]
-margin_right = 558.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 40, 40 )
 mouse_default_cursor_shape = 2
