@@ -25,14 +25,26 @@ public class Hexagon : MeshInstance{
     public static float HEIGHT_REAL_SEA = 0.40f;
 
     //Children geometry
+    private Spatial geo;
     private MeshInstance river;
-
     private MeshInstance sea;
-   
+    
 
     public override void _EnterTree(){
-        river = (MeshInstance)GetNode("River");
-        sea = (MeshInstance)GetNode("Sea");
+        geo = (Spatial)GetNode("geo");
+        river = (MeshInstance)geo.GetNode("River");
+        sea = (MeshInstance)geo.GetNode("Sea");
+       
+    }
+
+    public override void _Process(float delta){
+        Vector3 campos = GetViewport().GetCamera().GlobalTransform.origin;
+        float dist = (campos - GlobalTransform.origin).LengthSquared();
+        if (dist < 5000f){
+            Visible = true;
+        }else{
+            Visible = false;
+        }   
     }
 
     public float getRealHeight(){
@@ -136,7 +148,7 @@ public class Hexagon : MeshInstance{
         st.SetMaterial(mat);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
-        CreateUnions(st);  //Unions and holes
+        createHexBasicGeometry(st);  //Unions and holes
         
         // FINALLY  Commit a
         st.GenerateNormals(); 
@@ -145,8 +157,8 @@ public class Hexagon : MeshInstance{
 
         //Physic mesh 
         foreach (Node child in GetChildren()){
-            if (child == river || child == sea) 
-                continue; //rivers and sea no
+            if (child == geo) 
+                continue; //only physics
             child.QueueFree(); //delete old physics
         }
 
@@ -159,9 +171,13 @@ public class Hexagon : MeshInstance{
         //Sea
         CreateSea(st);
 
+        // rock On
+        CreateRocks(st);
+
+        //Grass ultimo
     }
 
-    private void CreateUnions(SurfaceTool st){
+    private void createHexBasicGeometry(SurfaceTool st){
 
         //cosas
         float dist =  innerRadius * 2/3;//distancia del puente
@@ -365,8 +381,8 @@ public class Hexagon : MeshInstance{
     // Rivers
     private void CreateRivers(SurfaceTool st){
             
-        ShaderMaterial matRiver = (ShaderMaterial)river.MaterialOverride;
-        st.SetMaterial(matRiver);
+        //ShaderMaterial matRiver = (ShaderMaterial)river.MaterialOverride;
+        st.SetMaterial(map.matRiber);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         // Top links and inter links
@@ -647,8 +663,8 @@ public class Hexagon : MeshInstance{
 
     //water
     private void CreateSea(SurfaceTool st){
-        ShaderMaterial matSea = (ShaderMaterial)sea.MaterialOverride;
-        st.SetMaterial(matSea);
+        //ShaderMaterial matSea = (ShaderMaterial)sea.MaterialOverride;
+        st.SetMaterial(map.matSea);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         // Top links and inter links
@@ -760,6 +776,43 @@ public class Hexagon : MeshInstance{
             if (hdNE!= null )
                 GeoAux.createTri(st,pwNv4,pwNv3,pwNEv2,color);//N-NE
         }
+    }
+
+    //Detail Rocks    
+    private void CreateRocks(SurfaceTool st){
+        //Rocks
+        MeshInstance rocks = geo.GetNodeOrNull("rocks") as MeshInstance;
+        if (rocks != null)rocks.QueueFree();
+        MeshInstance rock = new MeshInstance();
+        rock.Name = ("rocks");
+        rock.MaterialOverride = map.matRock;
+
+        //surface tool
+        st.SetMaterial(map.matRock);
+        st.Begin(Mesh.PrimitiveType.Triangles);
+
+        //poblate meshes
+        poblateRocks(st);
+
+        //finaly
+        st.GenerateNormals(); 
+        st.GenerateTangents(); 
+        rock.Mesh = st.Commit();
+        AddChild(rock);
+    }
+
+    private void poblateRocks(SurfaceTool st){
+        int numRocks = 10;
+        Color color = colors[hexData.colorIndex];//color del indexColor
+        float dist = innerRadius*0.8f;
+        for (int i = 0;i<numRocks;i++){
+            float x = GeoAux.FloatRange(map.random,-dist,dist);
+            float z = GeoAux.FloatRange(map.random,-dist,dist);
+            float size = GeoAux.FloatRange(map.random,0.05f,0.2f);
+            Vector3 vD = new Vector3(vertex[0].x+x,vertex[0].y,vertex[0].z+z);
+            Rock.createVertex(st,map.random,vD,size,color);
+        }
+        
     }
 
 }

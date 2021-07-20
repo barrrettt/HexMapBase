@@ -3,17 +3,29 @@ using System;
 
 public class Map : Spatial{
     
+    //resources
     private PackedScene resHexagon; 
+
+    public ShaderMaterial matSea,matRiber,matRock;
+
     private MeshInstance selector, overSelector; 
     private Hexagon[] hexagons; 
     public MapData mapData; 
     public Random random;
 
     public override void _EnterTree(){
-        resHexagon = ResourceLoader.Load("res://scenes/Hexagon.tscn") as PackedScene; 
+        //resources
+        resHexagon = ResourceLoader.Load("res://scenes/Hexagon.tscn") as PackedScene;
+        matRock = ResourceLoader.Load("res://src/shaders_materials/rock_vs.material") as ShaderMaterial;
+        matSea = ResourceLoader.Load("res://src/shaders_materials/sea_vs.material") as ShaderMaterial;
+        matRiber = ResourceLoader.Load("res://src/shaders_materials/riber_vs.material") as ShaderMaterial;
+
+        //references
         selector = GetNode<MeshInstance>("Selector");
         overSelector = GetNode<MeshInstance>("OverSelector");
-        if (random == null) random = new Random();
+        
+        //random for procedural generation
+        random = new Random();
     }
     
     public override void _Ready(){ 

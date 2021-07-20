@@ -11,6 +11,7 @@ public class Main : Node{
         // Load first scene directly 
         PackedScene packedScene; 
         packedScene = (PackedScene) GD.Load("res://scenes/Editor.tscn");//otra escena 
+        //packedScene = (PackedScene) GD.Load("res://scenes/Test.tscn");//otra escena 
         AddChild(packedScene.Instance()); 
     }
 }

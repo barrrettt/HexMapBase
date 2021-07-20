@@ -150,10 +150,15 @@ public class Camara : Spatial{
             InputEventScreenDrag evDrag = (InputEventScreenDrag)@event;
             
             if (countTouches == 1){
-                vel = -evDrag.Relative;
+                vel = -evDrag.Relative;//inverse direction
+                
+                //min movement
                 if (vel.LengthSquared()>2){
-                    //GD.Print(" move: " + vel.ToString());
-                    move(vel,rot, SENSITIVITY_MOBILE,1f);
+                    float zoomfactor = Mathf.Lerp(ZOOM_MIN,ZOOM_MAX,zoom);
+                    zoomfactor = (1e-3f*(zoomfactor * 4e-4f));
+                    float value = SENSITIVITY_MOBILE +zoomfactor;
+                    //GD.Print(zoomfactor.ToString());
+                    move(vel,rot, value,1f);
                 }
             }
 
@@ -164,19 +169,18 @@ public class Camara : Spatial{
                     
                 Vector2 firstPos = ((InputEventScreenTouch)firstTouch).Position;
                 Vector2 dirInit = evDrag.Position - evDrag.Relative;
-                
                 float initdist = (firstPos - dirInit).Length();
                 float findist = (firstPos - evDrag.Position).Length();
-                float leght = (firstPos - evDrag.Position).Length();
+
+                float length = Mathf.Abs(evDrag.Relative.Length() *100);
 
                 if (initdist>findist){
-                    zoom += leght * SENSITIVITY_ZOOM_MOBILE;
+                    zoom += length * SENSITIVITY_ZOOM_MOBILE;
                 }else{ 
-                    zoom -= leght * SENSITIVITY_ZOOM_MOBILE;
+                    zoom -= length * SENSITIVITY_ZOOM_MOBILE;
                 }
                 
                 move(vel,rot,SENSITIVITY_MOBILE,1f);
-                //GD.Print(String.Format(" spin: {0}, {1}",initdist.ToString(),findist.ToString()));
             }
         }
 

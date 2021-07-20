@@ -1,8 +1,8 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scenes/Hexagon.cs" type="Script" id=1]
-[ext_resource path="res://src/shaders/riber_visualshader.res" type="Material" id=2]
-[ext_resource path="res://src/shaders/sea_visualshader.res" type="Material" id=3]
+[ext_resource path="res://src/shaders_materials/riber_vs.material" type="Material" id=2]
+[ext_resource path="res://src/shaders_materials/sea_vs.material" type="Material" id=3]
 
 [sub_resource type="OpenSimplexNoise" id=1]
 period = 0.1
@@ -26,9 +26,12 @@ material_override = SubResource( 3 )
 cast_shadow = 0
 script = ExtResource( 1 )
 
-[node name="River" type="MeshInstance" parent="."]
+[node name="geo" type="Spatial" parent="."]
+
+[node name="River" type="MeshInstance" parent="geo"]
 material_override = ExtResource( 2 )
 cast_shadow = 0
 
-[node name="Sea" type="MeshInstance" parent="."]
+[node name="Sea" type="MeshInstance" parent="geo"]
 material_override = ExtResource( 3 )
+cast_shadow = 0
