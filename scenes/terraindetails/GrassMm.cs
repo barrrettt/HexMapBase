@@ -1,7 +1,7 @@
 using Godot;
 using System;
 [Tool]
-public class Grass : MultiMeshInstance {
+public class GrassMm : MultiMeshInstance {
 
     [Export] public bool update {set {
         crear(new Random(),0f);//hack para actualizar en edicion
