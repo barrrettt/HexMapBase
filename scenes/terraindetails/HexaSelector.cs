@@ -13,7 +13,7 @@ public class HexaSelector : MeshInstance{
         crear();
     }
     public override void _Process(float delta){
-        //efecto seleccion
+        //size waves
         if(Visible){
             float t = OS.GetTicksMsec();
             float scaleWave = 0.8f + Mathf.Sin(t*0.008f)*0.02f;
