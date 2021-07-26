@@ -6,7 +6,7 @@ public class Map : Spatial{
     //resources
     private PackedScene resHexagon; 
 
-    public ShaderMaterial matSea,matRiber,matRock;
+    public ShaderMaterial matSea,matRiber,matRock,matGrass;
 
     private MeshInstance selector, overSelector; 
     private Hexagon[] hexagons; 
@@ -16,9 +16,10 @@ public class Map : Spatial{
     public override void _EnterTree(){
         //resources
         resHexagon = ResourceLoader.Load("res://scenes/Hexagon.tscn") as PackedScene;
-        matRock = ResourceLoader.Load("res://src/shaders_materials/rock_vs.material") as ShaderMaterial;
         matSea = ResourceLoader.Load("res://src/shaders_materials/sea_vs.material") as ShaderMaterial;
         matRiber = ResourceLoader.Load("res://src/shaders_materials/riber_vs.material") as ShaderMaterial;
+        matRock = ResourceLoader.Load("res://src/shaders_materials/rock_vs.material") as ShaderMaterial;
+        matGrass = ResourceLoader.Load("res://src/shaders_materials/grass.material") as ShaderMaterial;
 
         //references
         selector = GetNode<MeshInstance>("Selector");
@@ -207,6 +208,7 @@ public class Map : Spatial{
     }
 
     // DEBUG CONEXIONES VECINOS 
+    /*
     private ImmediateGeometry iGeo;  //debug vecinos 
     private int indexActualDebug = 0; 
     private uint lastTime = 0; 
@@ -242,7 +244,7 @@ public class Map : Spatial{
         }
         iGeo.End();
     }
-
+*/
 
 }
 

@@ -66,6 +66,7 @@ public class Hexagon : MeshInstance{
         }
         return heightValue;
     }
+    
     // metrics
     public float innerRadius;
     public float innerRadiusRiver;
@@ -174,7 +175,9 @@ public class Hexagon : MeshInstance{
         // rock On
         CreateRocks(st);
 
-        //Grass ultimo
+        // grass on
+        CreateGrass(st);
+
     }
 
     private void createHexBasicGeometry(SurfaceTool st){
@@ -778,12 +781,12 @@ public class Hexagon : MeshInstance{
         }
     }
 
-    //Detail Rocks    
+    //Detail: Rocks
     private void CreateRocks(SurfaceTool st){
         //Rocks
-        MeshInstance rocks = geo.GetNodeOrNull("rocks") as MeshInstance;
-        if (rocks != null)rocks.QueueFree();
-        MeshInstance rock = new MeshInstance();
+        MeshInstance rock = geo.GetNodeOrNull("rocks") as MeshInstance;
+        if (rock != null)rock.QueueFree();
+        rock = new MeshInstance();
         rock.Name = ("rocks");
         rock.MaterialOverride = map.matRock;
 
@@ -796,23 +799,92 @@ public class Hexagon : MeshInstance{
 
         //finaly
         st.GenerateNormals(); 
-        st.GenerateTangents(); 
         rock.Mesh = st.Commit();
-        AddChild(rock);
+        geo.AddChild(rock);
     }
 
     private void poblateRocks(SurfaceTool st){
-        int numRocks = 10;
-        Color color = colors[hexData.colorIndex];//color del indexColor
+
+        if (hexData.getHeight()<3) return; // nada
+        
+        int numRocks = 1;
+        int h = hexData.getHeight();
+        int[] rockcolors = new int[]{7,8,8};
+        
+        switch(h){
+            case 10:
+                numRocks = 1;
+                rockcolors = new int[]{9,10,10};
+                break;
+            case 9:
+                numRocks = 1;
+                rockcolors = new int[]{8,9,9};
+                break;
+            case 8:
+                rockcolors = new int[]{7,8,8};
+                numRocks = 2;
+                break;
+            case 7:
+                numRocks = 2;
+                break;
+            case 6:
+                numRocks = 2;
+                break;
+        }
+
+        int rndi = map.random.Next(0,rockcolors.Length);
+        Color color = colors[rockcolors[rndi]];
+
         float dist = innerRadius*0.8f;
         for (int i = 0;i<numRocks;i++){
             float x = GeoAux.FloatRange(map.random,-dist,dist);
             float z = GeoAux.FloatRange(map.random,-dist,dist);
-            float size = GeoAux.FloatRange(map.random,0.05f,0.2f);
-            Vector3 vD = new Vector3(vertex[0].x+x,vertex[0].y,vertex[0].z+z);
-            Rock.createVertex(st,map.random,vD,size,color);
+            float scale = GeoAux.FloatRange(map.random,0.1f,0.5f);
+            Vector3 pos = new Vector3(vertex[0].x+x,vertex[0].y,vertex[0].z+z);
+
+            Rock.createVertex(st,map.random,pos,scale,color);
         }
         
+    }
+
+    //Detail: Grass
+    private void CreateGrass(SurfaceTool st) {
+         //Rocks
+        MeshInstance grass = geo.GetNodeOrNull("grass") as MeshInstance;
+        if (grass != null)grass.QueueFree();
+        grass = new MeshInstance();
+        grass.Name = ("grass");
+        grass.MaterialOverride = map.matGrass;
+
+        //surface tool
+        st.SetMaterial(map.matGrass);
+        st.Begin(Mesh.PrimitiveType.Triangles);
+
+        //poblate meshes
+        poblateGrass(st);
+
+        //finaly
+        st.GenerateNormals(); 
+        grass.Mesh = st.Commit();
+        geo.AddChild(grass);
+    }
+
+    private void poblateGrass(SurfaceTool st){
+        int h = hexData.getHeight();
+        if (h<3) return; // zonas de vegetacion
+        if (h>5) return;
+
+        int count = 10;
+        float radius = 0.5f;
+        float height = vertex[0].y;
+
+        for (int i = 0; i<count;i++){
+            float scale = GeoAux.FloatRange(map.random,0.4f, 0.5f);
+            float x = GeoAux.FloatRange(map.random, -radius, radius);
+            float z = GeoAux.FloatRange(map.random, -radius, radius);
+            Vector3 pos = new Vector3(x,height,z);
+            Grass.createVertex(st,map.random,pos, scale);
+        }
     }
 
 }

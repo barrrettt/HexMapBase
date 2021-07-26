@@ -14,20 +14,20 @@ public class Rock : MeshInstance {
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         //styles
-        float scale = GeoAux.FloatRange(random,0,1f);
+        float scale = GeoAux.FloatRange(random,0.2f,1f);
         createVertex(st,random,Vector3.Zero, scale, new Color("#382c0a"));
 
         //finaly
         st.GenerateNormals(); 
-        st.GenerateTangents(); 
+        //st.GenerateTangents(); 
         Mesh = st.Commit(); 
     }
 
     public static void createVertex(SurfaceTool st,Random rnd, Vector3 position,float scale, Color color) {
         float size = 1f;
         float md = size/2; //mitad
-        //rock center
-        Vector3 center = position + (Vector3.Up *size* 0.20f);
+        //rock center and 
+        Vector3 center = Vector3.Zero + (Vector3.Up *size* 0.20f);
 
         // vertex and random deformation (with natural efecct)
         // Vertex A: botton(Y-)
@@ -166,6 +166,14 @@ public class Rock : MeshInstance {
         vDD *= scale; vD1 *= scale; vD2 *= scale; vD3 *= scale; vD4 *= scale;
         vEE *= scale; vE1 *= scale; vE2 *= scale; vE3 *= scale; vE4 *= scale;
         vFF *= scale; vF1 *= scale; vF2 *= scale; vF3 *= scale; vF4 *= scale;
+
+        //translate
+        vAA += position; vA1 += position; vA2 += position; vA3 += position; vA4 += position;
+        vBB += position; vB1 += position; vB2 += position; vB3 += position; vB4 += position;
+        vCC += position; vC1 += position; vC2 += position; vC3 += position; vC4 += position;
+        vDD += position; vD1 += position; vD2 += position; vD3 += position; vD4 += position;
+        vEE += position; vE1 += position; vE2 += position; vE3 += position; vE4 += position;
+        vFF += position; vF1 += position; vF2 += position; vF3 += position; vF4 += position;
 
         // TRIS A 
         GeoAux.createTri(st,vAA,vA2,vA1,color); 

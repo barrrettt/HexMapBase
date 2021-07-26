@@ -26,7 +26,7 @@ public class Editor : Spatial{
     private Button buGenMap;
 
     //DEBUG 
-    int ballnumber = 50;
+    int ballnumber = 0;
     private RigidBody[] balls; 
     //GENERATION
     private Random random = new Random(); 
@@ -277,7 +277,6 @@ public class Editor : Spatial{
     }
 
     //GUI CONTROLS
-    private bool deactivateInput = false;
     private void buttonPanelclick(int buttonIndex){
 
         Boolean allHides = true;
