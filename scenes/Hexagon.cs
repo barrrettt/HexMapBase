@@ -38,9 +38,9 @@ public class Hexagon : MeshInstance{
     }
 
     public override void _Process(float delta){
-        Vector3 campos = GetViewport().GetCamera().GlobalTransform.origin;
-        float dist = (campos - GlobalTransform.origin).LengthSquared();
-        if (dist < 5000f){
+        if (map == null) return;
+        float dist = (map.cameraRayPosition - GlobalTransform.origin).LengthSquared();
+        if (dist < 625){
             Visible = true;
         }else{
             Visible = false;
@@ -158,8 +158,7 @@ public class Hexagon : MeshInstance{
 
         //Physic mesh 
         foreach (Node child in GetChildren()){
-            if (child == geo) 
-                continue; //only physics
+            if (child == geo) continue; //only physics
             child.QueueFree(); //delete old physics
         }
 
@@ -175,8 +174,11 @@ public class Hexagon : MeshInstance{
         // rock On
         CreateRocks(st);
 
-        // grass on
+        // grass
         CreateGrass(st);
+
+        // trees 
+        CreateTrees(st);
 
     }
 
@@ -785,7 +787,8 @@ public class Hexagon : MeshInstance{
     private void CreateRocks(SurfaceTool st){
         //Rocks
         MeshInstance rock = geo.GetNodeOrNull("rocks") as MeshInstance;
-        if (rock != null)rock.QueueFree();
+        if (rock != null)
+            rock.Free();
         rock = new MeshInstance();
         rock.Name = ("rocks");
         rock.MaterialOverride = map.matRock;
@@ -804,8 +807,8 @@ public class Hexagon : MeshInstance{
     }
 
     private void poblateRocks(SurfaceTool st){
-
-        if (hexData.getHeight()<3) return; // nada
+        if (hexData.river) return; //nada con rios
+        if (hexData.getHeight()<3) return; // sin rocas en alturas bajas
         
         int numRocks = 1;
         int h = hexData.getHeight();
@@ -851,7 +854,8 @@ public class Hexagon : MeshInstance{
     private void CreateGrass(SurfaceTool st) {
          //Rocks
         MeshInstance grass = geo.GetNodeOrNull("grass") as MeshInstance;
-        if (grass != null)grass.QueueFree();
+        if (grass != null)
+            grass.Free();
         grass = new MeshInstance();
         grass.Name = ("grass");
         grass.MaterialOverride = map.matGrass;
@@ -870,20 +874,69 @@ public class Hexagon : MeshInstance{
     }
 
     private void poblateGrass(SurfaceTool st){
+        if (hexData.river)return; // con river no
         int h = hexData.getHeight();
-        if (h<3) return; // zonas de vegetacion
+        if (h<3) return; // zonas de vegetacion delimitada
         if (h>5) return;
 
         int count = 10;
         float radius = 0.5f;
         float height = vertex[0].y;
 
+        for (int i=0; i<count; i++){
+            float scale = GeoAux.FloatRange(map.random, 0.4f, 0.5f); 
+            float x = GeoAux.FloatRange(map.random, -radius, radius); 
+            float z = GeoAux.FloatRange(map.random, -radius, radius); 
+            Vector3 pos = new Vector3(x,height,z); 
+            Grass.createVertex(st,map.random,pos, scale); 
+        }
+    }
+
+    //Detail: Tree
+    private void CreateTrees(SurfaceTool st){
+        MeshInstance trees = geo.GetNodeOrNull("trees") as MeshInstance;
+        if (trees != null)
+            trees.Free();
+        trees = new MeshInstance();
+        trees.Name = ("trees");
+        trees.MaterialOverride = map.matTree;
+
+        //surface tool
+        st.SetMaterial(map.matTree);
+        st.Begin(Mesh.PrimitiveType.Triangles);
+
+        //height on object child
+        float height = vertex[0].y;
+        trees.Translation = new Vector3(trees.Translation.x,height,trees.Translation.z);
+
+
+        //poblate meshes
+        poblateTree(st);
+
+        //finaly
+        st.GenerateNormals(); 
+        trees.Mesh = st.Commit();
+        geo.AddChild(trees);
+    }
+
+    private void poblateTree(SurfaceTool st){
+        if (hexData.river)return; // con river no
+        int h = hexData.getHeight();
+        if (h<3) return; // zonas de arboles delimitada
+        if (h>5) return;
+
+        int count = 2;// 2 trees
+        float radius = 0.5f;
+        
+        Color color1 =  new Color("#261506");
+        Color color2 =  new Color("#1c8c3a");
+
         for (int i = 0; i<count;i++){
-            float scale = GeoAux.FloatRange(map.random,0.4f, 0.5f);
+            float scale = GeoAux.FloatRange(map.random,0.3f, 0.4f);
             float x = GeoAux.FloatRange(map.random, -radius, radius);
             float z = GeoAux.FloatRange(map.random, -radius, radius);
-            Vector3 pos = new Vector3(x,height,z);
-            Grass.createVertex(st,map.random,pos, scale);
+            Vector3 pos = new Vector3(x,0f,z);
+            Tree.createVertex(st,map.random,pos,scale,color1,color2);
         }
     }
 
