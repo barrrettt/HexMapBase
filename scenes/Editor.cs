@@ -209,7 +209,12 @@ public class Editor : Spatial{
         Vector3 camOrigen = camara.GlobalTransform.origin;
         Hexagon hx = ray(camOrigen,camTarget);
         if (hx != null){
-            lblCameraPos2.Text = String.Format("({0},{1})",hx.hexData.row,hx.hexData.col);
+            int r = hx.hexData.row; 
+            int c = hx.hexData.col;
+            lblCameraPos2.Text = String.Format("({0},{1})",r,c);
+            map.cameraRayPosition = map.mapData.getHexPosition(r,c);
+        }else{
+            lblCameraPos2.Text ="-";
         }
     }
 

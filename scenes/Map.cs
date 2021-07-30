@@ -6,12 +6,14 @@ public class Map : Spatial{
     //resources
     private PackedScene resHexagon; 
 
-    public ShaderMaterial matSea,matRiber,matRock,matGrass;
+    public ShaderMaterial matSea,matRiber,matRock,matGrass,matTree;
 
     private MeshInstance selector, overSelector; 
     private Hexagon[] hexagons; 
     public MapData mapData; 
     public Random random;
+
+    public Vector3 cameraRayPosition = Vector3.Zero;
 
     public override void _EnterTree(){
         //resources
@@ -20,8 +22,9 @@ public class Map : Spatial{
         matRiber = ResourceLoader.Load("res://src/shaders_materials/riber_vs.material") as ShaderMaterial;
         matRock = ResourceLoader.Load("res://src/shaders_materials/rock_vs.material") as ShaderMaterial;
         matGrass = ResourceLoader.Load("res://src/shaders_materials/grass.material") as ShaderMaterial;
-
-        //references
+        matTree = ResourceLoader.Load("res://src/shaders_materials/tree_vs.material") as ShaderMaterial;
+        
+        //references to selectors
         selector = GetNode<MeshInstance>("Selector");
         overSelector = GetNode<MeshInstance>("OverSelector");
         
@@ -155,18 +158,20 @@ public class Map : Spatial{
         if (hxdOrigin.water) 
             return;
 
-        bool finded = false;
+        bool found = false;
         for (int i = 0; i< hxdOrigin.neighbours.Length; i++){
             if (hxdEnd == hxdOrigin.neighbours[i]) {
                 //Origin and end are Neighbours
                 hxdOrigin.river = true;
                 hxdEnd.river = true;
                 hxdOrigin.riversOut[i] = hxdOrigin.neighbours[i];
-                finded = true;
+                found = true;
                 break;
             }
         }
-        if (!finded)return;
+        if (!found){ 
+            return;
+        };
 
         CreateAffectedHex(hxdOrigin);
         CreateAffectedHex(hxdEnd);
