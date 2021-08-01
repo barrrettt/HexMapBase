@@ -107,6 +107,7 @@ public class Hexagon : MeshInstance{
         
     }
 
+    //create All
     public void Create(Map map){
         if (hexData == null) hexData = new HexaData(0,0);
         this.map = map;
@@ -119,7 +120,7 @@ public class Hexagon : MeshInstance{
         st.SetMaterial(mat);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
-        createHexBasicGeometry(st);  //Unions and holes
+        createHexagon(st);  //Unions and holes
         
         // FINALLY  Commit a
         st.GenerateNormals(); 
@@ -152,7 +153,8 @@ public class Hexagon : MeshInstance{
 
     }
 
-    private void createHexBasicGeometry(SurfaceTool st){
+    // Hexagon 
+    private void createHexagon(SurfaceTool st){
 
         //cosas
         float dist =  innerRadius * 2/3;//distancia del puente
