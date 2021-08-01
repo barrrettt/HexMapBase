@@ -78,19 +78,7 @@ public class Hexagon : MeshInstance{
     public Vector3 pNEv1 = new Vector3(), pNEv2 = new Vector3(), pNEv3 = new Vector3(), pNEv4 = new Vector3(), 
     pSEv1 = new Vector3(), pSEv2= new Vector3(), pSEv3 = new Vector3(), pSEv4= new Vector3(), 
     pSv1= new Vector3(), pSv2 = new Vector3(), pSv3= new Vector3(), pSv4= new Vector3();
-    //Rivers vertex
-    public Vector3[] riverVertex = new Vector3[13];
-    //River links Top
-    public Vector3 rpNEv1 = new Vector3(), rpNEv2 = new Vector3(), rpNEv3 = new Vector3(), rpNEv4 = new Vector3(),
-    rpSEv1 = new Vector3(), rpSEv2 = new Vector3(), rpSEv3 = new Vector3(), rpSEv4 = new Vector3(),
-    rpSv1 = new Vector3(), rpSv2 = new Vector3(), rpSv3 = new Vector3(), rpSv4 = new Vector3(),
-    rpSWv1 = new Vector3(), rpSWv2 = new Vector3(), rpSWv3 = new Vector3(), rpSWv4 = new Vector3(),
-    rpNWv1 = new Vector3(), rpNWv2 = new Vector3(), rpNWv3 = new Vector3(), rpNWv4 = new Vector3(),
-    rpNv1 = new Vector3(), rpNv2 = new Vector3(), rpNv3 = new Vector3(), rpNv4 = new Vector3();
-    //River links largues
-    public Vector3 pNEv1Link = new Vector3(), pNEv2Link = new Vector3(),pNEv3Link = new Vector3(),pNEv4Link = new Vector3(),
-    pSEv1Link = new Vector3(), pSEv2Link = new Vector3(), pSEv3Link = new Vector3(), pSEv4Link = new Vector3(),
-    pSv1Link = new Vector3(), pSv2Link = new Vector3(), pSv3Link = new Vector3(), pSv4Link = new Vector3();
+    
 
     // CREATE HEXAGON:
     private Map map;
@@ -117,24 +105,6 @@ public class Hexagon : MeshInstance{
         vertex[11] = new Vector3(Mathf.Cos(ang30 * 11)* innerRadius, hValue, Mathf.Sin(ang30*11)* innerRadius);// med E y SE
         vertex[12] = new Vector3(Mathf.Cos(ang30 * 12)* SIZE_TOP, hValue, Mathf.Sin(ang30*12)* SIZE_TOP);//E
         
-        //RIVERS vertices top
-        hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
-        innerRadiusRiver = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
-        
-        riverVertex[0] = new Vector3(0,hValue,0);//CENTRO
-        riverVertex[1] = new Vector3(Mathf.Cos(ang30 * 1)* innerRadiusRiver, hValue, Mathf.Sin(ang30*1)* innerRadiusRiver);// med E y SE
-        riverVertex[2] = new Vector3(Mathf.Cos(ang30 * 2)* SIZE_RIBER, hValue, Mathf.Sin(ang30*2)* SIZE_RIBER);//SE
-        riverVertex[3] = new Vector3(Mathf.Cos(ang30 * 3)* innerRadiusRiver, hValue, Mathf.Sin(ang30*3)* innerRadiusRiver);//med 
-        riverVertex[4] = new Vector3(Mathf.Cos(ang30 * 4)* SIZE_RIBER, hValue, Mathf.Sin(ang30*4)* SIZE_RIBER);//SW
-        riverVertex[5] = new Vector3(Mathf.Cos(ang30 * 5)* innerRadiusRiver, hValue, Mathf.Sin(ang30*5)* innerRadiusRiver);//med
-        riverVertex[6] = new Vector3(Mathf.Cos(ang30 * 6)* SIZE_RIBER, hValue, Mathf.Sin(ang30*6)* SIZE_RIBER);//W
-        riverVertex[7] = new Vector3(Mathf.Cos(ang30 * 7)* innerRadiusRiver, hValue, Mathf.Sin(ang30*7)* innerRadiusRiver) ;//med
-        riverVertex[8] = new Vector3(Mathf.Cos(ang30 * 8)* SIZE_RIBER, hValue, Mathf.Sin(ang30*8)* SIZE_RIBER);//NW
-        riverVertex[9] = new Vector3(Mathf.Cos(ang30 * 9)* innerRadiusRiver, hValue, Mathf.Sin(ang30*9)* innerRadiusRiver);//med
-        riverVertex[10] = new Vector3(Mathf.Cos(ang30 * 10)* SIZE_RIBER, hValue, Mathf.Sin(ang30*10)* SIZE_RIBER);//NE
-        riverVertex[11] = new Vector3(Mathf.Cos(ang30 * 11)* innerRadiusRiver, hValue, Mathf.Sin(ang30*11)* innerRadiusRiver);//med
-        riverVertex[12] = new Vector3(Mathf.Cos(ang30 * 12)* SIZE_RIBER, hValue, Mathf.Sin(ang30*12)* SIZE_RIBER);//E
-
     }
 
     public void Create(Map map){
@@ -385,24 +355,52 @@ public class Hexagon : MeshInstance{
 
     // Rivers
     private void CreateRivers(SurfaceTool st){
+        //Rivers vertex
+        Vector3[] riverVertex = new Vector3[13];
+        //River links Top
+        Vector3 rpNEv1 = new Vector3(), rpNEv2 = new Vector3(), rpNEv3 = new Vector3(), rpNEv4 = new Vector3(),
+        rpSEv1 = new Vector3(), rpSEv2 = new Vector3(), rpSEv3 = new Vector3(), rpSEv4 = new Vector3(),
+        rpSv1 = new Vector3(), rpSv2 = new Vector3(), rpSv3 = new Vector3(), rpSv4 = new Vector3(),
+        rpSWv1 = new Vector3(), rpSWv2 = new Vector3(), rpSWv3 = new Vector3(), rpSWv4 = new Vector3(),
+        rpNWv1 = new Vector3(), rpNWv2 = new Vector3(), rpNWv3 = new Vector3(), rpNWv4 = new Vector3(),
+        rpNv1 = new Vector3(), rpNv2 = new Vector3(), rpNv3 = new Vector3(), rpNv4 = new Vector3();
+        //River links largues
+        Vector3 pNEv1Link = new Vector3(), pNEv2Link = new Vector3(),pNEv3Link = new Vector3(),pNEv4Link = new Vector3(),
+        pSEv1Link = new Vector3(), pSEv2Link = new Vector3(), pSEv3Link = new Vector3(), pSEv4Link = new Vector3(),
+        pSv1Link = new Vector3(), pSv2Link = new Vector3(), pSv3Link = new Vector3(), pSv4Link = new Vector3();
+
+        //RIVERS vertices top
+        float hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
+        innerRadiusRiver = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
+        
+        riverVertex[0] = new Vector3(0,hValue,0);//CENTRO
+        riverVertex[1] = new Vector3(Mathf.Cos(ang30 * 1)* innerRadiusRiver, hValue, Mathf.Sin(ang30*1)* innerRadiusRiver);// med E y SE
+        riverVertex[2] = new Vector3(Mathf.Cos(ang30 * 2)* SIZE_RIBER, hValue, Mathf.Sin(ang30*2)* SIZE_RIBER);//SE
+        riverVertex[3] = new Vector3(Mathf.Cos(ang30 * 3)* innerRadiusRiver, hValue, Mathf.Sin(ang30*3)* innerRadiusRiver);//med 
+        riverVertex[4] = new Vector3(Mathf.Cos(ang30 * 4)* SIZE_RIBER, hValue, Mathf.Sin(ang30*4)* SIZE_RIBER);//SW
+        riverVertex[5] = new Vector3(Mathf.Cos(ang30 * 5)* innerRadiusRiver, hValue, Mathf.Sin(ang30*5)* innerRadiusRiver);//med
+        riverVertex[6] = new Vector3(Mathf.Cos(ang30 * 6)* SIZE_RIBER, hValue, Mathf.Sin(ang30*6)* SIZE_RIBER);//W
+        riverVertex[7] = new Vector3(Mathf.Cos(ang30 * 7)* innerRadiusRiver, hValue, Mathf.Sin(ang30*7)* innerRadiusRiver) ;//med
+        riverVertex[8] = new Vector3(Mathf.Cos(ang30 * 8)* SIZE_RIBER, hValue, Mathf.Sin(ang30*8)* SIZE_RIBER);//NW
+        riverVertex[9] = new Vector3(Mathf.Cos(ang30 * 9)* innerRadiusRiver, hValue, Mathf.Sin(ang30*9)* innerRadiusRiver);//med
+        riverVertex[10] = new Vector3(Mathf.Cos(ang30 * 10)* SIZE_RIBER, hValue, Mathf.Sin(ang30*10)* SIZE_RIBER);//NE
+        riverVertex[11] = new Vector3(Mathf.Cos(ang30 * 11)* innerRadiusRiver, hValue, Mathf.Sin(ang30*11)* innerRadiusRiver);//med
+        riverVertex[12] = new Vector3(Mathf.Cos(ang30 * 12)* SIZE_RIBER, hValue, Mathf.Sin(ang30*12)* SIZE_RIBER);//E
             
         //ShaderMaterial matRiver = (ShaderMaterial)river.MaterialOverride;
         st.SetMaterial(map.matRiber);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         // Top links and inter links
-        if (hexData.river) CreateRiverUnions(st);
+        if (!hexData.river){
+            st.GenerateNormals(); 
+            river.Mesh = st.Commit(); 
+            return;
+        } 
 
-        //finaly
-        st.GenerateNormals(); 
-        //st.GenerateTangents(); 
-        river.Mesh = st.Commit(); 
-    }
-    
-    private void CreateRiverUnions(SurfaceTool st){
         // Things 
         float distRiverTop = innerRadius - innerRadiusRiver;
-        float hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
+        hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
         float distLink = innerRadius * 2/3;//distancia del puente
         Color color = colorRiver;
 
@@ -664,6 +662,11 @@ public class Hexagon : MeshInstance{
                 }
             }
         }
+
+
+        //finaly
+        st.GenerateNormals(); 
+        river.Mesh = st.Commit(); 
     }
 
     //water
@@ -673,18 +676,12 @@ public class Hexagon : MeshInstance{
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         // Top links and inter links
-        if (hexData.height<2) 
-            CreateSeaWater(st);
-
-        //finaly
-        st.GenerateNormals(); 
-        //st.GenerateTangents(); 
-        sea.Mesh = st.Commit(); 
-    }
-
-    private void CreateSeaWater(SurfaceTool st){
-        
-        float hValue = HEIGHT_REAL_SEA;
+        if (hexData.height>1) {
+            st.GenerateNormals(); 
+            sea.Mesh = st.Commit(); 
+            return;
+        }
+         float hValue = HEIGHT_REAL_SEA;
         float distwater = innerRadius * 2/3;//water radius
         float ang30 = (Mathf.Pi/6);// 30º slides
         Color color = colorRiver;
@@ -781,7 +778,12 @@ public class Hexagon : MeshInstance{
             if (hdNE!= null )
                 GeoAux.createTri(st,pwNv4,pwNv3,pwNEv2,color);//N-NE
         }
+        
+        //finaly
+        st.GenerateNormals(); 
+        sea.Mesh = st.Commit(); 
     }
+
 
     //Detail: Rocks
     private void CreateRocks(SurfaceTool st){
@@ -797,19 +799,14 @@ public class Hexagon : MeshInstance{
         st.SetMaterial(map.matRock);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
-        //poblate meshes
-        poblateRocks(st);
-
-        //finaly
-        st.GenerateNormals(); 
-        rock.Mesh = st.Commit();
-        geo.AddChild(rock);
-    }
-
-    private void poblateRocks(SurfaceTool st){
-        if (hexData.river) return; //nada con rios
-        if (hexData.getHeight()<3) return; // sin rocas en alturas bajas
+        // no rocks when:
+        if (hexData.river || hexData.getHeight()<3){
+            rock.Mesh = st.Commit();
+            geo.AddChild(rock);
+            return;
+        }
         
+        //poblate
         int numRocks = 1;
         int h = hexData.getHeight();
         int[] rockcolors = new int[]{7,8,8};
@@ -847,7 +844,11 @@ public class Hexagon : MeshInstance{
 
             Rock.createVertex(st,map.random,pos,scale,color);
         }
-        
+
+        //finaly
+        st.GenerateNormals(); 
+        rock.Mesh = st.Commit();
+        geo.AddChild(rock);
     }
 
     //Detail: Grass
@@ -864,21 +865,15 @@ public class Hexagon : MeshInstance{
         st.SetMaterial(map.matGrass);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
-        //poblate meshes
-        poblateGrass(st);
+        //no grass when:
+         int h = hexData.getHeight();
+        if (hexData.river || h<3 || h>5){
+            grass.Mesh = st.Commit();
+            geo.AddChild(grass);
+            return;
+        }
 
-        //finaly
-        st.GenerateNormals(); 
-        grass.Mesh = st.Commit();
-        geo.AddChild(grass);
-    }
-
-    private void poblateGrass(SurfaceTool st){
-        if (hexData.river)return; // con river no
-        int h = hexData.getHeight();
-        if (h<3) return; // zonas de vegetacion delimitada
-        if (h>5) return;
-
+        //place instances:
         int count = 10;
         float radius = 0.5f;
         float height = vertex[0].y;
@@ -890,6 +885,11 @@ public class Hexagon : MeshInstance{
             Vector3 pos = new Vector3(x,height,z); 
             Grass.createVertex(st,map.random,pos, scale); 
         }
+
+        //finaly
+        st.GenerateNormals(); 
+        grass.Mesh = st.Commit();
+        geo.AddChild(grass);
     }
 
     //Detail: Tree
@@ -909,23 +909,16 @@ public class Hexagon : MeshInstance{
         float height = vertex[0].y;
         trees.Translation = new Vector3(trees.Translation.x,height,trees.Translation.z);
 
-
-        //poblate meshes
-        poblateTree(st);
-
-        //finaly
-        st.GenerateNormals(); 
-        trees.Mesh = st.Commit();
-        geo.AddChild(trees);
-    }
-
-    private void poblateTree(SurfaceTool st){
-        if (hexData.river)return; // con river no
+        //exit when:
         int h = hexData.getHeight();
-        if (h<3) return; // zonas de arboles delimitada
-        if (h>5) return;
+        if (hexData.river || h<3 || h>5){
+            trees.Mesh = st.Commit();
+            geo.AddChild(trees);
+            return;
+        }
 
-        int count = 2;// 2 trees
+        //place trees on top hex
+        int count = 2; // trees
         float radius = 0.5f;
         
         Color color1 =  new Color("#261506");
@@ -938,6 +931,11 @@ public class Hexagon : MeshInstance{
             Vector3 pos = new Vector3(x,0f,z);
             Tree.createVertex(st,map.random,pos,scale,color1,color2);
         }
+
+        //finaly
+        st.GenerateNormals(); 
+        trees.Mesh = st.Commit();
+        geo.AddChild(trees);
     }
 
 }

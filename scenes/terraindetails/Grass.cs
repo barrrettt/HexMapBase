@@ -31,8 +31,8 @@ public class Grass : MeshInstance {
     }
 
     public static void createVertex(SurfaceTool st,Random rnd, Vector3 position, float scale) {
-        float height = 2f;
-        float width = 0.25f;
+        float height = 1.5f;
+        float width = 0.40f;
         float md = width/2;
         Color color = Color.ColorN("green");
 
@@ -43,11 +43,10 @@ public class Grass : MeshInstance {
         
         // rotations 
         float angle1 = (2*Mathf.Pi) * GeoAux.FloatRange(rnd,-1f, 1f); 
-        float angle2 = (2*Mathf.Pi) * GeoAux.FloatRange(rnd,-0.02f, 0.02f); 
 
-        v1 = v1.Rotated(Vector3.Up,angle1); v1 = v1.Rotated(Vector3.Forward,angle2); 
-        v2 = v2.Rotated(Vector3.Up,angle1); v2 = v2.Rotated(Vector3.Forward,angle2); 
-        v3 = v3.Rotated(Vector3.Up,angle1); v3 = v3.Rotated(Vector3.Forward,angle2); 
+        v1 = v1.Rotated(Vector3.Up,angle1); 
+        v2 = v2.Rotated(Vector3.Up,angle1); 
+        v3 = v3.Rotated(Vector3.Up,angle1); 
 
         //scale 
         v1 *= scale; v2 *= scale; v3 *= scale; 
