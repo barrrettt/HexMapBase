@@ -7,7 +7,7 @@ public class Tree : MeshInstance {
     }get{return true;}}
 
 
-    public static Color COLOR_WOOD = new Color("#402901"), COLOR_FOLIAGE = new Color("#015c07");
+    public static Color COLOR_WOOD = new Color("#402901"), COLOR_FOLIAGE = new Color("#1f5404");
 
     public void crear(Random random){
         SurfaceTool st = new SurfaceTool();

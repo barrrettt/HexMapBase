@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public class Hexagon : MeshInstance{
     public HexaData hexData;
@@ -29,6 +30,9 @@ public class Hexagon : MeshInstance{
     private MeshInstance river;
     private MeshInstance sea;
     
+    //spawn valid detail zones
+    private bool[] detailZonesFree = new bool[]{true,true,true,true,true,true,true};
+    private List<DetaillPlazed> detaillsPositions = new List<DetaillPlazed>();
 
     public override void _EnterTree(){
         geo = (Spatial)GetNode("geo");
@@ -69,17 +73,16 @@ public class Hexagon : MeshInstance{
     
     // metrics
     public float innerRadius;
-    public float innerRadiusRiver;
     public float ang30;
 
     // Main vertex
     public Vector3[] vertex = new Vector3[13];
+    
     //Main Links vertex
     public Vector3 pNEv1 = new Vector3(), pNEv2 = new Vector3(), pNEv3 = new Vector3(), pNEv4 = new Vector3(), 
     pSEv1 = new Vector3(), pSEv2= new Vector3(), pSEv3 = new Vector3(), pSEv4= new Vector3(), 
     pSv1= new Vector3(), pSv2 = new Vector3(), pSv3= new Vector3(), pSv4= new Vector3();
     
-
     // CREATE HEXAGON:
     private Map map;
 
@@ -120,36 +123,29 @@ public class Hexagon : MeshInstance{
         st.SetMaterial(mat);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
-        createHexagon(st);  //Unions and holes
+        createHexagon(st);  // Main, Unions and holes
         
-        // FINALLY  Commit a
+        //Finally commit mesh
         st.GenerateNormals(); 
         st.GenerateTangents(); 
         Mesh = st.Commit(); 
 
-        //Physic mesh 
+        //PHYSICS COLLIDERS
         foreach (Node child in GetChildren()){
-            if (child == geo) continue; //only physics
+            if (child == geo) continue; 
             child.QueueFree(); //delete old physics
         }
+        CreateTrimeshCollision(); //new physics
 
-        //new physics
-        CreateTrimeshCollision(); 
+        //WATERS
+        CreateRivers(st); //Rivers
+        CreateSea(st); //Sea
 
-        //Rivers
-        CreateRivers(st);
-        
-        //Sea
-        CreateSea(st);
-
-        // rock On
-        CreateRocks(st);
-
-        // grass
-        CreateGrass(st);
-
-        // trees 
-        CreateTrees(st);
+        //DETAILS
+        calculateValidSpawnDetailZones();
+        CreateRocks(st); // rock On
+        CreateGrass(st); // grass
+        CreateTrees(st); // trees 
 
     }
 
@@ -373,7 +369,7 @@ public class Hexagon : MeshInstance{
 
         //RIVERS vertices top
         float hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
-        innerRadiusRiver = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
+        float innerRadiusRiver = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
         
         riverVertex[0] = new Vector3(0,hValue,0);//CENTRO
         riverVertex[1] = new Vector3(Mathf.Cos(ang30 * 1)* innerRadiusRiver, hValue, Mathf.Sin(ang30*1)* innerRadiusRiver);// med E y SE
@@ -402,7 +398,6 @@ public class Hexagon : MeshInstance{
 
         // Things 
         float distRiverTop = innerRadius - innerRadiusRiver;
-        hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
         float distLink = innerRadius * 2/3;//distancia del puente
         Color color = colorRiver;
 
@@ -786,7 +781,6 @@ public class Hexagon : MeshInstance{
         sea.Mesh = st.Commit(); 
     }
 
-
     //Detail: Rocks
     private void CreateRocks(SurfaceTool st){
         //Rocks
@@ -802,7 +796,7 @@ public class Hexagon : MeshInstance{
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         // no rocks when:
-        if (hexData.river || hexData.getHeight()<3){
+        if (hexData.getHeight()<3){
             rock.Mesh = st.Commit();
             geo.AddChild(rock);
             return;
@@ -837,14 +831,16 @@ public class Hexagon : MeshInstance{
         int rndi = map.random.Next(0,rockcolors.Length);
         Color color = colors[rockcolors[rndi]];
 
-        float dist = innerRadius*0.8f;
-        for (int i = 0;i<numRocks;i++){
-            float x = GeoAux.FloatRange(map.random,-dist,dist);
-            float z = GeoAux.FloatRange(map.random,-dist,dist);
-            float scale = GeoAux.FloatRange(map.random,0.1f,0.5f);
-            Vector3 pos = new Vector3(vertex[0].x+x,vertex[0].y,vertex[0].z+z);
+        float variation = innerRadius * 0.01f;
+        float sizeDetail = 0.2f;
 
-            Rock.createVertex(st,map.random,pos,scale,color);
+        for (int i = 0;i<numRocks;i++){
+            float scale = GeoAux.FloatRange(map.random, 0.1f, 0.5f);
+            Vector3 pos = getValidFreeDetailPosition(variation,sizeDetail);
+            if (pos != Vector3.Zero){
+                Rock.createVertex(st,map.random,pos,scale,color);
+                //detaillsPositions.Add(new DetaillPlazed(pos,sizeDetail)); //free rocks
+            }            
         }
 
         //finaly
@@ -868,24 +864,36 @@ public class Hexagon : MeshInstance{
         st.Begin(Mesh.PrimitiveType.Triangles);
 
         //no grass when:
-         int h = hexData.getHeight();
+        int h = hexData.getHeight();
         if (hexData.river || h<3 || h>5){
             grass.Mesh = st.Commit();
             geo.AddChild(grass);
             return;
         }
 
-        //place instances:
-        int count = 10;
-        float radius = 0.5f;
-        float height = vertex[0].y;
+        //place positions:
+        int count = 2;
+        int subinstances = 3;
+        float variation = innerRadius * 0.01f;
+        float subvariation = 0.2f;
+        float sizeDetail = 0.1f;
 
-        for (int i=0; i<count; i++){
-            float scale = GeoAux.FloatRange(map.random, 0.4f, 0.5f); 
-            float x = GeoAux.FloatRange(map.random, -radius, radius); 
-            float z = GeoAux.FloatRange(map.random, -radius, radius); 
-            Vector3 pos = new Vector3(x,height,z); 
-            Grass.createVertex(st,map.random,pos, scale); 
+        for (int i = 0;i<count;i++){
+            float scale = GeoAux.FloatRange(map.random, 0.4f, 0.5f);
+            Vector3 pos = getValidFreeDetailPosition(variation,sizeDetail);
+
+            if (pos != Vector3.Zero){
+                //detaillsPositions.Add(new DetaillPlazed(pos,sizeDetail)); // free grass
+
+                //add random subvariation on plane XZ to zone position
+                for (int j = 0;j<subinstances;j++){
+                    float x = GeoAux.FloatRange(map.random,-subvariation,subvariation); 
+                    float y = 0; //height 
+                    float z = GeoAux.FloatRange(map.random,-subvariation,subvariation); 
+                    Vector3 subpos = pos + new Vector3(x,y,z); // add subvariation
+                    Grass.createVertex(st,map.random,subpos,scale);
+                }
+            }            
         }
 
         //finaly
@@ -911,6 +919,10 @@ public class Hexagon : MeshInstance{
         float height = vertex[0].y;
         trees.Translation = new Vector3(trees.Translation.x,height,trees.Translation.z);
 
+        //colors trees
+        Color cWood =  Tree.COLOR_WOOD;
+        Color cFoliage =  Tree.COLOR_FOLIAGE;
+
         //exit when:
         int h = hexData.getHeight();
         if (hexData.river || h<3 || h>5){
@@ -921,17 +933,18 @@ public class Hexagon : MeshInstance{
 
         //place trees on top hex
         int count = 2; // trees
-        float radius = 0.5f;
-        
-        Color color1 =  new Color("#261506");
-        Color color2 =  new Color("#1c8c3a");
+        float variation = innerRadius * 0.01f;
+        float sizeDetail = 0.8f;
 
-        for (int i = 0; i<count;i++){
-            float scale = GeoAux.FloatRange(map.random,0.3f, 0.4f);
-            float x = GeoAux.FloatRange(map.random, -radius, radius);
-            float z = GeoAux.FloatRange(map.random, -radius, radius);
-            Vector3 pos = new Vector3(x,0f,z);
-            Tree.createVertex(st,map.random,pos,scale,color1,color2);
+        for (int i = 0;i<count;i++){
+            float scale = GeoAux.FloatRange(map.random, 0.3f, 0.4f);
+            Vector3 pos = getValidFreeDetailPosition(variation,sizeDetail);
+            pos.y = 0; // position y on transform
+
+            if (pos != Vector3.Zero){
+                Tree.createVertex(st,map.random,pos,scale,cWood,cFoliage);
+                detaillsPositions.Add(new DetaillPlazed(pos,sizeDetail));
+            }            
         }
 
         //finaly
@@ -940,4 +953,166 @@ public class Hexagon : MeshInstance{
         geo.AddChild(trees);
     }
 
+    //AUXs terrain details positions
+    private void calculateValidSpawnDetailZones(){
+
+        //zones: 0-center, 1-SE, 2-S,...
+        //linkzones: no yet
+        detailZonesFree = new bool[]{true,true,true,true,true,true,true};
+        detaillsPositions = new List<DetaillPlazed>();
+    
+        //if exist riber, road or bigdetail invalide zone
+        int countRiverNeibours = 0;
+
+        if (hexData.river) {
+            detailZonesFree[0] = false;
+        }
+
+        // Rivers IN or OUT?
+        HexaData hdNE = hexData.neighbours[5];
+        if (hdNE != null){
+            bool linkNE_out = hexData.riversOut[5] == hdNE;
+            bool linkNE_in = hdNE.riversOut[2] == hexData;
+            if (hdNE.river && (linkNE_out|| linkNE_in)){
+                detailZonesFree[6] = false; // has riber, no details here
+                countRiverNeibours++;
+            }
+        }
+        HexaData hdSE = hexData.neighbours[0];
+        if (hdSE != null){
+            bool linkSE_out = hexData.riversOut[0] == hdSE;
+            bool linkSE_in = hdSE.riversOut[3] == hexData;
+            if (hdSE.river && (linkSE_out ||linkSE_in)){
+                detailZonesFree[1] = false;
+                countRiverNeibours++;            
+            }
+        }
+        HexaData hdS = hexData.neighbours[1];
+        if (hdS != null){
+            bool linkS_out = hexData.riversOut[1] == hdS;
+            bool linkS_in = hdS.riversOut[4] == hexData;
+            if (hdS.river && (linkS_out || linkS_in)){
+                detailZonesFree[2] = false;
+                countRiverNeibours++;
+            }
+        }
+        HexaData hdSW = hexData.neighbours[2];
+        if (hdSW != null){
+            bool linkSW_out = hexData.riversOut[2] == hdSW;
+            bool linkSW_in = hdSW.riversOut[5] == hexData;
+            if (hdSW.river && (linkSW_out || linkSW_in)){
+                detailZonesFree[3] = false;
+                countRiverNeibours++;
+            }
+        }
+        HexaData hdNW = hexData.neighbours[3];
+        if (hdNW != null){
+            bool linkNW_out = hexData.riversOut[3] == hdNW;
+            bool linkNW_in = hdNW.riversOut[0] == hexData;
+            if (hdNW.river && (linkNW_out || linkNW_in)){
+                detailZonesFree[4] = false;
+                countRiverNeibours++;  
+            }
+        }
+        HexaData hdN = hexData.neighbours[4];
+        if (hdN != null){
+            bool linkN_out = hexData.riversOut[4] == hdN;
+            bool linkN_in = hdN.riversOut[1] == hexData;
+            if (hdN.river && (linkN_out || linkN_in)){
+                detailZonesFree[5] = false;
+                countRiverNeibours++;
+            }
+        }
+
+        //small espaces? ->  no valid spawn zone:
+        if (!detailZonesFree[1] && !detailZonesFree[3]) detailZonesFree[2] = false;
+        if (!detailZonesFree[2] && !detailZonesFree[4]) detailZonesFree[3] = false;
+        if (!detailZonesFree[3] && !detailZonesFree[5]) detailZonesFree[4] = false;
+        if (!detailZonesFree[4] && !detailZonesFree[6]) detailZonesFree[5] = false;
+        if (!detailZonesFree[5] && !detailZonesFree[1]) detailZonesFree[6] = false;
+        if (!detailZonesFree[6] && !detailZonesFree[2]) detailZonesFree[1] = false;
+
+
+        //center lake?
+        if (hexData.river && (countRiverNeibours < 2  || countRiverNeibours > 3)){
+            detailZonesFree[0] = false;
+            detailZonesFree[1] = false;
+            detailZonesFree[2] = false;
+            detailZonesFree[3] = false;
+            detailZonesFree[4] = false;
+            detailZonesFree[5] = false;
+            detailZonesFree[6] = false;
+        }
+    }
+    private Vector3 getValidFreeDetailPosition(float variationRadio, float sizeDetail){
+        Vector3 zonePosition = Vector3.Zero;
+        List<int> validzones = new List<int>();
+
+        for (int i = 0;i<detailZonesFree.Length;i++){
+            if (detailZonesFree[i]) validzones.Add(i);
+        }
+        
+        if (validzones.Count== 0) return zonePosition; //0, no free zones
+
+        //random valid zone
+        int index = map.random.Next(0,validzones.Count);
+        int zone = validzones[index];
+
+        switch(zone){
+            case 0: 
+            zonePosition = vertex[0]; break;
+            case 1: 
+            zonePosition = vertex[0] + ((vertex[1] - vertex[0])/2); break;
+            case 2: 
+            zonePosition = vertex[0] + ((vertex[3] - vertex[0])/2); break;
+            case 3: 
+            zonePosition = vertex[0] + ((vertex[5] - vertex[0])/2); break;
+            case 4: 
+            zonePosition = vertex[0] + ((vertex[7] - vertex[0])/2); break;
+            case 5: 
+            zonePosition = vertex[0] + ((vertex[9] - vertex[0])/2); break;
+            case 6: 
+            zonePosition = vertex[0] + ((vertex[11] - vertex[0])/2); break;
+        }
+
+        // ckeck free radius
+        int tries = 10;
+        for (int i=0;i<tries;i++){ 
+            
+            //add random variation on plane XZ to zone position
+            float x = GeoAux.FloatRange(map.random,-variationRadio,variationRadio); 
+            float y = 0; //height 
+            float z = GeoAux.FloatRange(map.random,-variationRadio,variationRadio); 
+            Vector3 detailPosition = zonePosition + new Vector3(x,y,z); // add variation
+
+            bool isFree = true;//check
+
+            foreach (DetaillPlazed d in detaillsPositions){
+                float lenght = (d.position - detailPosition).Length();
+                if (lenght < (sizeDetail + d.sizeDetail)){
+                    isFree = false;
+                    break;
+                }
+            }
+
+            //return position if correct
+            if (isFree){
+                return detailPosition;
+            }
+        }
+
+        //zero if incorrect position
+        return Vector3.Zero;
+    }
+
+}
+
+class DetaillPlazed{
+    public readonly Vector3 position = Vector3.Zero;
+    public readonly float sizeDetail = 0f;
+
+    public DetaillPlazed(Vector3 position, float sizeDetail){
+        this.position = position;
+        this.sizeDetail = sizeDetail;
+    }
 }
