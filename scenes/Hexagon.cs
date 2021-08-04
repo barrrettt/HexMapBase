@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Hexagon : MeshInstance{
     public HexaData hexData;
+    
     // 10 colors
     private Color[] colors = new Color[]{
         new Color("#022340"),//blue dark
@@ -18,19 +19,21 @@ public class Hexagon : MeshInstance{
         new Color("#ccc3b8"), //white
         new Color("#ffffff"), //white w
     };
-    private Color colorRiver = new Color("#115999");//blue
-    //STATICS METRICS
-    public static float SIZE_TOP = 0.75f;//0.75f; //radius top hex (1 max)
+    
+    private Color colorRiver = new Color("#115999"); //blue
+    
+    // STATICS METRICS 
+    public static float SIZE_TOP = 0.75f; //0.75f; //radius top hex (1 max) 
     public static float HEIGHT_RIBER_OFFSET = 0.05f;
     public static float SIZE_RIBER = 0.50f;
     public static float HEIGHT_REAL_SEA = 0.40f;
 
-    //Children geometry
+    // Children geometry 
     private Spatial geo;
     private MeshInstance river;
     private MeshInstance sea;
     
-    //spawn valid detail zones
+    // Spawn valid detail zones 
     private bool[] detailZonesFree = new bool[]{true,true,true,true,true,true,true};
     private List<DetaillPlazed> detaillsPositions = new List<DetaillPlazed>();
 
@@ -71,14 +74,14 @@ public class Hexagon : MeshInstance{
         return heightValue;
     }
     
-    // metrics
+    // Metrics 
     public float innerRadius;
     public float ang30;
 
-    // Main vertex
+    // Main vertex 
     public Vector3[] vertex = new Vector3[13];
     
-    //Main Links vertex
+    // Main Links vertex 
     public Vector3 pNEv1 = new Vector3(), pNEv2 = new Vector3(), pNEv3 = new Vector3(), pNEv4 = new Vector3(), 
     pSEv1 = new Vector3(), pSEv2= new Vector3(), pSEv3 = new Vector3(), pSEv4= new Vector3(), 
     pSv1= new Vector3(), pSv2 = new Vector3(), pSv3= new Vector3(), pSv4= new Vector3();
@@ -146,6 +149,9 @@ public class Hexagon : MeshInstance{
         CreateRocks(st); // rock On
         CreateGrass(st); // grass
         CreateTrees(st); // trees 
+
+        //GAMEOBJECTS
+        PlaceGO();
 
     }
 
@@ -1103,6 +1109,26 @@ public class Hexagon : MeshInstance{
 
         //zero if incorrect position
         return Vector3.Zero;
+    }
+
+    //Place GameObjects
+    private void PlaceGO() {
+        Spatial go = geo.GetNodeOrNull("go") as Spatial;
+        if (go != null) go.Free();
+        
+        if (hexData.indexGO < 0){
+            return;
+        }
+
+        //instancing..
+        PackedScene psGO = map.resGOs[hexData.indexGO];
+        go = (Spatial)psGO.Instance(); 
+        go.Name = "go";
+
+        //Translate and add child
+        float height = vertex[0].y;
+        go.Translation = new Vector3(go.Translation.x,height,go.Translation.z);
+        geo.AddChild(go); 
     }
 
 }

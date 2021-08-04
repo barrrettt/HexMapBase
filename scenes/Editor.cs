@@ -18,7 +18,7 @@ public class Editor : Spatial{
     private String actualToolSelected = "";
     private HexaData lastOrigin = null;
     private Label lblActualTool;
-    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buRoads, buRivers, buRiverClear;
+    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buDetailClear, buRoad, buRoadClear, buRivers, buRiverClear;
 
     private LineEdit lblNameMap;
     private SpinBox sbSeedMap;
@@ -74,7 +74,6 @@ public class Editor : Spatial{
         };
 
         // TOOLS
-
         buUp = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuUp");
         buUp2 = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuUp2");
         buDown = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuDown");
@@ -84,7 +83,9 @@ public class Editor : Spatial{
         buStyle = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuStyle");
 
         buDetail = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuDetail");
-        buRoads = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoads");
+        buDetailClear = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuDetailClear");
+        buRoad = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoad");
+        buRoadClear = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoadClear");
 
         buUp.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"up"});
         buUp2.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"up2"});
@@ -94,8 +95,10 @@ public class Editor : Spatial{
         buRiverClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riverclear"});
 
         buStyle.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"style"});
-        buDetail.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detail"});
-        buRoads.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"road"});
+        buDetail.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detail_0"});
+        buDetailClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detailClear"});
+        buRoad.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"road"});
+        buRoadClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"roadClear"});
 
         // PROCEDURAL GEN
         lblNameMap = GetNode<LineEdit>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1/txtNameMap");
@@ -297,14 +300,18 @@ public class Editor : Spatial{
         //panel base se muestra si alguien visible
         pTools.Visible = !allHides;
 
+        //no tools
+        actualToolSelected = "";
+        lblActualTool.Text = "";
+
         //si algun panel activo, camara no responde a acciones
         camara.playerControl = allHides;
     }
 
     private void buttonToolSelect(String toolname){
+        buttonPanelclick(-1);//hide panels
         actualToolSelected = toolname;
         lblActualTool.Text = toolname;
-        buttonPanelclick(-1);//hide panels
     }
 
     private void buttonGenerateTerrain(){
@@ -417,6 +424,8 @@ public class Editor : Spatial{
                 map.cleanRivers(hxd); 
                 lastOrigin = null;
                 break;
+            case "detail_0":map.placeGO(hxd,0); break;
+            case "detailClear":map.placeGO(hxd,-1); break;
         }
     }
 

@@ -6,13 +6,14 @@ public class Map : Spatial{
     //resources
     private PackedScene resHexagon; 
 
+    public PackedScene[] resGOs = new PackedScene[1];
+
     public ShaderMaterial matSea,matRiber,matRock,matGrass,matTree;
 
     private MeshInstance selector, overSelector; 
     private Hexagon[] hexagons; 
     public MapData mapData; 
     public Random random;
-
     public Vector3 cameraRayPosition = Vector3.Zero;
 
     public override void _EnterTree(){
@@ -27,7 +28,10 @@ public class Map : Spatial{
         //references to selectors
         selector = GetNode<MeshInstance>("Selector");
         overSelector = GetNode<MeshInstance>("OverSelector");
-        
+
+        //reference to GO imported
+        resGOs[0] = ResourceLoader.Load("res://scenes/gameobjects/sign.tscn") as PackedScene;
+
         //random for procedural generation
         random = new Random();
     }
@@ -51,7 +55,7 @@ public class Map : Spatial{
 
         // delete old map
         if (hexagons != null){
-            foreach (Hexagon hx in hexagons) hx.QueueFree();
+            foreach (Hexagon hx in hexagons) hx.Free();
         }
         
         //new array hexagons
@@ -103,7 +107,6 @@ public class Map : Spatial{
             if (affected == null)continue;
             affected.hexagon.CreateHexMetrics();
             affected.hexagon.Create(this);
-           
         }
     }
 
@@ -180,6 +183,13 @@ public class Map : Spatial{
     public void cleanRivers(HexaData hxd){
         if (hxd == null) return;
         hxd.clearRivers();
+        CreateAffectedHex(hxd);
+    }
+
+    //PLACE GAMEOBJECT DETAIL
+    public void placeGO(HexaData hxd,int indexGO){
+        if (hxd == null) return;
+        hxd.indexGO = indexGO;
         CreateAffectedHex(hxd);
     }
 
@@ -371,13 +381,18 @@ public class HexaData{
     public static int MAX_HEIGHT = 10;
     public static int WATER_LEVEL = 2;
     public readonly int row, col; 
+
+    //references neighbours
     public HexaData[] neighbours = new HexaData[6]; // primero SE y continua sentido horario 
     // aspect
     public int colorIndex = 0;
     public int height = 1; 
+    //sea
     public bool water = false;
+    //GameObject placed
+    public int indexGO = -1;
     
-    // river system, 
+    // river system
     public bool river = false; 
     public HexaData[] riversOut = new HexaData[6]; //first SE and clock way: S, SW...
 

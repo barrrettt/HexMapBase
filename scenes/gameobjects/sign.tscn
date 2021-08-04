@@ -4,6 +4,7 @@
 [ext_resource path="res://src/blender/sign.gltf" type="PackedScene" id=2]
 
 [node name="sign" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 
 [node name="Sign" parent="." index="0"]
 transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0 )

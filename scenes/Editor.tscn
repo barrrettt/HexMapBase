@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://scenes/Editor.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Map.tscn" type="PackedScene" id=2]
 [ext_resource path="res://src/themes/EditorAndroidTheme.tres" type="Theme" id=3]
 [ext_resource path="res://scenes/Camara.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/vectorial/cross.svg" type="Texture" id=5]
 [ext_resource path="res://src/vectorial/doble-down.svg" type="Texture" id=6]
 [ext_resource path="res://src/vectorial/palette.svg" type="Texture" id=7]
 [ext_resource path="res://src/vectorial/home.svg" type="Texture" id=8]
@@ -473,7 +474,7 @@ __meta__ = {
 visible = false
 self_modulate = Color( 0, 0, 0, 0 )
 margin_right = 610.0
-margin_bottom = 338.0
+margin_bottom = 558.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -483,7 +484,7 @@ size_flags_horizontal = 3
 margin_left = 14.0
 margin_top = 14.0
 margin_right = 596.0
-margin_bottom = 324.0
+margin_bottom = 544.0
 mouse_filter = 2
 custom_constants/separation = 20
 __meta__ = {
@@ -535,15 +536,61 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BuRoads" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB"]
+[node name="BuDetailClear" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB"]
 margin_top = 220.0
 margin_right = 582.0
 margin_bottom = 310.0
 rect_min_size = Vector2( 90, 90 )
 mouse_default_cursor_shape = 2
 
-[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoads"]
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuDetailClear"]
+self_modulate = Color( 1, 0, 0, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuRoad" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB"]
+margin_top = 330.0
+margin_right = 582.0
+margin_bottom = 420.0
+rect_min_size = Vector2( 90, 90 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoad"]
 self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 5.0
+margin_top = 5.0
+margin_right = -5.0
+margin_bottom = -5.0
+mouse_filter = 2
+texture = ExtResource( 15 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BuRoadClear" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB"]
+margin_top = 440.0
+margin_right = 582.0
+margin_bottom = 530.0
+rect_min_size = Vector2( 90, 90 )
+mouse_default_cursor_shape = 2
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoadClear"]
+self_modulate = Color( 1, 0, 0, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
