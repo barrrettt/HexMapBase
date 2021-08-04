@@ -12,7 +12,7 @@ public class Hexagon : MeshInstance{
         new Color("#859911"),//yellow
         new Color("#518513"),//y-green
         new Color("#1f5404"),//g
-        new Color("#0c2b02"), //green d
+        new Color("#0b4003"), //green d
         new Color("#2e2a0a"), //broown
         new Color("#2e210a"), //b dark
         new Color("#5e4e38"), //b light
@@ -1126,9 +1126,9 @@ public class Hexagon : MeshInstance{
         go.Name = "go";
 
         //Translate and add child
+        geo.AddChild(go); 
         float height = vertex[0].y;
         go.Translation = new Vector3(go.Translation.x,height,go.Translation.z);
-        geo.AddChild(go); 
     }
 
 }
