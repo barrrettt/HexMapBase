@@ -18,8 +18,8 @@ _global_script_class_icons={
 config/name="HexMapBase"
 config/description="HexMap base proyect with editor"
 run/main_scene="res://Main.tscn"
+boot_splash/image="res://icon.png"
 boot_splash/bg_color=Color( 0.286275, 0.054902, 0.509804, 1 )
-config/icon="res://icon.png"
 
 [display]
 
