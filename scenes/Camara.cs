@@ -8,20 +8,23 @@ public class Camara : Spatial{
     public Boolean isPC = true;
     private Camera camara;
     private Vector3 offsetCamera = new Vector3(0f,20.25f,11.25f);
-    private const float ZOOM_MIN = 0.30f, ZOOM_MAX = 2.5f, ZOOM_SPEED = 0.01f;
+    private float ZOOM_MIN = 0.30f, ZOOM_MAX = 2.5f, ZOOM_SPEED = 0.01f;
     private float zoom = 1f; 
     public Vector2 movelimitsTopLeft = new Vector2 (0,0);
     public Vector2 movelimitsDownRight = new Vector2 (10,10);
 
     public override void _Ready() {
-        // mobil o PC
-        string osname = Godot.OS.GetName();
-        if (osname=="Android" || osname=="iOS" ) isPC = false;
-
         //referancia
         camara = GetNode<Camera>("Camara");
 
-        //max zoom
+        // mobil o PC
+        string osname = Godot.OS.GetName();
+        if (osname=="Android" || osname=="iOS" ) {
+            isPC = false;
+            ZOOM_MAX = 1.2f;
+        }
+
+        //set max zoom and init position
         zoom = ZOOM_MAX;
         camara.Translation =  offsetCamera * zoom;
     }
@@ -162,22 +165,19 @@ public class Camara : Spatial{
                 }
             }
 
-            if (countTouches>1){
-                if (firstTouch == null) {
-                    return;
-                }
-                    
+            if (countTouches>1) { 
+                if (firstTouch == null) {return;} 
                 Vector2 firstPos = ((InputEventScreenTouch)firstTouch).Position;
                 Vector2 dirInit = evDrag.Position - evDrag.Relative;
                 float initdist = (firstPos - dirInit).Length();
                 float findist = (firstPos - evDrag.Position).Length();
-
-                float length = Mathf.Abs(evDrag.Relative.Length() *100);
+                float lenght = (firstPos - evDrag.Position).Length();
+                //float lenght = Mathf.Abs(evDrag.Relative.Length() *100);
 
                 if (initdist>findist){
-                    zoom += length * SENSITIVITY_ZOOM_MOBILE;
+                    zoom += lenght * SENSITIVITY_ZOOM_MOBILE;
                 }else{ 
-                    zoom -= length * SENSITIVITY_ZOOM_MOBILE;
+                    zoom -= lenght * SENSITIVITY_ZOOM_MOBILE;
                 }
                 
                 move(vel,rot,SENSITIVITY_MOBILE,1f);
