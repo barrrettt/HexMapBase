@@ -86,11 +86,12 @@ ui_zoom_out={
  ]
 }
 
+[physics]
+
+3d/active_soft_world=false
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
-quality/filters/use_nearest_mipmap_filter=true
-quality/filters/msaa=2
 environment/default_environment="res://src/environments/default_env.tres"
-quality/filters/anisotropic_filter_level=16
