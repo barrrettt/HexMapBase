@@ -1,10 +1,13 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public class Editor : Spatial{
     private Camara camara;
     private WorldEnvironment centro;
     private Map map;
+
+    private GenerationAlgoritm generationAlgoritm = new GenerationAlgoritm();
 
     //GUI REFERENCES
     private Label lblMousePos1, lblCameraPos1, lblSelectedPos1;
@@ -18,12 +21,11 @@ public class Editor : Spatial{
     private String actualToolSelected = "";
     private HexaData lastOrigin = null;
     private Label lblActualTool;
-    private Button buUp, buUp2, buDown, buDown2, buStyle, buDetail, buDetailClear, buRoad, buRoadClear, buRivers, buRiverClear;
 
-    private LineEdit lblNameMap;
-    private SpinBox sbSeedMap;
-    private HSlider sSizeMap,sP1,sH1,sP2,sH2,sP3,sH3;
-    private Button buGenMap;
+    //gui generation
+    private Label lblSeedMap,lblSizeMap,lblStyleMap;
+    private Label lblGenParam0,lblGenParam1,lblGenParam2,lblGenParam3;
+    private GuiModals modals;
 
     //DEBUG 
     int ballnumber = 0;
@@ -37,84 +39,43 @@ public class Editor : Spatial{
         camara = centro.GetNode<Camara>("Camara"); 
         spaceState = GetWorld().DirectSpaceState; //physic ray neededs 
 
-        //GUI panel top
-        lblActualTool = GetNode<Label>("GUI/UpPanel/HB/HB/lblTool");
-
-        //GUI panel botton
-        lblMousePos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB1/Label");
+        //labels
+        lblActualTool = GetNode<Label>("GUI/UpPanel/HB/HB/lblTool"); //GUI panel top
+        lblMousePos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB1/Label"); //labels of debug positions
         lblMousePos2 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB1/Label2");
         lblCameraPos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB2/Label");
         lblCameraPos2 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB2/Label2");
         lblSelectedPos1 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB3/Label");
         lblSelectedPos2 = GetNode<Label>("GUI/BottomPanel/HB/LPanel/HB/VB/HB3/Label2");
 
-        //right pane buttons
-        buElevations = GetNode<Button>("GUI/RightPanel/Right/PButtons/HB/CC/BUElevations"); 
-        buStyles= GetNode<Button>("GUI/RightPanel/Right/PButtons/HB/CC2/BUStyles"); 
-        buGeneration= GetNode<Button>("GUI/RightPanel/Right/PButtons/HB/CC3/BUGeneration"); 
-        buOptions= GetNode<Button>("GUI/RightPanel/Right/PButtons/HB/CC4/BUOptions"); 
-
-        buElevations.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{0});
-        buStyles.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{1});
-        buGeneration.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{2});
-        buOptions.Connect("pressed", this, nameof(buttonPanelclick),new Godot.Collections.Array{3});
-
-        //subpanels
-        pTools = GetNode<Control>("GUI/RightPanel/Right/PTools");
+        //subpanels 
+        pTools = GetNode<Control>("GUI/RightPanel/Right/PTools"); 
         pElevations = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations"); 
         pStyles = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles"); 
-        pGeneration = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration");
+        pGeneration = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration"); 
         pOptions = GetNode<Control>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions"); 
 
-        panels = new Control[]{
+        panels = new Control[] { 
             pElevations,
             pStyles,
             pGeneration,
             pOptions
-        };
+        }; 
 
-        // TOOLS
-        buUp = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuUp");
-        buUp2 = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuUp2");
-        buDown = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuDown");
-        buDown2 = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuDown2");
-        buRivers = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuRiver");
-        buRiverClear = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/PElevations/VB/BuRiverClear");
-        buStyle = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuStyle");
+        // PROCEDURAL GEN PANEL
+        lblSeedMap = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSeed/lblSeedMap");
+        lblSizeMap = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSize/lblSizeMap");
+        lblStyleMap = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbStyle/lblStyleMap");
 
-        buDetail = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuDetail");
-        buDetailClear = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuDetailClear");
-        buRoad = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoad");
-        buRoadClear = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBStyles/VB/BuRoadClear");
+        lblGenParam0 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0/lblGenParam");
+        lblGenParam1 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1/lblGenParam");
+        lblGenParam2 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB2/lblGenParam");
+        lblGenParam3 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB3/lblGenParam");
 
-        buUp.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"up"});
-        buUp2.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"up2"});
-        buDown.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"down"});
-        buDown2.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"down2"});
-        buRivers.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"river"});
-        buRiverClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"riverclear"});
-
-        buStyle.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"style"});
-        buDetail.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detail_0"});
-        buDetailClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"detailClear"});
-        buRoad.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"road"});
-        buRoadClear.Connect("pressed", this, nameof(buttonToolSelect),new Godot.Collections.Array{"roadClear"});
-
-        // PROCEDURAL GEN
-        lblNameMap = GetNode<LineEdit>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1/txtNameMap");
-        sbSeedMap = GetNode<SpinBox>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB4/sbSeedMap");
-        sSizeMap = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB2/sSizeMap");
-        sP1 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB5/sP1");
-        sH1 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB6/sH1");
-        sP2 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB7/sP2");
-        sH2 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB8/sH2");
-        sP3 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB9/sP3");
-        sH3 = GetNode<HSlider>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB10/sH3");
-
-        buGenMap = GetNode<Button>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0/MC/BuGenerate");
-        buGenMap.Connect("pressed", this, nameof(buttonGenerateTerrain));
-
-        // translate text GUI
+        //modals
+        modals = GetNode<GuiModals>("GUI/Modals");
+        
+        // translate text GUI 
         locateTexts();
 
     }
@@ -129,12 +90,8 @@ public class Editor : Spatial{
 
     public override void _Ready(){
          //map debug
-        float [][] datas = { 
-            new float[]{1f,2f},//1pass 
-            new float[]{3f,6f},//2pass 
-            new float[]{10f,20f} //3pass 
-        }; 
-        generateSimplexNoise(10,0,datas);
+        generationAlgoritm.sizeMap = 10;
+        generationAlgoritm.generateMapData(random,map);
 
         //physics balls debug
         balls = new RigidBody[ballnumber];
@@ -314,20 +271,45 @@ public class Editor : Spatial{
         lblActualTool.Text = toolname;
     }
 
-    private void buttonGenerateTerrain(){
-        //get datas
-        int sizeMap = (int)sSizeMap.Value;
-        int seed = (int)sbSeedMap.Value;
-        
-        //pass datas 
-        float [][] datas = { 
-            new float[]{(float)sP1.Value,(float)sH1.Value},//1pass 
-            new float[]{(float)sP2.Value,(float)sH2.Value},//2pass 
-            new float[]{(float)sP3.Value,(float)sH3.Value} //3pass 
-        }; 
+    private async void buttonSetGenerationParam(String nameparam){
+        GD.Print(nameparam);
 
+        switch (nameparam){
+            case "seed":
+                //show modal
+                modals.showModalInputString("Map seed", generationAlgoritm.seed, 20);
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+                generationAlgoritm.seed = modals.value_str; //set param value
+                lblSeedMap.Text = modals.value_str;
+                break;
+
+            case "size":
+                //show modal
+                modals.showModalInputInteger("Map size", generationAlgoritm.sizeMap,0,50);
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+                generationAlgoritm.sizeMap = modals.value_int; //set param value
+                lblSizeMap.Text =  modals.value_int.ToString();
+                break;
+            
+            case "style":
+                //show modal
+                modals.showModalMessage("No map styles yet");
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+                generationAlgoritm.styleMap = 0;
+                break;
+        }
+
+    }
+    private void buttonGenerateTerrain(){
+        
         //generate data terrain
-        generateSimplexNoise(sizeMap,seed,datas);
+        generationAlgoritm.generateMapData(random,map);
 
         //Instanciar toda la vista
         map.instanceAllMap(random);
@@ -336,16 +318,57 @@ public class Editor : Spatial{
         initcamera();
     }
 
-    //GENERACION CON RUIDO - BIOMAS
-    public void generateSimplexNoise(int sizeMap, int seed, float[][] datas){
+    //MANUAL EDITION
+    public void exeTool(HexaData hxd){
+        
+        switch(actualToolSelected){
+            case "up": map.upTerrain(hxd); break;
+            case "up2": map.up2Terrain(hxd); break;
+            case "down":map.downTerrain(hxd); break;
+            case "down2":map.down2Terrain(hxd); break;
+            case "river":
+                map.createRiver(lastOrigin,hxd); 
+                lastOrigin = hxd;
+                break;
+            case "riverclear": 
+                map.cleanRivers(hxd); 
+                lastOrigin = null;
+                break;
+            case "detail_0":map.placeGO(hxd,0); break;
+            case "detailClear":map.placeGO(hxd,-1); break;
+        }
+    }
+
+}
+
+class GenerationAlgoritm {
+    public String seed;
+    public int sizeMap = 1;
+    public int styleMap = 0;
+    public float seaParam = 0.1f;
+
+    public int tointSeed(){
+        if (seed == null || seed.Length == 0) return 0;
+        int ihash = seed.GetHashCode();
+        return ihash;
+    }
+
+    public void generateMapData(Random random, Map map){
         //SIZE
         GD.Print("New map...");
         map.mapData = new MapData(sizeMap);
         float[,] dataTerrain = new float[sizeMap,sizeMap];
         
         //Ramdom
-        Random rnd = new Random();
-        if (seed == 0) seed = rnd.Next();
+        int seed = tointSeed();
+        if (seed == 0) seed = random.Next();
+
+        //pass datas 
+        float [][] datas = { 
+            new float[]{1f,2f},//1pass 
+            new float[]{3f,6f},//2pass 
+            new float[]{10f,20f} //3pass 
+        }; 
         
         //Noise
         OpenSimplexNoise noise = new OpenSimplexNoise();
@@ -353,13 +376,6 @@ public class Editor : Spatial{
         noise.Octaves = 8;
         noise.Lacunarity = 1.5f;
         noise.Persistence = 0.02f;
-
-        //parameters algotitmi 
-        /*float [][] datas = { 
-            new float[]{1,10},//1pass 
-            new float[]{3,20},//2pass 
-            new float[]{5,30} //3pass 
-        }; */
 
         //1 pass low noise (big areas)
         noise.Period = datas[0][0]; float heigthMulti = datas[0][1];
@@ -405,27 +421,6 @@ public class Editor : Spatial{
                 HexaData hexaData = map.mapData.GetHexaData(i,j);
                 hexaData.setHeight(height);
             }
-        }
-    }
-
-    //MANUAL EDITION
-    public void exeTool(HexaData hxd){
-        
-        switch(actualToolSelected){
-            case "up": map.upTerrain(hxd); break;
-            case "up2": map.up2Terrain(hxd); break;
-            case "down":map.downTerrain(hxd); break;
-            case "down2":map.down2Terrain(hxd); break;
-            case "river":
-                map.createRiver(lastOrigin,hxd); 
-                lastOrigin = hxd;
-                break;
-            case "riverclear": 
-                map.cleanRivers(hxd); 
-                lastOrigin = null;
-                break;
-            case "detail_0":map.placeGO(hxd,0); break;
-            case "detailClear":map.placeGO(hxd,-1); break;
         }
     }
 

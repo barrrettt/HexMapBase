@@ -878,8 +878,8 @@ public class Hexagon : MeshInstance{
         }
 
         //place positions:
-        int count = 2;
-        int subinstances = 3;
+        int count = 4;
+        int subinstances = 1;
         float variation = innerRadius * 0.01f;
         float subvariation = 0.2f;
         float sizeDetail = 0.1f;
