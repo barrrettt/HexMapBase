@@ -282,7 +282,6 @@ public class Editor : Spatial{
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
                 generationAlgoritm.seed = modals.value_str; //set param value
-                lblSeedMap.Text = modals.value_str;
                 break;
 
             case "size":
@@ -292,7 +291,6 @@ public class Editor : Spatial{
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
                 generationAlgoritm.sizeMap = modals.value_int; //set param value
-                lblSizeMap.Text =  modals.value_int.ToString();
                 break;
             
             case "style":
@@ -303,8 +301,47 @@ public class Editor : Spatial{
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
                 generationAlgoritm.styleMap = 0;
                 break;
+            
+            case "param0":
+                modals.showModalInputFloat("Sea and ground", generationAlgoritm.seaParam, 0, 1); //show modal
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+                generationAlgoritm.seaParam = modals.value_float; //set param value
+                break;
+
+            case "param1":
+                modals.showModalInputFloat("Vegetation", generationAlgoritm.vegetationParm, 0, 1);//show modal
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+                generationAlgoritm.vegetationParm = modals.value_float; //set param value
+                break;
+
+            case "param2":
+                modals.showModalInputFloat("Mountains", generationAlgoritm.mountainParam, 0, 1);//show modal
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+                generationAlgoritm.mountainParam = modals.value_float; //set param value
+                break;
+
+            case "param3":
+                modals.showModalInputFloat("Rivers", generationAlgoritm.riversParam, 0, 1);//show modal
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+                generationAlgoritm.riversParam = modals.value_float; //set param value
+                break;
         }
 
+        lblSeedMap.Text = generationAlgoritm.seed;
+        lblSizeMap.Text =  generationAlgoritm.sizeMap.ToString();
+        lblStyleMap.Text = "not yet";
+        lblGenParam0.Text = generationAlgoritm.seaParam.ToString();
+        lblGenParam1.Text = generationAlgoritm.vegetationParm.ToString();
+        lblGenParam2.Text = generationAlgoritm.mountainParam.ToString();
+        lblGenParam3.Text = generationAlgoritm.riversParam.ToString();
     }
     private void buttonGenerateTerrain(){
         
@@ -345,7 +382,7 @@ class GenerationAlgoritm {
     public String seed;
     public int sizeMap = 1;
     public int styleMap = 0;
-    public float seaParam = 0.1f;
+    public float seaParam = 0.1f, vegetationParm = 0.1f, mountainParam = 0.1f, riversParam = 0.1f;
 
     public int tointSeed(){
         if (seed == null || seed.Length == 0) return 0;
