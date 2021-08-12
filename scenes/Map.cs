@@ -45,17 +45,20 @@ public class Map : Spatial{
         //indicadorVecinosDebug();
     }
     
-    
-    public void instanceAllMap(Random random) {
-        this.random = random;
-
+    public void instanceAllMap() {
+        
         //hide indicators
         moveSelector(-1,-1);
         moveOver(-1,-1);
 
         // delete old map
         if (hexagons != null){
-            foreach (Hexagon hx in hexagons) hx.Free();
+            foreach (Hexagon hx in hexagons){
+                hx.hexData.hexagon = null;
+                hx.hexData = null;
+                hx.QueueFree();
+            };
+            hexagons = null;
         }
         
         //new array hexagons

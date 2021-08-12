@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class Hexagon : MeshInstance{
     public HexaData hexData;
-    
+    public Boolean isPC = true;
+
     // 10 colors
     private Color[] colors = new Color[]{
         new Color("#022340"),//blue dark
@@ -38,14 +39,21 @@ public class Hexagon : MeshInstance{
     private List<DetaillPlazed> detaillsPositions = new List<DetaillPlazed>();
 
     public override void _EnterTree(){
+        //refs
         geo = (Spatial)GetNode("geo");
         river = (MeshInstance)geo.GetNode("River");
         sea = (MeshInstance)geo.GetNode("Sea");
+
+        // mobil o PC
+        string osname = Godot.OS.GetName();
+        if (osname=="Android" || osname=="iOS" ) {
+            isPC = false;
+        }
        
     }
 
     public override void _Process(float delta){
-        if (map == null) return;
+        if (map == null || isPC) return;
         float dist = (map.cameraRayPosition - GlobalTransform.origin).LengthSquared();
         if (dist < 625){
             Visible = true;
@@ -58,7 +66,7 @@ public class Hexagon : MeshInstance{
         float heightValue = 0.0f;
         int height = hexData.getHeight();
         switch (height){
-            case 0: heightValue = 0.0f; break;
+            case 0: heightValue = 0.1f; break;
             case 1: heightValue = 0.2f; break;//water
             case 2: heightValue = 0.5f; break;//beach
             case 3: heightValue = 0.8f; break;//grass

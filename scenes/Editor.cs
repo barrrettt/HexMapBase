@@ -24,7 +24,8 @@ public class Editor : Spatial{
 
     //gui generation
     private Label lblSeedMap,lblSizeMap,lblStyleMap;
-    private Label lblGenParam0,lblGenParam1,lblGenParam2,lblGenParam3;
+    private Label lblAlgoParam0, lblAlgoParam1, lblAlgoParam2, lblAlgoParam3;
+    private Label lblGenParam0,lblGenParam1,lblGenParam2,lblGenParam3,lblGenParam4,lblGenParam5,lblGenParam6,lblGenParam7,lblGenParam8,lblGenParam9;
     private GuiModals modals;
 
     //DEBUG 
@@ -66,11 +67,24 @@ public class Editor : Spatial{
         lblSeedMap = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSeed/lblSeedMap");
         lblSizeMap = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSize/lblSizeMap");
         lblStyleMap = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbStyle/lblStyleMap");
+        
+        lblAlgoParam0 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit0/lblGenParam");
+        lblAlgoParam1 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit1/lblGenParam");
+        lblAlgoParam2 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit2/lblGenParam");
+        lblAlgoParam3 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit3/lblGenParam");
 
         lblGenParam0 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0/lblGenParam");
         lblGenParam1 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1/lblGenParam");
         lblGenParam2 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB2/lblGenParam");
         lblGenParam3 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB3/lblGenParam");
+        lblGenParam4 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB4/lblGenParam");
+        lblGenParam5 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB5/lblGenParam");
+        lblGenParam6 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB6/lblGenParam");
+        lblGenParam7 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB7/lblGenParam");
+        lblGenParam8 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB8/lblGenParam");
+        lblGenParam9 = GetNode<Label>("GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB9/lblGenParam");
+
+        buttonSetGenerationParam(""); //init labels with values
 
         //modals
         modals = GetNode<GuiModals>("GUI/Modals");
@@ -89,9 +103,10 @@ public class Editor : Spatial{
     }
 
     public override void _Ready(){
-         //map debug
-        generationAlgoritm.sizeMap = 10;
-        generationAlgoritm.generateMapData(random,map);
+        
+        //init mapdata
+        generationAlgoritm.sizeMap = 20;
+        generationAlgoritm.generateMapData(map);
 
         //physics balls debug
         balls = new RigidBody[ballnumber];
@@ -110,7 +125,7 @@ public class Editor : Spatial{
             balls[i] = ball;
         }
 
-        map.instanceAllMap(random); //Show all map
+        map.instanceAllMap(); //Show all map
 
         initcamera();//camera to center
 
@@ -168,7 +183,7 @@ public class Editor : Spatial{
         Vector3 camTarget = ((Spatial)camara.GetChild(0)).GlobalTransform.origin;
         Vector3 camOrigen = camara.GlobalTransform.origin;
         Hexagon hx = ray(camOrigen,camTarget);
-        if (hx != null){
+        if (hx != null && hx.hexData != null){
             int r = hx.hexData.row; 
             int c = hx.hexData.col;
             lblCameraPos2.Text = String.Format("({0},{1})",r,c);
@@ -182,7 +197,7 @@ public class Editor : Spatial{
         //Control a donde apunta la cámara para saber el punto central del mapa
         Vector3[] mRay = camara.getMouseRay(); 
         Hexagon hx = ray(mRay[0],mRay[1]);
-        if (hx != null){
+        if (hx != null && hx.hexData!= null){
             lblMousePos2.Text = String.Format("({0},{1})",hx.hexData.row,hx.hexData.col);
             map.moveOver(hx.hexData.row, hx.hexData.col);
         }else{
@@ -195,7 +210,7 @@ public class Editor : Spatial{
         //Control a donde apunta la cámara para saber el punto central del mapa
         Vector3[] mRay = camara.getMouseRay(); 
         Hexagon hx = ray(mRay[0],mRay[1]);
-        if (hx != null){
+        if (hx != null && hx.hexData != null){
             lblSelectedPos2.Text = String.Format("({0},{1})",hx.hexData.row,hx.hexData.col); 
             
             if (actualToolSelected != ""){
@@ -272,8 +287,7 @@ public class Editor : Spatial{
     }
 
     private async void buttonSetGenerationParam(String nameparam){
-        GD.Print(nameparam);
-
+        
         switch (nameparam){
             case "seed":
                 //show modal
@@ -301,57 +315,147 @@ public class Editor : Spatial{
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
                 generationAlgoritm.styleMap = 0;
                 break;
-            
-            case "param0":
-                modals.showModalInputFloat("Sea and ground", generationAlgoritm.seaParam, 0, 1); //show modal
-                //waiting for modal state READY 
-                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
-                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
-                generationAlgoritm.seaParam = modals.value_float; //set param value
-                break;
 
-            case "param1":
-                modals.showModalInputFloat("Vegetation", generationAlgoritm.vegetationParm, 0, 1);//show modal
+            case "param_passes": 
+                modals.showModalInputInteger("Algoritm passes", generationAlgoritm.passes, 1, 50);//show modal 
                 //waiting for modal state READY 
-                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
-                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
-                generationAlgoritm.vegetationParm = modals.value_float; //set param value
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.passes = modals.value_int; //set param value 
+                break; 
+            
+            case "param_period": 
+                modals.showModalInputFloat("Algoritm period", generationAlgoritm.period , 0, 100); //show modal 
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );  
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.period = modals.value_float; //set param value 
+                break; 
+            
+            case "param_periodMulti":
+                modals.showModalInputFloat("Algoritm period multiply", generationAlgoritm.periodMulti, 0, 100); //show modal 
+                //waiting for modal state READY  
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.periodMulti = modals.value_float; //set param value 
+                break; 
+            
+            case "parma_heightSteep": 
+                modals.showModalInputFloat("Algoritm heightSteep", generationAlgoritm.heightSteep, 0, 100); //show modal 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); //waiting for modal state READY 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightSteep = modals.value_float; //set param value 
+                break; 
+            
+            case "param0": 
+                modals.showModalInputInteger("Deep sea level", generationAlgoritm.heightParams[0] , 0, 20); //show modal 
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[0] = modals.value_int; //set param value 
+                break; 
+
+            case "param1": 
+                modals.showModalInputInteger("Sea level", generationAlgoritm.heightParams[1] , 0, 20);//show modal 
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[1]  = modals.value_int; //set param value 
                 break;
 
             case "param2":
-                modals.showModalInputFloat("Mountains", generationAlgoritm.mountainParam, 0, 1);//show modal
+                modals.showModalInputInteger("Beach level", generationAlgoritm.heightParams[2] , 0, 20);//show modal
                 //waiting for modal state READY 
-                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
-                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
-                generationAlgoritm.mountainParam = modals.value_float; //set param value
-                break;
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[2]  = modals.value_int; //set param value 
+                break; 
 
             case "param3":
-                modals.showModalInputFloat("Rivers", generationAlgoritm.riversParam, 0, 1);//show modal
+                modals.showModalInputInteger("Grass level", generationAlgoritm.heightParams[3], 0, 20);//show modal 
                 //waiting for modal state READY 
-                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
-                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
-                generationAlgoritm.riversParam = modals.value_float; //set param value
-                break;
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[3] = modals.value_int; //set param value 
+                break; 
+            
+            case "param4": 
+                modals.showModalInputInteger("Deep Grass level", generationAlgoritm.heightParams[4], 0, 20);//show modal 
+                //waiting for modal state READY  
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[4] = modals.value_int; //set param value 
+                break; 
+
+            case "param5": 
+                modals.showModalInputInteger("Forest level", generationAlgoritm.heightParams[5], 0, 20);//show modal 
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[5] = modals.value_int; //set param value 
+                break; 
+
+            case "param6": 
+                modals.showModalInputInteger("Hill level", generationAlgoritm.heightParams[6], 0, 20);//show modal 
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[6] = modals.value_int; //set param value 
+                break; 
+
+            case "param7":
+                modals.showModalInputInteger("High hill level", generationAlgoritm.heightParams[7], 0, 20);//show modal 
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[7] = modals.value_int; //set param value 
+                break; 
+
+            case "param8": 
+                modals.showModalInputInteger("Mountain level", generationAlgoritm.heightParams[8], 0, 20);//show modal 
+                //waiting for modal state READY 
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[8] = modals.value_int; //set param value 
+                break; 
+
+            case "param9": 
+                modals.showModalInputInteger("Top level", generationAlgoritm.heightParams[9], 0, 20);//show modal 
+                //waiting for modal state READY  
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
+                modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
+                generationAlgoritm.heightParams[9] = modals.value_int; //set param value 
+                break; 
         }
 
         lblSeedMap.Text = generationAlgoritm.seed;
         lblSizeMap.Text =  generationAlgoritm.sizeMap.ToString();
         lblStyleMap.Text = "not yet";
-        lblGenParam0.Text = generationAlgoritm.seaParam.ToString();
-        lblGenParam1.Text = generationAlgoritm.vegetationParm.ToString();
-        lblGenParam2.Text = generationAlgoritm.mountainParam.ToString();
-        lblGenParam3.Text = generationAlgoritm.riversParam.ToString();
+        lblAlgoParam0.Text = generationAlgoritm.passes.ToString();
+        lblAlgoParam1.Text = generationAlgoritm.period.ToString();
+        lblAlgoParam2.Text = generationAlgoritm.periodMulti.ToString();
+        lblAlgoParam3.Text = generationAlgoritm.heightSteep.ToString();
+        lblGenParam0.Text = generationAlgoritm.heightParams[0].ToString();
+        lblGenParam1.Text = generationAlgoritm.heightParams[1].ToString();
+        lblGenParam2.Text = generationAlgoritm.heightParams[2].ToString();
+        lblGenParam3.Text = generationAlgoritm.heightParams[3].ToString();
+        lblGenParam4.Text = generationAlgoritm.heightParams[4].ToString();
+        lblGenParam5.Text = generationAlgoritm.heightParams[5].ToString();
+        lblGenParam6.Text = generationAlgoritm.heightParams[6].ToString();
+        lblGenParam7.Text = generationAlgoritm.heightParams[7].ToString();
+        lblGenParam8.Text = generationAlgoritm.heightParams[8].ToString();
+        lblGenParam9.Text = generationAlgoritm.heightParams[9].ToString();
     }
+    
     private void buttonGenerateTerrain(){
-        
-        //generate data terrain
-        generationAlgoritm.generateMapData(random,map);
 
-        //Instanciar toda la vista
-        map.instanceAllMap(random);
+        //exe algoritm to generate data terrain
+        generationAlgoritm.generateMapData(map);
 
-        //camera to center
+        //Instancing all map
+        map.instanceAllMap();
+
+        // init camera position and zoom
         initcamera();
     }
 
@@ -379,33 +483,43 @@ public class Editor : Spatial{
 }
 
 class GenerationAlgoritm {
-    public String seed;
-    public int sizeMap = 1;
-    public int styleMap = 0;
-    public float seaParam = 0.1f, vegetationParm = 0.1f, mountainParam = 0.1f, riversParam = 0.1f;
 
-    public int tointSeed(){
+    //main param
+    public String seed;
+    public int sizeMap = 20;
+    public int styleMap = 0;
+
+    // algoritm param
+    public int passes = 10;
+    public float period = 1f;
+    public float periodMulti = 2f;
+    
+    public float heightSteep = 10;
+
+    //min height
+    public int[] heightParams = new int[]{
+        0,0,0,0,0,0,0,0,0,11
+    };
+
+    private int tointSeed(){
         if (seed == null || seed.Length == 0) return 0;
         int ihash = seed.GetHashCode();
         return ihash;
     }
 
-    public void generateMapData(Random random, Map map){
-        //SIZE
-        GD.Print("New map...");
-        map.mapData = new MapData(sizeMap);
-        float[,] dataTerrain = new float[sizeMap,sizeMap];
+    public void generateMapData(Map map){
         
         //Ramdom
         int seed = tointSeed();
-        if (seed == 0) seed = random.Next();
+        if (seed == 0){
+            map.random = new Random();
+            seed = map.random.Next();
+        }else{
+            map.random = new Random(seed);
+        }
 
-        //pass datas 
-        float [][] datas = { 
-            new float[]{1f,2f},//1pass 
-            new float[]{3f,6f},//2pass 
-            new float[]{10f,20f} //3pass 
-        }; 
+        // New map
+        map.mapData = new MapData(sizeMap);
         
         //Noise
         OpenSimplexNoise noise = new OpenSimplexNoise();
@@ -413,52 +527,57 @@ class GenerationAlgoritm {
         noise.Octaves = 8;
         noise.Lacunarity = 1.5f;
         noise.Persistence = 0.02f;
+        noise.Period = period;
 
-        //1 pass low noise (big areas)
-        noise.Period = datas[0][0]; float heigthMulti = datas[0][1];
-        for (int i = 0; i<sizeMap; i++){
-            for (int j = 0; j<sizeMap; j++){
-                dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
-            }
-        }
-
-        //2 pass (medium elevations)
-        noise.Period = datas[1][0]; heigthMulti =datas[1][1];
-        for (int i = 0; i<sizeMap; i++){
-            for (int j = 0; j<sizeMap; j++){
-                dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
-            }
-        }
-
-        //3 pass (max elevations) and get max and min heights
-        noise.Period = datas[2][0]; heigthMulti = datas[2][1];
+        int nOffSetX = map.random.Next(-sizeMap,sizeMap);
+        int nOffSetY = map.random.Next(-sizeMap,sizeMap);
+        
+        float[,] dataTerrain = new float[sizeMap,sizeMap];
         float min = float.MaxValue; 
         float max = float.MinValue;
-        for (int i = 0; i<sizeMap; i++){
-            for (int j = 0; j<sizeMap; j++){
-                dataTerrain[j,i] += noise.GetNoise2d(j,i) * heigthMulti;
-                //minMax
-                float h =  dataTerrain[j,i];
-                if (h<min) min = h;
-                if (h>max) max = h;
+        
+        for(int p = 0; p < passes; p++){
+            noise.Period = p * periodMulti;
+
+            for (int i = 0; i<sizeMap; i++){
+                for (int j = 0; j<sizeMap; j++){
+                    float h = dataTerrain[j,i] + Mathf.Abs(noise.GetNoise2d(j+nOffSetX,i+nOffSetY) * heightSteep);
+                    dataTerrain[j,i] = h;
+                    if (h<min) min = h;
+                    if (h>max) max = h;
+                }
             }
         }
 
-        //pasamos las alturas generedas a mis alturas, necesitamos las cotas:
+        // To map data
         for (int i = 0; i<sizeMap; i++){
             for (int j = 0; j<sizeMap; j++){
                 float h =  dataTerrain[j,i];
                 float value = Mathf.InverseLerp(min,max,h);
-                if (value.Equals(float.NaN)) {
-                    value = 0;
-                }                
-                float lerp = Mathf.Lerp(0,9,value);
+                if (value.Equals(float.NaN)) {value = 0;}
+                float lerp = Mathf.Lerp(0,heightParams[9],value);
+                
                 int height =  Mathf.RoundToInt(lerp);
+                //min levels
+                if (height <= heightParams[0]) height = 0; 
+                else if (height <= heightParams[1]) height = 1;
+                else if (height <= heightParams[2]) height = 2;
+                else if (height <= heightParams[3]) height = 3;
+                else if (height <= heightParams[4]) height = 4;
+                else if (height <= heightParams[5]) height = 5;
+                else if (height <= heightParams[6]) height = 6;
+                else if (height <= heightParams[7]) height = 7;
+                else if (height <= heightParams[8]) height = 8;
+                //else if (height <= heightParams[9]) height = 9;
+
+                //limit
+                if (height>10) height = 10;
 
                 HexaData hexaData = map.mapData.GetHexaData(i,j);
                 hexaData.setHeight(height);
             }
         }
+
     }
 
 }

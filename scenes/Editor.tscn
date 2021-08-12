@@ -609,8 +609,8 @@ __meta__ = {
 [node name="VBGeneration" type="PanelContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB"]
 visible = false
 self_modulate = Color( 0, 0, 0, 0 )
-margin_right = 610.0
-margin_bottom = 888.0
+margin_right = 560.0
+margin_bottom = 1988.0
 grow_horizontal = 0
 grow_vertical = 0
 mouse_filter = 2
@@ -619,8 +619,8 @@ size_flags_horizontal = 3
 [node name="VB" type="VBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration"]
 margin_left = 14.0
 margin_top = 14.0
-margin_right = 596.0
-margin_bottom = 874.0
+margin_right = 546.0
+margin_bottom = 1974.0
 mouse_filter = 2
 size_flags_horizontal = 3
 custom_constants/separation = 20
@@ -629,7 +629,7 @@ __meta__ = {
 }
 
 [node name="hbSeed" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
-margin_right = 582.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -641,7 +641,7 @@ __meta__ = {
 }
 
 [node name="buSeedMap" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSeed"]
-margin_right = 143.0
+margin_right = 130.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
@@ -649,8 +649,8 @@ size_flags_vertical = 3
 text = "SEED"
 
 [node name="lblSeedMap" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSeed"]
-margin_left = 153.0
-margin_right = 582.0
+margin_left = 140.0
+margin_right = 532.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -663,7 +663,7 @@ __meta__ = {
 
 [node name="hbSize" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 110.0
-margin_right = 582.0
+margin_right = 532.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -675,7 +675,7 @@ __meta__ = {
 }
 
 [node name="buSizeMap" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSize"]
-margin_right = 143.0
+margin_right = 130.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
@@ -683,8 +683,8 @@ size_flags_vertical = 3
 text = "SIZE"
 
 [node name="lblSizeMap" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSize"]
-margin_left = 153.0
-margin_right = 582.0
+margin_left = 140.0
+margin_right = 532.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -697,7 +697,7 @@ __meta__ = {
 
 [node name="hbStyle" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 220.0
-margin_right = 582.0
+margin_right = 532.0
 margin_bottom = 310.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -709,7 +709,7 @@ __meta__ = {
 }
 
 [node name="buStyleMap" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbStyle"]
-margin_right = 143.0
+margin_right = 130.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
@@ -717,8 +717,8 @@ size_flags_vertical = 3
 text = "STYLE"
 
 [node name="lblStyleMap" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbStyle"]
-margin_left = 153.0
-margin_right = 582.0
+margin_left = 140.0
+margin_right = 532.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -729,9 +729,9 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+[node name="hbAlgorit0" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
 margin_top = 330.0
-margin_right = 582.0
+margin_right = 532.0
 margin_bottom = 420.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -742,17 +742,153 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0"]
-margin_right = 143.0
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit0"]
+margin_right = 150.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "SEA"
+text = "Algoritm Passes"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit0"]
+margin_left = 160.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hbAlgorit1" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 440.0
+margin_right = 532.0
+margin_bottom = 530.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit1"]
+margin_right = 174.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Algoritm Period"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit1"]
+margin_left = 184.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hbAlgorit2" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 550.0
+margin_right = 532.0
+margin_bottom = 640.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit2"]
+margin_right = 186.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Algoritm periodMulti"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit2"]
+margin_left = 196.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hbAlgorit3" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 660.0
+margin_right = 532.0
+margin_bottom = 750.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit3"]
+margin_right = 131.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Algoritm heightSteep"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit3"]
+margin_left = 141.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB0" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 770.0
+margin_right = 532.0
+margin_bottom = 860.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0"]
+margin_right = 130.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Deep sea"
 
 [node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0"]
-margin_left = 153.0
-margin_right = 582.0
+margin_left = 140.0
+margin_right = 532.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -764,9 +900,9 @@ __meta__ = {
 }
 
 [node name="HB1" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
-margin_top = 440.0
-margin_right = 582.0
-margin_bottom = 530.0
+margin_top = 880.0
+margin_right = 532.0
+margin_bottom = 970.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -777,16 +913,16 @@ __meta__ = {
 }
 
 [node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1"]
-margin_right = 143.0
+margin_right = 130.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "VEGETA"
+text = "Sea"
 
 [node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1"]
-margin_left = 153.0
-margin_right = 582.0
+margin_left = 140.0
+margin_right = 532.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -798,9 +934,9 @@ __meta__ = {
 }
 
 [node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
-margin_top = 550.0
-margin_right = 582.0
-margin_bottom = 640.0
+margin_top = 990.0
+margin_right = 532.0
+margin_bottom = 1080.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -811,16 +947,16 @@ __meta__ = {
 }
 
 [node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB2"]
-margin_right = 143.0
+margin_right = 130.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "MONTAINS"
+text = "Beach"
 
 [node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB2"]
-margin_left = 153.0
-margin_right = 582.0
+margin_left = 140.0
+margin_right = 532.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -832,9 +968,9 @@ __meta__ = {
 }
 
 [node name="HB3" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
-margin_top = 660.0
-margin_right = 582.0
-margin_bottom = 750.0
+margin_top = 1100.0
+margin_right = 532.0
+margin_bottom = 1190.0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
 size_flags_horizontal = 3
@@ -845,16 +981,220 @@ __meta__ = {
 }
 
 [node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB3"]
-margin_right = 143.0
+margin_right = 130.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 100, 30 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "RIVERS"
+text = "Grass"
 
 [node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB3"]
-margin_left = 153.0
-margin_right = 582.0
+margin_left = 140.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB4" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 1210.0
+margin_right = 532.0
+margin_bottom = 1300.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB4"]
+margin_right = 130.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Deep Grass"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB4"]
+margin_left = 140.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB5" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 1320.0
+margin_right = 532.0
+margin_bottom = 1410.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB5"]
+margin_right = 130.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Forest"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB5"]
+margin_left = 140.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB6" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 1430.0
+margin_right = 532.0
+margin_bottom = 1520.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB6"]
+margin_right = 130.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Hill"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB6"]
+margin_left = 140.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB7" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 1540.0
+margin_right = 532.0
+margin_bottom = 1630.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB7"]
+margin_right = 130.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "High hill"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB7"]
+margin_left = 140.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB8" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 1650.0
+margin_right = 532.0
+margin_bottom = 1740.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB8"]
+margin_right = 130.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Mountain"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB8"]
+margin_left = 140.0
+margin_right = 532.0
+margin_bottom = 90.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.0
+text = "0"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HB9" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
+margin_top = 1760.0
+margin_right = 532.0
+margin_bottom = 1850.0
+rect_min_size = Vector2( 90, 90 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buGenParam" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB9"]
+margin_right = 130.0
+margin_bottom = 90.0
+rect_min_size = Vector2( 100, 30 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Top"
+
+[node name="lblGenParam" type="Label" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB9"]
+margin_left = 140.0
+margin_right = 532.0
 margin_bottom = 90.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -866,9 +1206,9 @@ __meta__ = {
 }
 
 [node name="hbGen" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB"]
-margin_top = 770.0
-margin_right = 582.0
-margin_bottom = 860.0
+margin_top = 1870.0
+margin_right = 532.0
+margin_bottom = 1960.0
 grow_vertical = 0
 rect_min_size = Vector2( 90, 90 )
 mouse_filter = 2
@@ -878,13 +1218,13 @@ __meta__ = {
 }
 
 [node name="MC" type="MarginContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbGen"]
-margin_right = 582.0
+margin_right = 532.0
 margin_bottom = 90.0
 mouse_filter = 2
 size_flags_horizontal = 3
 
 [node name="BuGenerate" type="Button" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbGen/MC"]
-margin_right = 582.0
+margin_right = 532.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 40, 40 )
 mouse_default_cursor_shape = 2
@@ -1129,8 +1469,18 @@ visible = false
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSeed/buSeedMap" to="." method="buttonSetGenerationParam" binds= [ "seed" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbSize/buSizeMap" to="." method="buttonSetGenerationParam" binds= [ "size" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbStyle/buStyleMap" to="." method="buttonSetGenerationParam" binds= [ "style" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit0/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param_passes" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit1/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param_period" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit2/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param_periodMulti" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbAlgorit3/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "parma_heightSteep" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB0/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param0" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB1/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param1" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB2/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param2" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB3/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param3" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB4/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param4" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB5/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param5" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB6/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param6" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB7/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param7" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB8/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param8" ]]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB9/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param9" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbGen/MC/BuGenerate" to="." method="buttonGenerateTerrain"]
