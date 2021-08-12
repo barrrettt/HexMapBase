@@ -14,10 +14,10 @@ public class Camara : Spatial{
     public Vector2 movelimitsDownRight = new Vector2 (10,10);
 
     public override void _Ready() {
-        //referancia
+        //refs
         camara = GetNode<Camera>("Camara");
 
-        // mobil o PC
+        // mobil or PC
         string osname = Godot.OS.GetName();
         if (osname=="Android" || osname=="iOS" ) {
             isPC = false;
@@ -43,8 +43,8 @@ public class Camara : Spatial{
         }
     }
 
-    // CONTROL PC
-    private const float SENSITIVITY_PC = 0.05f, JOYPAD_DEADZONE = 0.15f;
+    // CONTROL PC 
+    private const float SENSITIVITY_PC = 0.05f, JOYPAD_DEADZONE = 0.15f; 
 
     private void inputPC(float delta){
         Vector2 vel = new Vector2();
