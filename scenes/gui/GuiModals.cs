@@ -23,13 +23,17 @@ public class GuiModals : Control{
     public bool value_bool = false;
 
     //ref to controls
+    private Control panel;
     private Label lblTitle;
     private Control subpaneString,subpaneInt,subpaneFloat,subpaneBoolean;
     private Control[] subpanels;
 
     private Button buOk, buCancel;
 
+    public Boolean isPC = true; //pc-mobile
+
     public override void _EnterTree(){
+        panel = GetNode<Control>("panel");
         lblTitle = GetNode<Label>("panel/VB/HB/lblTitle");
         subpaneString = GetNode<Control>("panel/VB/HBContent/typeString");
         subpaneInt = GetNode<Control>("panel/VB/HBContent/typeInt");
@@ -45,6 +49,13 @@ public class GuiModals : Control{
 
         //hide me
         this.Visible = false;
+
+        // mobil or PC
+        string osname = Godot.OS.GetName();
+        if (osname=="Android" || osname=="iOS" ) {
+            isPC = false;
+        }
+
     }
 
     private void showModal(String title){
@@ -56,6 +67,12 @@ public class GuiModals : Control{
 
         buOk.Visible = true;
         buCancel.Visible = true;
+
+        if (!isPC && type != MODAL_TYPE.NONE){
+            Vector2 size = GetViewport().GetVisibleRect().Size;
+            float hight4 = size.y / 8;
+            panel.RectPosition = new Vector2(panel.RectPosition.x, hight4);//up, no center
+        }
     }   
 
     public void showModalInputString(String title,String value, int maxLeght){
@@ -63,10 +80,13 @@ public class GuiModals : Control{
         this.type = MODAL_TYPE.STRING;
         subpaneString.Visible = true;
 
-        LineEdit lineIn = (LineEdit) subpaneString.GetChild(0);
-        lineIn.Text = value;
-        lineIn.MaxLength = maxLeght;
+        LineEdit lineEdit = (LineEdit) subpaneString.GetChild(0);
+        lineEdit.Text = value;
+        lineEdit.MaxLength = maxLeght;
         value_str = value;
+
+        lineEdit.GrabFocus();
+        lineEdit.CaretPosition = lineEdit.Text.Length();
     }
 
     public void showModalInputInteger(String title,int value, int minValue, int maxValue){
@@ -80,6 +100,11 @@ public class GuiModals : Control{
         sbIn.MinValue = minValue;
         sbIn.MaxValue = maxValue;
         value_int = value;
+
+        LineEdit lineEdit = sbIn.GetLineEdit();
+        lineEdit.GrabFocus();
+        //lineEdit.CaretPosition = lineEdit.Text.Length();
+
     }
 
     public void showModalInputFloat(String title, float value, float minValue, float maxValue){
@@ -93,6 +118,10 @@ public class GuiModals : Control{
         sbIn.MinValue = minValue;
         sbIn.MaxValue = maxValue;
         value_float = value;
+
+        LineEdit lineEdit = sbIn.GetLineEdit();
+        lineEdit.GrabFocus();
+        //lineEdit.CaretPosition = lineEdit.Text.Length();
     }
 
     public void showModalInputBoolean(String title, Boolean value){
@@ -103,12 +132,16 @@ public class GuiModals : Control{
         CheckButton ckb = (CheckButton) subpaneFloat.GetChild(0);
         ckb.Pressed = value;
         value_bool = value;
+
+        ckb.GrabFocus();
     }
 
     public void showModalMessage(String title){
         this.type = MODAL_TYPE.NONE;
         showModal(title);
         buCancel.Visible = false;
+
+        buOk.GrabFocus();
     }
 
     //SET READY
