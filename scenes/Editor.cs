@@ -1,10 +1,13 @@
 using Godot;
 using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 public class Editor : Spatial{
     private Camara camara;
     private WorldEnvironment centro;
+    private String mapFileName = "usermap";
     private Map map;
 
     private GenerationAlgoritm generationAlgoritm = new GenerationAlgoritm();
@@ -478,6 +481,155 @@ public class Editor : Spatial{
             case "detail_0":map.placeGO(hxd,0); break;
             case "detailClear":map.placeGO(hxd,-1); break;
         }
+    }
+
+    //SAVE / LOAD
+    public void save(){
+        GD.Print("Saving map " + mapFileName);
+        Godot.File file = new Godot.File();
+        String pathDir = "user://maps";
+        String pathFile =  "/"+mapFileName+".map";
+        Godot.Directory directory = new Godot.Directory();
+
+        if (directory.Open(pathDir) != Error.Ok){
+            directory.MakeDir(pathDir);
+            GD.Print("Dir maps created");
+        }
+       
+        //open
+        Error error = file.Open(pathDir+pathFile , Godot.File.ModeFlags.Write);
+        if (error!= Error.Ok) 
+            return;
+
+        //Serialize xml
+        GD.Print("File absolute: " + file.GetPathAbsolute());
+        MapData m = map.mapData;
+        String t = "\t"; //prettyPrint
+        file.StoreLine("<map version=\"1.0\" size=\""+m.getSize()+"\" >");
+            
+            foreach(HexaData d in m.datas){
+                file.StoreLine(t+"<hexdata r=\""+d.row+"\" c=\""+d.col+"\">");
+                    file.StoreLine(t+t+"<color>"+d.colorIndex+"</color>");
+                    file.StoreLine(t+t+"<height>"+d.height+"</height>");
+                    file.StoreLine(t+t+"<GO>"+d.indexGO+"</GO>");
+                    file.StoreLine(t+t+"<water>"+d.water+"</water>");
+                    file.StoreLine(t+t+"<river>"+d.river+"</river>");
+                    file.StoreLine(t+t+"<riversout>");
+                        file.StoreLine(t+t+t+"<r0>" + ((d.riversOut[0] != null)?"true":"false") + "</r0>");
+                        file.StoreLine(t+t+t+"<r1>" + ((d.riversOut[1] != null)?"true":"false") + "</r1>");
+                        file.StoreLine(t+t+t+"<r2>" + ((d.riversOut[2] != null)?"true":"false") + "</r2>");
+                        file.StoreLine(t+t+t+"<r3>" + ((d.riversOut[3] != null)?"true":"false") + "</r3>");
+                        file.StoreLine(t+t+t+"<r4>" + ((d.riversOut[4] != null)?"true":"false") + "</r4>");
+                        file.StoreLine(t+t+t+"<r5>" + ((d.riversOut[5] != null)?"true":"false") + "</r5>");
+                    file.StoreLine(t+t+"</riversout>");
+                file.StoreLine(t+"</hexdata>");
+            }
+
+        file.StoreLine("</map>");
+        file.Close();
+        GD.Print("Map saved!");
+    }
+
+    public void load() { 
+        Godot.File file = new Godot.File(); 
+        string path = "user://maps/" +mapFileName+".map"; 
+
+        if (!file.FileExists(path)){ 
+            GD.Print("File no exist: " +path); 
+            return; 
+        }
+
+        //xml parser 
+        file.Open(path,Godot.File.ModeFlags.Read);
+        XMLParser xmlP = new XMLParser(); 
+        Error err = xmlP.Open(path); 
+        if (err != Error.Ok) {return;} 
+        GD.Print("Loading map: " + file.GetPathAbsolute()); 
+
+        xmlP.Read(); 
+        String version = xmlP.GetAttributeValue(0); 
+        int sizeMap = int.Parse(xmlP.GetAttributeValue(1)); 
+        MapData map = new MapData(sizeMap); 
+
+        for (int j = 0; j<sizeMap; j++){ 
+            for (int i = 0; i<sizeMap; i++){ 
+                
+                XMLParser.NodeType nodeType;
+                String nodeNome = "";
+                do{
+                    xmlP.Read();
+                    nodeType = xmlP.GetNodeType();
+                    if (nodeType==XMLParser.NodeType.Element){
+                        nodeNome = xmlP.GetNodeName();
+                        if (nodeNome == "hexdata") break;
+                    }
+                }while(true);
+
+                int r = int.Parse( xmlP.GetAttributeValue(0)); 
+                int c = int.Parse(xmlP.GetAttributeValue(1));
+                HexaData hd = map.GetHexaData(r,c);
+
+                if (hd == null){GD.Print("Error file mal format!");}
+                
+                //fields
+                hd.colorIndex = int.Parse(auxLoadData(xmlP,"color"));
+                hd.height = int.Parse(auxLoadData(xmlP,"height"));
+                hd.indexGO = int.Parse(auxLoadData(xmlP,"GO"));
+                hd.water = bool.Parse(auxLoadData(xmlP,"water"));
+                hd.river = bool.Parse(auxLoadData(xmlP,"river"));
+
+                //riber out
+                //String data = getNextTextNodeData(xmlP,"riversout");
+                xmlP.Read();xmlP.Read();
+                //6 neighbours
+                bool r0 = bool.Parse(auxLoadData(xmlP,"r0"));
+                bool r1 = bool.Parse(auxLoadData(xmlP,"r1"));
+                bool r2 = bool.Parse(auxLoadData(xmlP,"r2"));
+                bool r3 = bool.Parse(auxLoadData(xmlP,"r3"));
+                bool r4 = bool.Parse(auxLoadData(xmlP,"r4"));
+                bool r5 = bool.Parse(auxLoadData(xmlP,"r5"));
+                
+                //river bools to refs: SE,S,...
+                if (r0) hd.riversOut[0] = hd.neighbours[0];
+                if (r1) hd.riversOut[1] = hd.neighbours[1];
+                if (r2) hd.riversOut[2] = hd.neighbours[2];
+                if (r3) hd.riversOut[3] = hd.neighbours[3];
+                if (r4) hd.riversOut[4] = hd.neighbours[4];
+                if (r5) hd.riversOut[5] = hd.neighbours[5];
+
+            }
+        }
+        file.Close();
+        GD.Print("File readed");
+
+        // instancing loaded map
+        this.map.mapData = map;
+        this.map.instanceAllMap();
+        initcamera();
+        GD.Print("Map ready!");
+        
+    }
+
+    private String auxLoadData(XMLParser xmlP, String nodename){
+        int i = 0;
+        int max = 50;
+        String value = null;
+        do{
+            xmlP.Read();
+            XMLParser.NodeType type = xmlP.GetNodeType();
+            if (type== XMLParser.NodeType.Element){
+                String name = xmlP.GetNodeName();
+                if (name == nodename){
+                    xmlP.Read();
+                    value = xmlP.GetNodeData();
+                    xmlP.Read();
+                    break;
+                }
+            }
+            i++;
+        }while(i<max);
+
+        return value;
     }
 
 }

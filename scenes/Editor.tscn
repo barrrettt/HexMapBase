@@ -1484,3 +1484,5 @@ visible = false
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB8/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param8" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/HB9/buGenParam" to="." method="buttonSetGenerationParam" binds= [ "param9" ]]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbGen/MC/BuGenerate" to="." method="buttonGenerateTerrain"]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU" to="." method="save"]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU2" to="." method="load"]

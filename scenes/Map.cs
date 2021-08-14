@@ -268,7 +268,6 @@ public class Map : Spatial{
 }
 
 //clase para los datos del mapa
-[Serializable]
 public class MapData{
     private int sizeMap;
     public HexaData[] datas; 
@@ -382,8 +381,7 @@ public class MapData{
 } 
 
 // clase para datos del tile 
-[Serializable]
-public class HexaData  { 
+public class HexaData { 
     //const
     public static int MAX_HEIGHT = 10;
     public static int WATER_LEVEL = 2;
