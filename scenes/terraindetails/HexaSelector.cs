@@ -23,7 +23,7 @@ public class HexaSelector : MeshInstance{
 
     private void crear(){
         var st = new SurfaceTool();
-        SpatialMaterial mat = (SpatialMaterial) MaterialOverride;
+        ShaderMaterial mat = (ShaderMaterial) MaterialOverride;
         st.SetMaterial(mat);
         st.Begin(Mesh.PrimitiveType.Triangles);
 
