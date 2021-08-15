@@ -17,8 +17,8 @@ public class Hexagon : MeshInstance{
         new Color("#2e2a0a"), //broown
         new Color("#2e210a"), //b dark
         new Color("#5e4e38"), //b light
-        new Color("#ccc3b8"), //white
-        new Color("#ffffff"), //white w
+        new Color("#91816a"), //white
+        new Color("#a3947e"), //white w
     };
     
     private Color colorRiver = new Color("#115999"); //blue
@@ -62,10 +62,9 @@ public class Hexagon : MeshInstance{
         }   
     }
 
-    public float getRealHeight(){
+    public static float getRealHeight(int heightIndex){
         float heightValue = 0.0f;
-        int height = hexData.getHeight();
-        switch (height){
+        switch (heightIndex){
             case 0: heightValue = 0.1f; break;
             case 1: heightValue = 0.2f; break;//water
             case 2: heightValue = 0.5f; break;//beach
@@ -77,7 +76,7 @@ public class Hexagon : MeshInstance{
             case 8: heightValue = 3.2f; break;
             case 9: heightValue = 3.6f; break;
             case 10: heightValue = 4.0f; break;
-            default: heightValue = 4.6f+ (height-10)*0.4f; break;
+            default: heightValue = 4.6f+ (heightIndex-10)*0.4f; break;
         }
         return heightValue;
     }
@@ -101,7 +100,7 @@ public class Hexagon : MeshInstance{
     public void CreateHexMetrics(){
         //metics
         ang30 = (Mathf.Pi/6);// 30º slides
-        float hValue = getRealHeight();
+        float hValue = Hexagon.getRealHeight(hexData.height);
         innerRadius = (Mathf.Sqrt(3)/2)*SIZE_TOP; //med
 
         //MAIN vertices: TOP
@@ -126,8 +125,8 @@ public class Hexagon : MeshInstance{
         if (hexData == null) hexData = new HexaData(0,0);
         this.map = map;
         
-        SpatialMaterial mat = (SpatialMaterial) MaterialOverride;
-        mat.VertexColorUseAsAlbedo= true;
+        ShaderMaterial mat = (ShaderMaterial) MaterialOverride;
+        //mat.VertexColorUseAsAlbedo= true;
         MaterialOverride = mat;
 
         SurfaceTool st = new SurfaceTool();
@@ -168,7 +167,7 @@ public class Hexagon : MeshInstance{
 
         //cosas
         float dist =  innerRadius * 2/3;//distancia del puente
-        float height = getRealHeight();
+        float height = Hexagon.getRealHeight(hexData.height);
 
         //colors
         Color color = colors[hexData.colorIndex];//color del indexColor
@@ -195,7 +194,8 @@ public class Hexagon : MeshInstance{
             pNEv1 = vertex[10];
             pNEv4 = vertex[12];
             float ang = Mathf.Pi/6; //30º
-            deltaH_NE = (hdNE.hexagon.getRealHeight() - height);
+            float h = Hexagon.getRealHeight(hdNE.height);
+            deltaH_NE = (h - height);
             Vector3 offset = new Vector3(Mathf.Cos(ang)*dist, deltaH_NE ,-Mathf.Sin(ang)*dist);
             pNEv2 = pNEv1 + offset;
             pNEv3 = pNEv4 + offset;
@@ -214,7 +214,8 @@ public class Hexagon : MeshInstance{
             pSEv1 = vertex[12];
             pSEv4 = vertex[2];
             float ang = -Mathf.Pi/6; //-30º
-            deltaH_SE = (hdSE.hexagon.getRealHeight()- height);
+            float h = Hexagon.getRealHeight(hdSE.height);
+            deltaH_SE = (h- height);
             Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH_SE,-Mathf.Sin(ang)*dist);
             pSEv2 = pSEv1 + offset;
             pSEv3 = pSEv4 + offset;
@@ -232,7 +233,8 @@ public class Hexagon : MeshInstance{
             pSv1 = vertex[2];
             pSv4 = vertex[4];
             float ang = -Mathf.Pi/2; //-90º
-            deltaH_S = (hdS.hexagon.getRealHeight()- height);
+            float h = Hexagon.getRealHeight(hdS.height);
+            deltaH_S = (h- height);
             Vector3 offset = new Vector3(Mathf.Cos(ang)*dist,deltaH_S,-Mathf.Sin(ang)*dist);
             pSv2 = pSv1 + offset;
             pSv3 = pSv4 + offset;
@@ -382,7 +384,8 @@ public class Hexagon : MeshInstance{
         pSv1Link = new Vector3(), pSv2Link = new Vector3(), pSv3Link = new Vector3(), pSv4Link = new Vector3();
 
         //RIVERS vertices top
-        float hValue = getRealHeight() + HEIGHT_RIBER_OFFSET;
+        float h = Hexagon.getRealHeight(hexData.height);
+        float hValue = h + HEIGHT_RIBER_OFFSET;
         float innerRadiusRiver = (Mathf.Sqrt(3)/2)*SIZE_RIBER; //med
         
         riverVertex[0] = new Vector3(0,hValue,0);//CENTRO
@@ -540,7 +543,8 @@ public class Hexagon : MeshInstance{
 
         //LARGUES LINKS 
         if (linkNE){
-            float otherH = hdNE.hexagon.getRealHeight() + HEIGHT_RIBER_OFFSET;
+            h = Hexagon.getRealHeight(hdNE.height);
+            float otherH = h + HEIGHT_RIBER_OFFSET;
             float deltaH = otherH - hValue;
             pNEv1Link = rpNEv2;
             pNEv4Link = rpNEv3;
@@ -564,7 +568,8 @@ public class Hexagon : MeshInstance{
         }
 
         if (linkSE){
-            float otherH = hdSE.hexagon.getRealHeight() + HEIGHT_RIBER_OFFSET;
+            h = Hexagon.getRealHeight(hdSE.height);
+            float otherH = h + HEIGHT_RIBER_OFFSET;
             float deltaH = otherH - hValue;
             pSEv1Link = rpSEv2;
             pSEv4Link = rpSEv3;
@@ -592,7 +597,8 @@ public class Hexagon : MeshInstance{
         }
 
         if (linkS){
-            float otherH = hdS.hexagon.getRealHeight() + HEIGHT_RIBER_OFFSET;
+            h = Hexagon.getRealHeight(hdS.height);
+            float otherH = h + HEIGHT_RIBER_OFFSET;
             float deltaH = otherH - hValue;
             pSv1Link = rpSv2;
             pSv4Link = rpSv3;

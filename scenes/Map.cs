@@ -189,7 +189,7 @@ public class Map : Spatial{
         CreateAffectedHex(hxd);
     }
 
-    //PLACE GAMEOBJECT DETAIL
+    // NO PROCEDURAL GAME OBJECTS: BLENDER...
     public void placeGO(HexaData hxd,int indexGO){
         if (hxd == null) return;
         hxd.indexGO = indexGO;
@@ -199,13 +199,15 @@ public class Map : Spatial{
     // SELECTOR 
     public void moveSelector(int row, int col){
         HexaData hdSelected = mapData.GetHexaData(row,col);
+
         if (hdSelected == null){
             selector.Visible = false;
 
         }else{
             selector.Visible = true;
             Vector3 pos = mapData.getHexPosition(hdSelected.row,hdSelected.col);
-            float height = hdSelected.hexagon.getRealHeight() + 0.1f;
+            float height = Hexagon.getRealHeight(hdSelected.height) + 0.1f;
+            if (hdSelected.water) height = Hexagon.getRealHeight(2) + 0.1f; //overwater
             pos = pos + new Vector3(0,height,0);
             selector.Translation = pos;
         }
@@ -219,7 +221,8 @@ public class Map : Spatial{
         }else{
             overSelector.Visible = true;
             Vector3 pos = mapData.getHexPosition(hdOver.row,hdOver.col);
-            float height = hdOver.hexagon.getRealHeight() + 0.1f;
+            float height = Hexagon.getRealHeight(hdOver.height) + 0.1f;
+            if (hdOver.water) height = Hexagon.getRealHeight(2) + 0.1f; //overwater
             pos = pos + new Vector3(0,height,0);
             overSelector.Translation = pos;
         }
@@ -264,10 +267,9 @@ public class Map : Spatial{
     }
 */
 
-
 }
 
-//clase para los datos del mapa
+//Map data model
 public class MapData{
     private int sizeMap;
     public HexaData[] datas; 
@@ -337,7 +339,7 @@ public class MapData{
 
             }
         }
-        GD.Print("Datos creados");
+        // GD.Print("Map ready");
     }
 
     private int coordToListIndex(int row, int col){
@@ -380,7 +382,7 @@ public class MapData{
 
 } 
 
-// clase para datos del tile 
+// Hexagon data model
 public class HexaData { 
     //const
     public static int MAX_HEIGHT = 10;

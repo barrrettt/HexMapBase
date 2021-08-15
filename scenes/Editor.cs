@@ -36,7 +36,17 @@ public class Editor : Spatial{
     private RigidBody[] balls; 
     //GENERATION
     private Random random = new Random(); 
+
+    private bool isPc = true;
+
     public override void _EnterTree(){ 
+        //PC?
+        // mobil or PC
+        string osname = Godot.OS.GetName();
+        if (osname=="Android" || osname=="iOS" ) {
+            isPc = false;
+        }
+
         //Things
         centro = GetNode<WorldEnvironment>("center"); 
         map = centro.GetNode<Map>("Map"); 
@@ -303,7 +313,9 @@ public class Editor : Spatial{
 
             case "size":
                 //show modal
-                modals.showModalInputInteger("Map size", generationAlgoritm.sizeMap,0,50);
+                int maxsize = 100; if (!isPc) maxsize = 50;
+
+                modals.showModalInputInteger("Map size", generationAlgoritm.sizeMap,0,maxsize);
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
@@ -351,7 +363,7 @@ public class Editor : Spatial{
                 break; 
             
             case "param0": 
-                modals.showModalInputInteger("Deep sea level", generationAlgoritm.heightParams[0] , 0, 20); //show modal 
+                modals.showModalInputInteger("Deep sea level", generationAlgoritm.heightParams[0] , 0, 100); //show modal 
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -359,7 +371,7 @@ public class Editor : Spatial{
                 break; 
 
             case "param1": 
-                modals.showModalInputInteger("Sea level", generationAlgoritm.heightParams[1] , 0, 20);//show modal 
+                modals.showModalInputInteger("Sea level", generationAlgoritm.heightParams[1] , 0, 100);//show modal 
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -367,7 +379,7 @@ public class Editor : Spatial{
                 break;
 
             case "param2":
-                modals.showModalInputInteger("Beach level", generationAlgoritm.heightParams[2] , 0, 20);//show modal
+                modals.showModalInputInteger("Beach level", generationAlgoritm.heightParams[2] , 0, 100);//show modal
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -375,7 +387,7 @@ public class Editor : Spatial{
                 break; 
 
             case "param3":
-                modals.showModalInputInteger("Grass level", generationAlgoritm.heightParams[3], 0, 20);//show modal 
+                modals.showModalInputInteger("Grass level", generationAlgoritm.heightParams[3], 0, 100);//show modal 
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -383,7 +395,7 @@ public class Editor : Spatial{
                 break; 
             
             case "param4": 
-                modals.showModalInputInteger("Deep Grass level", generationAlgoritm.heightParams[4], 0, 20);//show modal 
+                modals.showModalInputInteger("Deep Grass level", generationAlgoritm.heightParams[4], 0, 100);//show modal 
                 //waiting for modal state READY  
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -391,7 +403,7 @@ public class Editor : Spatial{
                 break; 
 
             case "param5": 
-                modals.showModalInputInteger("Forest level", generationAlgoritm.heightParams[5], 0, 20);//show modal 
+                modals.showModalInputInteger("Forest level", generationAlgoritm.heightParams[5], 0, 100);//show modal 
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -399,7 +411,7 @@ public class Editor : Spatial{
                 break; 
 
             case "param6": 
-                modals.showModalInputInteger("Hill level", generationAlgoritm.heightParams[6], 0, 20);//show modal 
+                modals.showModalInputInteger("Hill level", generationAlgoritm.heightParams[6], 0, 100);//show modal 
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -407,7 +419,7 @@ public class Editor : Spatial{
                 break; 
 
             case "param7":
-                modals.showModalInputInteger("High hill level", generationAlgoritm.heightParams[7], 0, 20);//show modal 
+                modals.showModalInputInteger("High hill level", generationAlgoritm.heightParams[7], 0, 100);//show modal 
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -415,7 +427,7 @@ public class Editor : Spatial{
                 break; 
 
             case "param8": 
-                modals.showModalInputInteger("Mountain level", generationAlgoritm.heightParams[8], 0, 20);//show modal 
+                modals.showModalInputInteger("Mountain level", generationAlgoritm.heightParams[8], 0, 100);//show modal 
                 //waiting for modal state READY 
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -423,7 +435,7 @@ public class Editor : Spatial{
                 break; 
 
             case "param9": 
-                modals.showModalInputInteger("Top level", generationAlgoritm.heightParams[9], 0, 20);//show modal 
+                modals.showModalInputInteger("Max level", generationAlgoritm.heightParams[9], 0, 100);//show modal 
                 //waiting for modal state READY  
                 await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } ); 
                 modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show 
@@ -460,6 +472,26 @@ public class Editor : Spatial{
 
         // init camera position and zoom
         initcamera();
+    }
+
+    private async void buttonSave(){
+        await Task.Run(() => { 
+            save();
+        }); 
+    }
+
+    private async void buttonLoad(){
+        bool r = false;
+
+        await Task.Run(() => { 
+            r = load();
+        }); 
+
+        if (r){
+            this.map.instanceAllMap();
+            this.initcamera();
+        }
+
     }
 
     //MANUAL EDITION
@@ -530,20 +562,20 @@ public class Editor : Spatial{
         GD.Print("Map saved!");
     }
 
-    public void load() { 
+    public bool load() { 
         Godot.File file = new Godot.File(); 
         string path = "user://maps/" +mapFileName+".map"; 
 
         if (!file.FileExists(path)){ 
             GD.Print("File no exist: " +path); 
-            return; 
+            return false; 
         }
 
         //xml parser 
         file.Open(path,Godot.File.ModeFlags.Read);
         XMLParser xmlP = new XMLParser(); 
         Error err = xmlP.Open(path); 
-        if (err != Error.Ok) {return;} 
+        if (err != Error.Ok) {return false;} 
         GD.Print("Loading map: " + file.GetPathAbsolute()); 
 
         xmlP.Read(); 
@@ -569,7 +601,7 @@ public class Editor : Spatial{
                 int c = int.Parse(xmlP.GetAttributeValue(1));
                 HexaData hd = map.GetHexaData(r,c);
 
-                if (hd == null){GD.Print("Error file mal format!");}
+                if (hd == null){GD.Print("Error: xml bad format!");}
                 
                 //fields
                 hd.colorIndex = int.Parse(auxLoadData(xmlP,"color"));
@@ -600,14 +632,10 @@ public class Editor : Spatial{
             }
         }
         file.Close();
-        GD.Print("File readed");
-
-        // instancing loaded map
-        this.map.mapData = map;
-        this.map.instanceAllMap();
-        initcamera();
-        GD.Print("Map ready!");
         
+        // data to map 
+        this.map.mapData = map;
+        return true;
     }
 
     private String auxLoadData(XMLParser xmlP, String nodename){
