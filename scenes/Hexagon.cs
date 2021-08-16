@@ -7,7 +7,7 @@ public class Hexagon : MeshInstance{
     public Boolean isPC = true;
 
     // 10 colors
-    private Color[] colors = new Color[]{
+    public static Color[] colors = new Color[]{
         new Color("#022340"),//blue dark
         new Color("#115999"),//blue
         new Color("#859911"),//yellow
@@ -21,7 +21,7 @@ public class Hexagon : MeshInstance{
         new Color("#a3947e"), //white w
     };
     
-    private Color colorRiver = new Color("#115999"); //blue
+    public static Color colorRiver = new Color("#115999"); //blue
     
     // STATICS METRICS 
     public static float SIZE_TOP = 0.75f; //0.75f; //radius top hex (1 max) 
@@ -823,17 +823,15 @@ public class Hexagon : MeshInstance{
         }
         
         //poblate
-        int numRocks = 1;
+        int numRocks = 1; // max rocks
         int h = hexData.getHeight();
         int[] rockcolors = new int[]{7,8,8};
         
         switch(h){
             case 10:
-                numRocks = 1;
                 rockcolors = new int[]{9,10,10};
                 break;
             case 9:
-                numRocks = 1;
                 rockcolors = new int[]{8,9,9};
                 break;
             case 8:
@@ -847,6 +845,11 @@ public class Hexagon : MeshInstance{
                 numRocks = 2;
                 break;
         }
+
+        float poblate = GeoAux.FloatRange(map.random, 0, 1.0f);
+        if (h==3 && poblate < 0.75f) numRocks = 0;
+        if (h==4 && poblate < 0.50f) numRocks = 0;
+        if (h==5 && poblate < 0.30f) numRocks = 0;
 
         int rndi = map.random.Next(0,rockcolors.Length);
         Color color = colors[rockcolors[rndi]];
@@ -925,8 +928,7 @@ public class Hexagon : MeshInstance{
     //Detail: Tree
     private void CreateTrees(SurfaceTool st){
         MeshInstance trees = geo.GetNodeOrNull("trees") as MeshInstance;
-        if (trees != null)
-            trees.Free();
+        if (trees != null) trees.Free();
         trees = new MeshInstance();
         trees.Name = ("trees");
         trees.MaterialOverride = map.matTree;
@@ -952,7 +954,11 @@ public class Hexagon : MeshInstance{
         }
 
         //place trees on top hex
-        int count = 2; // trees
+        int count = 2; // max trees
+        float poblate = GeoAux.FloatRange(map.random, 0, 1.0f);
+        if (h==3 && poblate < 0.75f) count = 0;
+        if (h==4 && poblate < 0.50f) count = 0;
+        
         float variation = innerRadius * 0.01f;
         float sizeDetail = 0.8f;
 
