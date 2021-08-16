@@ -515,8 +515,9 @@ public class Editor : Spatial{
         if (result){
             this.map.instanceAllMap();
             this.initcamera();
+            buttonToolSelect("");//hide panel
         }
-
+        
     }
 
     private async void buttonDelete(){
@@ -598,8 +599,7 @@ public class Editor : Spatial{
        
         //open
         Error error = file.Open(pathDir+pathFile , Godot.File.ModeFlags.Write);
-        if (error!= Error.Ok) 
-            return;
+        if (error!= Error.Ok) return;
 
         //Serialize xml
         GD.Print("File absolute: " + file.GetPathAbsolute());
