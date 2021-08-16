@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://scenes/Editor.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Map.tscn" type="PackedScene" id=2]
@@ -21,6 +21,8 @@
 [ext_resource path="res://src/vectorial/file-delete.svg" type="Texture" id=19]
 [ext_resource path="res://src/environments/default_env.tres" type="Environment" id=20]
 [ext_resource path="res://scenes/gui/Modals.tscn" type="PackedScene" id=21]
+[ext_resource path="res://src/vectorial/left.svg" type="Texture" id=22]
+[ext_resource path="res://src/vectorial/right.svg" type="Texture" id=23]
 
 [node name="Editor" type="Spatial"]
 script = ExtResource( 1 )
@@ -1257,16 +1259,39 @@ margin_right = 582.0
 margin_bottom = 90.0
 rect_min_size = Vector2( 90, 90 )
 
-[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
-anchor_right = 1.0
+[node name="HB" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU"]
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = -5.0
+margin_left = -100.0
+margin_right = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU/HB"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+margin_right = 96.0
+margin_bottom = 90.0
 mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect2" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU/HB"]
+self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+margin_left = 104.0
+margin_right = 200.0
+margin_bottom = 90.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 22 )
 expand = true
 stretch_mode = 6
 __meta__ = {
@@ -1279,16 +1304,39 @@ margin_right = 582.0
 margin_bottom = 200.0
 rect_min_size = Vector2( 90, 90 )
 
-[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU2"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
-anchor_right = 1.0
+[node name="HB" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU2"]
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = -5.0
+margin_left = -100.0
+margin_right = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU2/HB"]
+self_modulate = Color( 0.0392157, 0.462745, 0.690196, 1 )
+margin_right = 96.0
+margin_bottom = 90.0
 mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect2" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU2/HB"]
+self_modulate = Color( 0.0392157, 0.462745, 0.690196, 1 )
+margin_left = 104.0
+margin_right = 200.0
+margin_bottom = 90.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 23 )
 expand = true
 stretch_mode = 6
 __meta__ = {
@@ -1302,7 +1350,7 @@ margin_bottom = 310.0
 rect_min_size = Vector2( 90, 90 )
 
 [node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU3"]
-self_modulate = Color( 0.278431, 0.654902, 0.0705882, 1 )
+self_modulate = Color( 0.670588, 0.0156863, 0.0235294, 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 5.0
@@ -1486,3 +1534,4 @@ visible = false
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBGeneration/VB/hbGen/MC/BuGenerate" to="." method="buttonGenerateTerrain"]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU" to="." method="buttonSave"]
 [connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU2" to="." method="buttonLoad"]
+[connection signal="pressed" from="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU3" to="." method="buttonDelete"]

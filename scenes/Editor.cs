@@ -1,20 +1,18 @@
 using Godot;
 using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 
 public class Editor : Spatial{
     private Camara camara;
     private WorldEnvironment centro;
-    private String mapFileName = "usermap";
+    private String mapFileName = "";
     private Map map;
 
     private GenerationAlgoritm generationAlgoritm = new GenerationAlgoritm();
 
     //GUI REFERENCES
-    private Label lblMousePos1, lblCameraPos1, lblSelectedPos1;
-    private Label lblMousePos2, lblCameraPos2, lblSelectedPos2;
+    private ColorRect CrSelected;
+    private Label lblMousePos1, lblCameraPos1, lblSelectedPos1,lblMousePos2, lblCameraPos2, lblSelectedPos2;
 
     private Button buElevations, buStyles, buGeneration, buOptions;
 
@@ -32,7 +30,7 @@ public class Editor : Spatial{
     private GuiModals modals;
 
     //DEBUG 
-    int ballnumber = 0;
+    int ballnumber = 20;
     private RigidBody[] balls; 
     //GENERATION
     private Random random = new Random(); 
@@ -52,6 +50,10 @@ public class Editor : Spatial{
         map = centro.GetNode<Map>("Map"); 
         camara = centro.GetNode<Camara>("Camara"); 
         spaceState = GetWorld().DirectSpaceState; //physic ray neededs 
+
+        //colorrect selected
+        CrSelected = GetNode<ColorRect>("GUI/BottomPanel/HB/LPanel/HB/CC/ColorRect");
+        CrSelected.Color = new Color("#ffffff00");
 
         //labels
         lblActualTool = GetNode<Label>("GUI/UpPanel/HB/HB/lblTool"); //GUI panel top
@@ -105,6 +107,7 @@ public class Editor : Spatial{
         // translate text GUI 
         locateTexts();
 
+
     }
     private void locateTexts(){
         lblMousePos1.Text = "Mouse:";
@@ -118,8 +121,11 @@ public class Editor : Spatial{
     public override void _Ready(){
         
         //init mapdata
-        generationAlgoritm.sizeMap = 20;
+        generationAlgoritm.sizeMap = 10;
         generationAlgoritm.generateMapData(map);
+        map.instanceAllMap(); //Show all map
+        initcamera();//camera to center
+        buttonSetGenerationParam("");  //set algoritm params to gui
 
         //physics balls debug
         balls = new RigidBody[ballnumber];
@@ -137,11 +143,7 @@ public class Editor : Spatial{
             centro.AddChild(ball);
             balls[i] = ball;
         }
-
-        map.instanceAllMap(); //Show all map
-
-        initcamera();//camera to center
-
+        
         GD.Print("Editor ready");
     }
 
@@ -225,7 +227,8 @@ public class Editor : Spatial{
         Hexagon hx = ray(mRay[0],mRay[1]);
         if (hx != null && hx.hexData != null){
             lblSelectedPos2.Text = String.Format("({0},{1})",hx.hexData.row,hx.hexData.col); 
-            
+            CrSelected.Color = Hexagon.colors[hx.hexData.colorIndex];
+
             if (actualToolSelected != ""){
                 exeTool(hx.hexData);
             }
@@ -475,23 +478,88 @@ public class Editor : Spatial{
     }
 
     private async void buttonSave(){
+        modals.showModalInputString("Map name", mapFileName, 20);
+        await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+        modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+        String outname = modals.value_str; //set param value
+        if (outname == "") return; // cancel
+
+        if (outname.Length < 8){
+            modals.showModalMessage("Map name too small. Required lenght: 8-20");
+            await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+            modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+            return;
+        }
+
+        mapFileName = outname; //set new name
         await Task.Run(() => { 
             save();
         }); 
+
+        buttonToolSelect("");//hide panel
     }
 
     private async void buttonLoad(){
-        bool r = false;
+        //modal maps
+        modals.showMaps();
+        await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+        modals.estado = GuiModals.MODAL_ENUM.HIDE; //mark ready for show
+        mapFileName = modals.value_str; //set param value
 
+        //load
+        bool result = false;
         await Task.Run(() => { 
-            r = load();
+            result = load();
         }); 
 
-        if (r){
+        if (result){
             this.map.instanceAllMap();
             this.initcamera();
         }
 
+    }
+
+    private async void buttonDelete(){
+        if (mapFileName == "") return;
+        modals.showConfirmationMessage("Delete map " + mapFileName + "?");
+        await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+        modals.estado = GuiModals.MODAL_ENUM.HIDE;
+        bool ok = modals.value_bool;
+
+        if (ok){
+            Godot.File file = new Godot.File(); 
+            string path = "user://maps/" +mapFileName+".map"; 
+
+            if (!file.FileExists(path)){ 
+                modals.showModalMessage("Map not exist!");
+                await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+                modals.estado = GuiModals.MODAL_ENUM.HIDE;
+                return; 
+            }
+
+            Directory dir = new Directory();
+            Error error = dir.Remove(path);
+            if (error == Error.Ok){
+                mapFileName = "";
+                //new minimap
+                generationAlgoritm.sizeMap = 5;
+                generationAlgoritm.generateMapData(map);
+                map.instanceAllMap(); //Show all map
+                initcamera();//camera to center
+
+                modals.showModalMessage("Map deleted!");
+            }else{
+                modals.showModalMessage("Error on delete file!");
+            }
+
+            //message wait
+            await Task.Run(() => {do{}while(modals.estado != GuiModals.MODAL_ENUM.READY); } );
+            modals.estado = GuiModals.MODAL_ENUM.HIDE;
+
+
+        }
+
+        buttonToolSelect("");//hide panel
     }
 
     //MANUAL EDITION
@@ -563,6 +631,7 @@ public class Editor : Spatial{
     }
 
     public bool load() { 
+        
         Godot.File file = new Godot.File(); 
         string path = "user://maps/" +mapFileName+".map"; 
 

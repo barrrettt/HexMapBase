@@ -1,10 +1,16 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/fonts/Roboto-Regular.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://scenes/gui/GuiModals.cs" type="Script" id=2]
+[ext_resource path="res://src/themes/EditorAndroidTheme.tres" type="Theme" id=3]
 
 [sub_resource type="DynamicFont" id=1]
 size = 37
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 30
 use_filter = true
 font_data = ExtResource( 1 )
 
@@ -13,12 +19,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 1.41418
 margin_right = 1.41418
+theme = ExtResource( 3 )
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="panel" type="PanelContainer" parent="."]
+visible = false
 self_modulate = Color( 0, 0, 0, 0.294118 )
 anchor_left = 0.5
 anchor_top = 0.5
@@ -180,5 +188,98 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_fonts/font = SubResource( 1 )
 text = "OK"
+
+[node name="panelmaps" type="PanelContainer" parent="."]
+self_modulate = Color( 0, 0, 0, 0.294118 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -400.0
+margin_top = -300.0
+margin_right = 400.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 300, 100 )
+mouse_filter = 2
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VB" type="VBoxContainer" parent="panelmaps"]
+margin_left = 14.0
+margin_top = 14.0
+margin_right = 786.0
+margin_bottom = 586.0
+rect_min_size = Vector2( 200, 80 )
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 20
+alignment = 1
+
+[node name="HB" type="HBoxContainer" parent="panelmaps/VB"]
+margin_right = 772.0
+margin_bottom = 45.0
+mouse_filter = 2
+size_flags_horizontal = 3
+
+[node name="lblTitle" type="Label" parent="panelmaps/VB/HB"]
+margin_right = 772.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 1 )
+text = "Maps saved"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBContent" type="HBoxContainer" parent="panelmaps/VB"]
+margin_top = 65.0
+margin_right = 772.0
+margin_bottom = 507.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="panelmaps/VB/HBContent"]
+margin_right = 772.0
+margin_bottom = 442.0
+size_flags_horizontal = 3
+follow_focus = true
+scroll_horizontal_enabled = false
+
+[node name="VB" type="VBoxContainer" parent="panelmaps/VB/HBContent/ScrollContainer"]
+margin_right = 772.0
+margin_bottom = 75.0
+size_flags_horizontal = 3
+
+[node name="buFile" type="Button" parent="panelmaps/VB/HBContent/ScrollContainer/VB"]
+margin_right = 772.0
+margin_bottom = 75.0
+rect_min_size = Vector2( 0, 75 )
+size_flags_horizontal = 3
+custom_fonts/font = SubResource( 2 )
+text = "File name aweson"
+
+[node name="HBConfirm" type="HBoxContainer" parent="panelmaps/VB"]
+margin_top = 527.0
+margin_right = 772.0
+margin_bottom = 572.0
+mouse_filter = 2
+size_flags_horizontal = 3
+custom_constants/separation = 20
+
+[node name="buCancel" type="Button" parent="panelmaps/VB/HBConfirm"]
+margin_right = 772.0
+margin_bottom = 45.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 1 )
+text = "CANCEL"
 [connection signal="pressed" from="panel/VB/HBConfirm/buCancel" to="." method="inputReady" binds= [ false ]]
 [connection signal="pressed" from="panel/VB/HBConfirm/buOk" to="." method="inputReady" binds= [ true ]]
+[connection signal="pressed" from="panelmaps/VB/HBConfirm/buCancel" to="." method="inputReady" binds= [ false ]]
