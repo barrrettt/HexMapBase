@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://scenes/Editor.cs" type="Script" id=1]
 [ext_resource path="res://scenes/Map.tscn" type="PackedScene" id=2]
@@ -18,7 +18,6 @@
 [ext_resource path="res://src/vectorial/riber.svg" type="Texture" id=16]
 [ext_resource path="res://src/vectorial/paint-brush.svg" type="Texture" id=17]
 [ext_resource path="res://src/vectorial/disk.svg" type="Texture" id=18]
-[ext_resource path="res://src/vectorial/file-delete.svg" type="Texture" id=19]
 [ext_resource path="res://src/environments/default_env.tres" type="Environment" id=20]
 [ext_resource path="res://scenes/gui/Modals.tscn" type="PackedScene" id=21]
 [ext_resource path="res://src/vectorial/left.svg" type="Texture" id=22]
@@ -1349,16 +1348,39 @@ margin_right = 582.0
 margin_bottom = 310.0
 rect_min_size = Vector2( 90, 90 )
 
-[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU3"]
-self_modulate = Color( 0.670588, 0.0156863, 0.0235294, 1 )
-anchor_right = 1.0
+[node name="HB2" type="HBoxContainer" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU3"]
+anchor_left = 0.5
+anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = 5.0
-margin_top = 5.0
-margin_right = -5.0
-margin_bottom = -5.0
+margin_left = -100.0
+margin_right = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU3/HB2"]
+self_modulate = Color( 0.980392, 0.0156863, 0.129412, 1 )
+margin_right = 96.0
+margin_bottom = 90.0
 mouse_filter = 2
-texture = ExtResource( 19 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 18 )
+expand = true
+stretch_mode = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect2" type="TextureRect" parent="GUI/RightPanel/Right/PTools/ScrollContainer/VB/VBOptions/VB/BU3/HB2"]
+self_modulate = Color( 0.980392, 0.0156863, 0.129412, 1 )
+margin_left = 104.0
+margin_right = 200.0
+margin_bottom = 90.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = ExtResource( 5 )
 expand = true
 stretch_mode = 6
 __meta__ = {

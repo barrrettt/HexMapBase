@@ -203,7 +203,7 @@ public class GuiModals : Control{
 
             Button buFile = new Button();
             buFile.Text=(next);
-            buFile.RectMinSize = new Vector2(0,75);
+            buFile.RectMinSize = new Vector2(0,90);
             buFile.Connect("pressed",this,"mapClick",new Godot.Collections.Array{next});
             parentBuFiles.AddChild(buFile);
         }
